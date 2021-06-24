@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Guitar online shop</string>
+    <string name="product_fetching_failure">Fetching productas failed, please try again</string>
+    <string name="retry">Retry</string>
+</resources>
