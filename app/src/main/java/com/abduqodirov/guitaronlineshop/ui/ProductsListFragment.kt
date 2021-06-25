@@ -59,7 +59,8 @@ class ProductsListFragment : Fragment() {
 
                     ERROR -> {
                         stopProgressBar()
-                        binding.productsMessageTxt.text = getString(R.string.product_fetching_failure)
+                        binding.productsMessageTxt.text =
+                            getString(R.string.product_fetching_failure)
                         binding.productsRetryButton.visibility = View.VISIBLE
                         binding.productsMessageTxt.visibility = View.VISIBLE
                     }
@@ -77,10 +78,17 @@ class ProductsListFragment : Fragment() {
             viewModel.refreshProducts()
         }
 
+        binding.productsAddNewProductBtn.setOnClickListener {
+
+        }
+
     }
 
     private fun navigateToProductDetails(it: Product) {
-        findNavController().navigate(R.id.action_productsListFragment_to_productDetailsFragment)
+        findNavController().navigate(
+            ProductsListFragmentDirections.actionProductsListFragmentToProductDetailsFragment(it.id)
+
+        )
     }
 
     private fun startProgressBar() {
