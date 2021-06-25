@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.abduqodirov.guitaronlineshop.R
 import com.abduqodirov.guitaronlineshop.databinding.ItemProductBinding
 import com.abduqodirov.guitaronlineshop.model.Product
 import com.bumptech.glide.Glide
@@ -16,7 +17,8 @@ class ProductsRecyclerAdapter(private val productClickListener: ProductClickList
 
         val binding =
             ItemProductBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false)
+                LayoutInflater.from(parent.context), parent, false
+            )
 
         return ProductViewHolder(binding)
     }
@@ -28,7 +30,10 @@ class ProductsRecyclerAdapter(private val productClickListener: ProductClickList
         if (product.photos.isNotEmpty() && product.photos[0].isNotEmpty()) {
             Glide.with(holder.binding.itemProductImage.context)
                 .load(product.photos[0])
+                .error(R.drawable.no_img)
                 .into(holder.binding.itemProductImage)
+        } else {
+            holder.binding.itemProductImage.setImageResource(R.drawable.no_img)
         }
 
         holder.binding.itemProductName.text = product.name
