@@ -3,4 +3,5 @@
     <string name="product_fetching_failure">Fetching productas failed, please try again</string>
     <string name="retry">Retry</string>
     <string name="item_product_image_content">There is a photo of guitar</string>
+    <string name="no_products">There are no products yet</string>
 </resources>

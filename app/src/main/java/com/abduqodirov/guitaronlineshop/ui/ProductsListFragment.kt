@@ -53,7 +53,13 @@ class ProductsListFragment : Fragment() {
                     SUCCESS -> {
                         stopProgressBar()
                         response.data.let { products ->
-                            productAdapter.submitList(products)
+                            if (products == null || products.isEmpty()) {
+                                binding.productsMessageTxt.text = getString(R.string.no_products)
+                                binding.productsMessageTxt.visibility = View.VISIBLE
+                            } else {
+                                productAdapter.submitList(products)
+                            }
+
                         }
                     }
 
