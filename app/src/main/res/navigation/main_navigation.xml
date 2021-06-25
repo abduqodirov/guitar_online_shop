@@ -18,5 +18,9 @@
         android:id="@+id/productDetailsFragment"
         android:name="com.abduqodirov.guitaronlineshop.ui.ProductDetailsFragment"
         android:label="fragment_product_details"
-        tools:layout="@layout/fragment_product_details" />
+        tools:layout="@layout/fragment_product_details" >
+        <argument
+            android:name="productId"
+            app:argType="string" />
+    </fragment>
 </navigation>
