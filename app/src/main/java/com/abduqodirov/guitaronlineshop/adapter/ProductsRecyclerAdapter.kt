@@ -1,6 +1,7 @@
 package com.abduqodirov.guitaronlineshop.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -40,6 +41,17 @@ class ProductsRecyclerAdapter(private val productClickListener: ProductClickList
 
         holder.binding.itemProductName.text = product.name
         holder.binding.itemProductPrice.text = product.price.toString()
+
+        holder.binding.itemProductCommentsCountTxt.text = product.comments.size.toString()
+        holder.binding.itemProductRatingTxt.text = product.rating.average().toString()
+
+        if (product.comments.isEmpty()) {
+            holder.binding.itemProductCommentsGroup.visibility = View.INVISIBLE
+        }
+
+        if (product.rating.isEmpty()) {
+            holder.binding.itemProductRatingGroup.visibility = View.INVISIBLE
+        }
 
         holder.binding.root.setOnClickListener {
             productClickListener.onProductClick(product)

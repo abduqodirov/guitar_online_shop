@@ -9,8 +9,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.abduqodirov.guitaronlineshop.R
+import com.abduqodirov.guitaronlineshop.adapter.CommentsRecyclerAdapter
 import com.abduqodirov.guitaronlineshop.databinding.FragmentProductDetailsBinding
-import com.abduqodirov.guitaronlineshop.network.Status
 import com.abduqodirov.guitaronlineshop.network.Status.*
 import com.abduqodirov.guitaronlineshop.viewmodel.ProductDetailsViewModel
 import com.bumptech.glide.Glide
@@ -65,10 +65,23 @@ class ProductDetailsFragment : Fragment() {
                             binding.detailsPriceTxt.text = product?.price.toString()
                             binding.detailsDescTxt.text = product?.description
 
+                            binding.detailsRatingTxt.text = product?.rating?.average().toString()
+
+                            if (product?.rating?.isEmpty() == true) {
+                                binding.detailsRatingGroup.visibility = View.INVISIBLE
+                            }
+
                             Glide.with(binding.detailsImage.context)
                                 .load(product?.photos?.get(0))
                                 .error(R.drawable.no_img)
                                 .into(binding.detailsImage)
+
+                            val commentAdapter = CommentsRecyclerAdapter()
+
+                            binding.detailsCommentsRecycler.setHasFixedSize(true)
+                            binding.detailsCommentsRecycler.adapter = commentAdapter
+
+                            commentAdapter.submitList(product?.comments)
                         }
 
 

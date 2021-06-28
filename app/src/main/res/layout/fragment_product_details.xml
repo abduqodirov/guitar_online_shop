@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:layoutDescription="@xml/fragment_product_details_scene"
     tools:context=".ui.ProductDetailsFragment">
 
     <ImageView
         android:id="@+id/details_image"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginBottom="16dp"
         android:scaleType="centerCrop"
-        app:layout_constraintDimensionRatio="H,1.5:1"
+        app:layout_constraintBottom_toTopOf="@id/details_name_txt"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/fake_img" />
 
@@ -20,12 +22,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:textColor="@color/black"
         android:textSize="28sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/details_price_txt"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/details_image"
         tools:text="Guitar" />
 
     <TextView
@@ -33,9 +36,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
         android:textSize="22sp"
+        app:layout_constraintBottom_toTopOf="@id/details_desc_txt"
         app:layout_constraintStart_toStartOf="@id/details_name_txt"
-        app:layout_constraintTop_toBottomOf="@id/details_name_txt"
         tools:text="$500" />
 
 
@@ -44,16 +48,61 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
         android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@id/horizontal_border"
         app:layout_constraintStart_toStartOf="@id/details_name_txt"
-        app:layout_constraintTop_toBottomOf="@id/details_price_txt"
         tools:text="Lorem ipsum dolor sit amet" />
+
+
+    <ImageView
+        android:id="@+id/details_rating_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginRight="4dp"
+        android:src="@drawable/ic_baseline_star_24"
+        app:layout_constraintBottom_toBottomOf="@id/details_rating_txt"
+        app:layout_constraintEnd_toStartOf="@id/details_rating_txt"
+        app:layout_constraintTop_toTopOf="@id/details_rating_txt" />
+
+    <TextView
+        android:id="@+id/details_rating_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="16dp"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/details_name_txt"
+        tools:text="4.5" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/details_rating_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="rating_icon, details_rating_txt" />
+
+    <View
+        android:id="@+id/horizontal_border"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:orientation="horizontal" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/details_comments_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/horizontal_border" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/details_data_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="details_image, details_name_txt, details_price_txt, details_desc_txt" />
+        app:constraint_referenced_ids="details_image, details_name_txt, details_price_txt, details_desc_txt, details_comments_recycler, details_rating_txt, details_rating_icon" />
+
 
     <androidx.core.widget.ContentLoadingProgressBar
         android:id="@+id/details_progress_bar"
@@ -95,4 +144,4 @@
         app:constraint_referenced_ids="details_message_txt,details_retry_btn" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.motion.widget.MotionLayout>
