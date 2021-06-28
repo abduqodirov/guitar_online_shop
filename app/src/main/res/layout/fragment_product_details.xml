@@ -6,4 +6,93 @@
     android:layout_height="match_parent"
     tools:context=".ui.ProductDetailsFragment">
 
+    <ImageView
+        android:id="@+id/details_image"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintDimensionRatio="H,1.5:1"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/fake_img" />
+
+    <TextView
+        android:id="@+id/details_name_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:textColor="@color/black"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/details_image"
+        tools:text="Guitar" />
+
+    <TextView
+        android:id="@+id/details_price_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textSize="22sp"
+        app:layout_constraintStart_toStartOf="@id/details_name_txt"
+        app:layout_constraintTop_toBottomOf="@id/details_name_txt"
+        tools:text="$500" />
+
+
+    <TextView
+        android:id="@+id/details_desc_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@id/details_name_txt"
+        app:layout_constraintTop_toBottomOf="@id/details_price_txt"
+        tools:text="Lorem ipsum dolor sit amet" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/details_data_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="details_image, details_name_txt, details_price_txt, details_desc_txt" />
+
+    <androidx.core.widget.ContentLoadingProgressBar
+        android:id="@+id/details_progress_bar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/details_message_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Error occurred" />
+
+    <Button
+        android:id="@+id/details_retry_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/retry"
+        app:layout_constraintEnd_toEndOf="@id/details_message_txt"
+        app:layout_constraintStart_toStartOf="@id/details_message_txt"
+        app:layout_constraintTop_toBottomOf="@id/details_message_txt" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/details_error_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:constraint_referenced_ids="details_message_txt,details_retry_btn" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

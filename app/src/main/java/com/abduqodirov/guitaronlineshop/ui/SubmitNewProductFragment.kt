@@ -93,7 +93,6 @@ class SubmitNewProductFragment : Fragment() {
                         binding.submitProductSendBtn.visibility = View.INVISIBLE
                         binding.submitProductProgressBar.visibility = View.VISIBLE
                         binding.submitProductMessageTxt.visibility = View.INVISIBLE
-                        //TODO successfuly jo'natishda message yo'q ekan
                     }
 
                     SUCCESS -> {

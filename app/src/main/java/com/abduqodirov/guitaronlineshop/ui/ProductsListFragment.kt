@@ -70,6 +70,7 @@ class ProductsListFragment : Fragment() {
                             getString(R.string.product_fetching_failure)
                         binding.productsRetryButton.visibility = View.VISIBLE
                         binding.productsMessageTxt.visibility = View.VISIBLE
+                        binding.productsRecycler.visibility = View.INVISIBLE
                     }
 
                     LOADING -> {
@@ -109,7 +110,6 @@ class ProductsListFragment : Fragment() {
     }
 
     private fun stopProgressBar() {
-        //TODO hide RecyclerView when error occurs. Or show error in different way so that not overlapping the RecyclerView.
         binding.productsProgressBar.visibility = View.GONE
         binding.productsRecycler.visibility = View.VISIBLE
         binding.productsRetryButton.visibility = View.GONE
