@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import com.abduqodirov.guitaronlineshop.R
 import com.abduqodirov.guitaronlineshop.adapter.ProductsRecyclerAdapter
 import com.abduqodirov.guitaronlineshop.databinding.FragmentProductsListBinding
+import com.abduqodirov.guitaronlineshop.model.FetchingProduct
 import com.abduqodirov.guitaronlineshop.model.Product
 import com.abduqodirov.guitaronlineshop.network.Status.*
 import com.abduqodirov.guitaronlineshop.viewmodel.ProductsViewModel
@@ -57,7 +58,7 @@ class ProductsListFragment : Fragment() {
                                 binding.productsMessageTxt.text = getString(R.string.no_products)
                                 binding.productsMessageTxt.visibility = View.VISIBLE
                             } else {
-                                productAdapter.submitList(products)
+                                productAdapter.submitList(products.reversed())
                             }
 
                         }
@@ -85,14 +86,16 @@ class ProductsListFragment : Fragment() {
         }
 
         binding.productsAddNewProductBtn.setOnClickListener {
-
+            findNavController().navigate(
+                ProductsListFragmentDirections.actionProductsListFragmentToSubmitNewProductFragment()
+            )
         }
 
     }
 
     private fun navigateToProductDetails(it: Product) {
         findNavController().navigate(
-            ProductsListFragmentDirections.actionProductsListFragmentToProductDetailsFragment(it.id)
+            ProductsListFragmentDirections.actionProductsListFragmentToProductDetailsFragment((it as FetchingProduct).id)
 
         )
     }
@@ -106,6 +109,7 @@ class ProductsListFragment : Fragment() {
     }
 
     private fun stopProgressBar() {
+        //TODO hide RecyclerView when error occurs. Or show error in different way so that not overlapping the RecyclerView.
         binding.productsProgressBar.visibility = View.GONE
         binding.productsRecycler.visibility = View.VISIBLE
         binding.productsRetryButton.visibility = View.GONE

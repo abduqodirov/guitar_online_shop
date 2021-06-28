@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_productsListFragment_to_productDetailsFragment"
             app:destination="@id/productDetailsFragment" />
+        <action
+            android:id="@+id/action_productsListFragment_to_submitNewProductFragment"
+            app:destination="@id/submitNewProductFragment" />
     </fragment>
     <fragment
         android:id="@+id/productDetailsFragment"
@@ -22,5 +25,13 @@
         <argument
             android:name="productId"
             app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/submitNewProductFragment"
+        android:name="com.abduqodirov.guitaronlineshop.ui.SubmitNewProductFragment"
+        android:label="SubmitNewProductFragment" >
+        <action
+            android:id="@+id/action_submitNewProductFragment_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" />
     </fragment>
 </navigation>

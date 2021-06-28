@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.abduqodirov.guitaronlineshop.R
 import com.abduqodirov.guitaronlineshop.databinding.ItemProductBinding
+import com.abduqodirov.guitaronlineshop.model.FetchingProduct
 import com.abduqodirov.guitaronlineshop.model.Product
 import com.bumptech.glide.Glide
 
@@ -25,7 +26,8 @@ class ProductsRecyclerAdapter(private val productClickListener: ProductClickList
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
 
-        val product = getItem(position)
+        val product = getItem(position) as FetchingProduct
+
 
         if (product.photos.isNotEmpty() && product.photos[0].isNotEmpty()) {
             Glide.with(holder.binding.itemProductImage.context)
@@ -51,11 +53,11 @@ class ProductsRecyclerAdapter(private val productClickListener: ProductClickList
     class ProductDiffCallback : DiffUtil.ItemCallback<Product>() {
 
         override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
-            return oldItem.id == newItem.id
+            return (oldItem as FetchingProduct).id == (newItem as FetchingProduct).id
         }
 
         override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean {
-            return oldItem == newItem
+            return (oldItem as FetchingProduct) == (newItem as FetchingProduct)
         }
     }
 

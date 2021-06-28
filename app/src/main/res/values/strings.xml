@@ -1,7 +1,14 @@
 <resources>
     <string name="app_name">Guitar online shop</string>
-    <string name="product_fetching_failure">Fetching productas failed, please try again</string>
+    <string name="product_fetching_failure">Fetching products failed, please try again</string>
     <string name="retry">Retry</string>
     <string name="item_product_image_content">There is a photo of guitar</string>
     <string name="no_products">There are no products yet</string>
+    <string name="send_product">Send</string>
+    <string name="error_on_sending_product">Failed to send the product, please try again</string>
+    <string name="submit_products_hint_name">Enter name</string>
+    <string name="submit_products_hint_price">Enter price</string>
+    <string name="submit_products_hint_description">Enter description</string>
+    <string name="successfully_uploaded">Successfully uploaded</string>
+    <string name="show_product">Show product</string>
 </resources>
