@@ -81,6 +81,8 @@ class ProductDetailsFragment : Fragment() {
                             binding.detailsCommentsRecycler.setHasFixedSize(true)
                             binding.detailsCommentsRecycler.adapter = commentAdapter
 
+                            //TODO empty comments shouldn't be displayed
+
                             commentAdapter.submitList(product?.comments)
                         }
 

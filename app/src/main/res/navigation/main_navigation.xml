@@ -32,6 +32,8 @@
         android:label="SubmitNewProductFragment" >
         <action
             android:id="@+id/action_submitNewProductFragment_to_productDetailsFragment"
-            app:destination="@id/productDetailsFragment" />
+            app:destination="@id/productDetailsFragment"
+            app:popUpTo="@id/submitNewProductFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>
