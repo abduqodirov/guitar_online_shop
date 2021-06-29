@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.abduqodirov.guitaronlineshop.R
 import com.abduqodirov.guitaronlineshop.adapter.CommentsRecyclerAdapter
+import com.abduqodirov.guitaronlineshop.adapter.ImagesCollectionAdapter
 import com.abduqodirov.guitaronlineshop.databinding.FragmentProductDetailsBinding
 import com.abduqodirov.guitaronlineshop.network.Status.*
 import com.abduqodirov.guitaronlineshop.viewmodel.ProductDetailsViewModel
@@ -71,18 +72,26 @@ class ProductDetailsFragment : Fragment() {
                                 binding.detailsRatingGroup.visibility = View.INVISIBLE
                             }
 
-                            Glide.with(binding.detailsImage.context)
-                                .load(product?.photos?.get(0))
-                                .error(R.drawable.no_img)
-                                .into(binding.detailsImage)
 
+                            //TODO shu va boshqa screenlarni datasini qo'yib chiqishni successni
+                            // ichida yozmasdan alohida methodga olib chiqish kerak
+                            // shunda let bilan tekshirish, ? lar ham yo'qoladi.
+
+                            val imagesCollectionAdapter =
+                                product?.let { it1 ->
+                                    ImagesCollectionAdapter(
+                                        this,
+                                        it1.photos
+                                    )
+                                }
+                            binding.detailsImagePager.adapter = imagesCollectionAdapter
+
+
+                            //TODO empty comments shouldn't be displayed
                             val commentAdapter = CommentsRecyclerAdapter()
 
                             binding.detailsCommentsRecycler.setHasFixedSize(true)
                             binding.detailsCommentsRecycler.adapter = commentAdapter
-
-                            //TODO empty comments shouldn't be displayed
-
                             commentAdapter.submitList(product?.comments)
                         }
 

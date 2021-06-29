@@ -7,15 +7,13 @@
     app:layoutDescription="@xml/fragment_product_details_scene"
     tools:context=".ui.ProductDetailsFragment">
 
-    <ImageView
-        android:id="@+id/details_image"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/details_image_pager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="16dp"
-        android:scaleType="centerCrop"
         app:layout_constraintBottom_toTopOf="@id/details_name_txt"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/fake_img" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/details_name_txt"
