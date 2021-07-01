@@ -50,18 +50,6 @@ class ProductsListFragment : Fragment() {
         _binding = null
     }
 
-    private fun setUpViewListeners() {
-        binding.productsRetryButton.setOnClickListener {
-            viewModel.refreshProducts()
-        }
-
-        binding.productsAddNewProductBtn.setOnClickListener {
-            findNavController().navigate(
-                ProductsListFragmentDirections.actionProductsListFragmentToSubmitNewProductFragment()
-            )
-        }
-    }
-
     private fun observeProductsData() {
         viewModel.products.observe(
             viewLifecycleOwner,
@@ -92,15 +80,6 @@ class ProductsListFragment : Fragment() {
         )
     }
 
-    private fun switchUIToErrorState() {
-        binding.productsRecycler.visibility = View.INVISIBLE
-        binding.productsProgressBar.visibility = View.INVISIBLE
-
-        binding.productsMessageTxt.text = getString(R.string.product_fetching_failure)
-        binding.productsRetryButton.visibility = View.VISIBLE
-        binding.productsMessageTxt.visibility = View.VISIBLE
-    }
-
     private fun populateViewsWithSuccessfullyFetchedData(products: List<Product>) {
 
         switchUIToSuccessState()
@@ -125,14 +104,6 @@ class ProductsListFragment : Fragment() {
         }
     }
 
-    private fun navigateToProductDetails(it: Product) {
-        findNavController().navigate(
-            ProductsListFragmentDirections.actionProductsListFragmentToProductDetailsFragment(
-                (it as FetchingProduct).id
-            )
-        )
-    }
-
     private fun switchUIToLoadingState() {
         binding.productsProgressBar.visibility = View.VISIBLE
 
@@ -147,6 +118,35 @@ class ProductsListFragment : Fragment() {
         binding.productsProgressBar.visibility = View.GONE
         binding.productsRetryButton.visibility = View.GONE
         binding.productsMessageTxt.visibility = View.GONE
+    }
+
+    private fun switchUIToErrorState() {
+        binding.productsRecycler.visibility = View.INVISIBLE
+        binding.productsProgressBar.visibility = View.INVISIBLE
+
+        binding.productsMessageTxt.text = getString(R.string.product_fetching_failure)
+        binding.productsRetryButton.visibility = View.VISIBLE
+        binding.productsMessageTxt.visibility = View.VISIBLE
+    }
+
+    private fun navigateToProductDetails(it: Product) {
+        findNavController().navigate(
+            ProductsListFragmentDirections.actionProductsListFragmentToProductDetailsFragment(
+                (it as FetchingProduct).id
+            )
+        )
+    }
+
+    private fun setUpViewListeners() {
+        binding.productsRetryButton.setOnClickListener {
+            viewModel.refreshProducts()
+        }
+
+        binding.productsAddNewProductBtn.setOnClickListener {
+            findNavController().navigate(
+                ProductsListFragmentDirections.actionProductsListFragmentToSubmitNewProductFragment()
+            )
+        }
     }
 
     companion object {

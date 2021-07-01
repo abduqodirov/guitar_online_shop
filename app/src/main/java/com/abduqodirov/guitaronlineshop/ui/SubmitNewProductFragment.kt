@@ -86,6 +86,31 @@ class SubmitNewProductFragment : Fragment() {
         )
     }
 
+    private fun switchUIToErrorState() {
+        binding.submitProductProgressBar.hide()
+        binding.submitProductSendBtn.visibility = View.VISIBLE
+        binding.submitProductMessageTxt.text =
+            getString(R.string.error_on_sending_product)
+        binding.submitProductMessageTxt.visibility = View.VISIBLE
+    }
+
+    private fun switchUIToLoadingState() {
+        binding.submitProductProgressBar.visibility = View.VISIBLE
+
+        binding.submitProductSendBtn.visibility = View.INVISIBLE
+        binding.submitProductMessageTxt.visibility = View.INVISIBLE
+    }
+
+    private fun setUpSuccessfullyUploadedButtonListener(response: Response<FetchingProduct>) {
+        binding.submitProductsProductDetailsBtn.setOnClickListener {
+            response.data?.let { product ->
+                navigateToProductDetailsScreen(
+                    product
+                )
+            }
+        }
+    }
+
     private fun setUpFormValidators() {
 
         viewModel.formInputsValidationLive.observe(
@@ -108,31 +133,6 @@ class SubmitNewProductFragment : Fragment() {
         binding.submitProductDescEdt.addTextChangedListener {
             viewModel.validateEditText(EDITTEXT_DESC_POSITION, it.toString())
         }
-    }
-
-    private fun setUpSuccessfullyUploadedButtonListener(response: Response<FetchingProduct>) {
-        binding.submitProductsProductDetailsBtn.setOnClickListener {
-            response.data?.let { product ->
-                navigateToProductDetailsScreen(
-                    product
-                )
-            }
-        }
-    }
-
-    private fun switchUIToErrorState() {
-        binding.submitProductProgressBar.hide()
-        binding.submitProductSendBtn.visibility = View.VISIBLE
-        binding.submitProductMessageTxt.text =
-            getString(R.string.error_on_sending_product)
-        binding.submitProductMessageTxt.visibility = View.VISIBLE
-    }
-
-    private fun switchUIToLoadingState() {
-        binding.submitProductProgressBar.visibility = View.VISIBLE
-
-        binding.submitProductSendBtn.visibility = View.INVISIBLE
-        binding.submitProductMessageTxt.visibility = View.INVISIBLE
     }
 
     private fun setUpViewClickListeners() {
