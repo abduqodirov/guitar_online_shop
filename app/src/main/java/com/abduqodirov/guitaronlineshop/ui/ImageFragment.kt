@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.abduqodirov.guitaronlineshop.R
 import com.abduqodirov.guitaronlineshop.databinding.FragmentImageBinding
-import com.bumptech.glide.Glide
+import com.abduqodirov.guitaronlineshop.util.loadImageFromNetwork
 
 const val ARG_IMAGE = "image"
 
@@ -33,10 +33,10 @@ class ImageFragment : Fragment() {
         arguments?.takeIf {
             it.containsKey(ARG_IMAGE).apply {
 
-                Glide.with(binding.pagerItemImage.context)
-                    .load(it.getString(ARG_IMAGE))
-                    .error(R.drawable.no_img)
-                    .into(binding.pagerItemImage)
+                binding.pagerItemImage.loadImageFromNetwork(
+                    url = it.getString(ARG_IMAGE).toString(),
+                    errorImg = R.drawable.no_img
+                )
             }
         }
     }

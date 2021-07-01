@@ -10,7 +10,7 @@ import com.abduqodirov.guitaronlineshop.R
 import com.abduqodirov.guitaronlineshop.databinding.ItemProductBinding
 import com.abduqodirov.guitaronlineshop.model.FetchingProduct
 import com.abduqodirov.guitaronlineshop.model.Product
-import com.bumptech.glide.Glide
+import com.abduqodirov.guitaronlineshop.util.loadImageFromNetwork
 
 class ProductsRecyclerAdapter(private val productClickListener: ProductClickListener) :
     ListAdapter<Product, ProductsRecyclerAdapter.ProductViewHolder>(ProductDiffCallback()) {
@@ -30,10 +30,11 @@ class ProductsRecyclerAdapter(private val productClickListener: ProductClickList
         val product = getItem(position) as FetchingProduct
 
         if (product.photos.isNotEmpty() && product.photos[0].isNotEmpty()) {
-            Glide.with(holder.binding.itemProductImage.context)
-                .load(product.photos[0])
-                .error(R.drawable.no_img)
-                .into(holder.binding.itemProductImage)
+
+            holder.binding.itemProductImage.loadImageFromNetwork(
+                url = product.photos[0],
+                errorImg = R.drawable.no_img,
+            )
         } else {
             holder.binding.itemProductImage.setImageResource(R.drawable.no_img)
         }
