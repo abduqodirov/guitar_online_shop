@@ -18,7 +18,6 @@ class ProductsViewModel : ViewModel() {
 
     fun refreshProducts() {
 
-
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
 
@@ -26,17 +25,14 @@ class ProductsViewModel : ViewModel() {
 
                 try {
                     _products.postValue(
-                        Response.success(data = ShopApi.shopService.fetchProducts()))
-
+                        Response.success(data = ShopApi.shopService.fetchProducts())
+                    )
                 } catch (e: Exception) {
 
                     _products.postValue(Response.error(data = null, message = e.message))
                     e.printStackTrace()
                 }
-
             }
         }
-
     }
-
 }

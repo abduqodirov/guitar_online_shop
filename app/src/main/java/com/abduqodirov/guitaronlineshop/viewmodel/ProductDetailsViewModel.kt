@@ -12,26 +12,22 @@ import kotlinx.coroutines.withContext
 
 class ProductDetailsViewModel : ViewModel() {
 
-    private var _productLive = MutableLiveData<Response<FetchingProduct>>()
-    val productLive get() = _productLive
+    private var _product = MutableLiveData<Response<FetchingProduct>>()
+    val product get() = _product
 
     fun refreshProduct(id: String) {
 
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
 
-                _productLive.postValue(Response.loading(null))
+                _product.postValue(Response.loading(null))
 
                 try {
-                    _productLive.postValue(Response.success(ShopApi.shopService.fetchProductById(id)))
-
+                    _product.postValue(Response.success(ShopApi.shopService.fetchProductById(id)))
                 } catch (e: Exception) {
-                    _productLive.postValue(Response.error(null, e.localizedMessage))
+                    _product.postValue(Response.error(null, e.localizedMessage))
                 }
             }
-
         }
-
     }
-
 }

@@ -29,7 +29,6 @@ class ProductsRecyclerAdapter(private val productClickListener: ProductClickList
 
         val product = getItem(position) as FetchingProduct
 
-
         if (product.photos.isNotEmpty() && product.photos[0].isNotEmpty()) {
             Glide.with(holder.binding.itemProductImage.context)
                 .load(product.photos[0])
@@ -56,7 +55,6 @@ class ProductsRecyclerAdapter(private val productClickListener: ProductClickList
         holder.binding.root.setOnClickListener {
             productClickListener.onProductClick(product)
         }
-
     }
 
     inner class ProductViewHolder(val binding: ItemProductBinding) :
@@ -76,5 +74,4 @@ class ProductsRecyclerAdapter(private val productClickListener: ProductClickList
     class ProductClickListener(private val productClickListener: (product: Product) -> Unit) {
         fun onProductClick(product: Product) = productClickListener(product)
     }
-
 }

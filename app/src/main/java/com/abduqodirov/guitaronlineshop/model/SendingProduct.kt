@@ -22,4 +22,4 @@ data class SendingProduct(
     @field:Json(name = "comments")
     val comments: List<String>
 
-): Product()
+) : Product()

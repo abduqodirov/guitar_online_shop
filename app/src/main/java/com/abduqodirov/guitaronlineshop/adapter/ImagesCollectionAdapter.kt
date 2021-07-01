@@ -19,6 +19,5 @@ class ImagesCollectionAdapter(fragment: Fragment, private val images: List<Strin
         }
 
         return fragment
-
     }
 }
