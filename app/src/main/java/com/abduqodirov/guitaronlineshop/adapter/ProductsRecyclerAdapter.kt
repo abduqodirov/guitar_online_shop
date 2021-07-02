@@ -10,6 +10,8 @@ import com.abduqodirov.guitaronlineshop.R
 import com.abduqodirov.guitaronlineshop.databinding.ItemProductBinding
 import com.abduqodirov.guitaronlineshop.model.FetchingProduct
 import com.abduqodirov.guitaronlineshop.model.Product
+import com.abduqodirov.guitaronlineshop.util.formatPrice
+import com.abduqodirov.guitaronlineshop.util.formatRatingAverage
 import com.abduqodirov.guitaronlineshop.util.loadImageFromNetwork
 
 class ProductsRecyclerAdapter(private val productClickListener: ProductClickListener) :
@@ -40,10 +42,10 @@ class ProductsRecyclerAdapter(private val productClickListener: ProductClickList
         }
 
         holder.binding.itemProductName.text = product.name
-        holder.binding.itemProductPrice.text = product.price.toString()
+        holder.binding.itemProductPrice.text = product.price.formatPrice()
 
         holder.binding.itemProductCommentsCountTxt.text = product.comments.size.toString()
-        holder.binding.itemProductRatingTxt.text = product.rating.average().toString()
+        holder.binding.itemProductRatingTxt.text = product.rating.average().formatRatingAverage()
 
         if (product.comments.isEmpty()) {
             holder.binding.itemProductCommentsGroup.visibility = View.INVISIBLE

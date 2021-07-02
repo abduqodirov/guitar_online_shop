@@ -15,6 +15,8 @@ import com.abduqodirov.guitaronlineshop.model.FetchingProduct
 import com.abduqodirov.guitaronlineshop.network.Status.ERROR
 import com.abduqodirov.guitaronlineshop.network.Status.LOADING
 import com.abduqodirov.guitaronlineshop.network.Status.SUCCESS
+import com.abduqodirov.guitaronlineshop.util.formatPrice
+import com.abduqodirov.guitaronlineshop.util.formatRatingAverage
 import com.abduqodirov.guitaronlineshop.viewmodel.ProductDetailsViewModel
 
 class ProductDetailsFragment : Fragment() {
@@ -94,11 +96,11 @@ class ProductDetailsFragment : Fragment() {
         binding.detailsDataGroup.visibility = View.VISIBLE
 
         binding.detailsNameTxt.text = product.name
-        binding.detailsPriceTxt.text = product.price.toString()
+        binding.detailsPriceTxt.text = product.price.formatPrice()
         binding.detailsDescTxt.text = product.description
 
         binding.detailsRatingTxt.text =
-            product.rating.average().toString()
+            product.rating.average().formatRatingAverage()
 
         if (product.rating.isEmpty()) {
             binding.detailsRatingGroup.visibility = View.INVISIBLE

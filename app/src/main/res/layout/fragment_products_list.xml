@@ -14,7 +14,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/item_product" />
 
     <androidx.core.widget.ContentLoadingProgressBar
         android:id="@+id/products_progress_bar"
@@ -42,9 +43,11 @@
 
     <TextView
         android:id="@+id/products_message_txt"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="24sp"
+        android:layout_marginHorizontal="32dp"
+        tools:text="Lorem ipsum dolor sit amet blah blah blah blah blah"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -58,6 +61,7 @@
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="@id/products_message_txt"
         app:layout_constraintEnd_toEndOf="@id/products_message_txt"
-        app:layout_constraintTop_toBottomOf="@id/products_message_txt" />
+        app:layout_constraintTop_toBottomOf="@id/products_message_txt"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
