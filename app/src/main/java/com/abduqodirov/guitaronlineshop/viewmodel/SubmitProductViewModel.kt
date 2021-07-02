@@ -52,9 +52,9 @@ class SubmitProductViewModel : ViewModel() {
         formInputsValidationLive.value = oldValidation!!
     }
 
-    private fun isValidName(name: String) = name.isNotEmpty()
+    fun isValidName(name: String) = name.isNotEmpty()
 
-    private fun isValidPrice(text: String): Boolean {
+    fun isValidPrice(text: String): Boolean {
         if (text.isEmpty()) {
             return false
         }
@@ -63,7 +63,7 @@ class SubmitProductViewModel : ViewModel() {
         return price > 0
     }
 
-    private fun isValidDesc(desc: String): Boolean {
+    fun isValidDesc(desc: String): Boolean {
         return desc.isNotEmpty() && desc.length > MINIMUM_DESC_LENGTH
     }
 }
