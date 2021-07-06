@@ -16,7 +16,6 @@ import com.abduqodirov.guitaronlineshop.data.network.Status.ERROR
 import com.abduqodirov.guitaronlineshop.data.network.Status.LOADING
 import com.abduqodirov.guitaronlineshop.data.network.Status.SUCCESS
 import com.abduqodirov.guitaronlineshop.databinding.FragmentProductsListBinding
-import com.abduqodirov.guitaronlineshop.view.adapter.ProductsRecyclerAdapter
 import com.abduqodirov.guitaronlineshop.view.ui.ShopApplication
 import javax.inject.Inject
 

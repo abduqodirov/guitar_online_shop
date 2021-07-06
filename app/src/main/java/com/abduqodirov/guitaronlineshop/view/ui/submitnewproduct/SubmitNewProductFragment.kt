@@ -1,5 +1,6 @@
 package com.abduqodirov.guitaronlineshop.view.ui.submitnewproduct
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.abduqodirov.guitaronlineshop.R
 import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
@@ -17,6 +19,8 @@ import com.abduqodirov.guitaronlineshop.data.network.Status.ERROR
 import com.abduqodirov.guitaronlineshop.data.network.Status.LOADING
 import com.abduqodirov.guitaronlineshop.data.network.Status.SUCCESS
 import com.abduqodirov.guitaronlineshop.databinding.FragmentSubmitNewProductBinding
+import com.abduqodirov.guitaronlineshop.view.ui.ShopApplication
+import javax.inject.Inject
 
 private const val EDITTEXT_NAME_POSITION = 0
 private const val EDITTEXT_PRICE_POSITION = 1
@@ -24,10 +28,19 @@ private const val EDITTEXT_DESC_POSITION = 2
 
 class SubmitNewProductFragment : Fragment() {
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
     private var _binding: FragmentSubmitNewProductBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: SubmitProductViewModel by viewModels()
+    private val viewModel by viewModels<SubmitProductViewModel> { viewModelFactory }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        (requireActivity().application as ShopApplication).appComponent.inject(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,7 +69,7 @@ class SubmitNewProductFragment : Fragment() {
     }
 
     private fun observeSendingProductStatusAndData() {
-        viewModel.sendingProduct.observe(
+        viewModel.sentProduct.observe(
             viewLifecycleOwner,
             {
                 it.let { response ->

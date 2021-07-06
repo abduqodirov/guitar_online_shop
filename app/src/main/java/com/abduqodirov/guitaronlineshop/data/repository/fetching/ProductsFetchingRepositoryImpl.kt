@@ -1,10 +1,9 @@
-package com.abduqodirov.guitaronlineshop.data.repository
+package com.abduqodirov.guitaronlineshop.data.repository.fetching
 
 import androidx.lifecycle.MutableLiveData
 import com.abduqodirov.guitaronlineshop.data.model.Product
 import com.abduqodirov.guitaronlineshop.data.network.IRemoteDataSource
 import com.abduqodirov.guitaronlineshop.data.network.Response
-import com.abduqodirov.guitaronlineshop.data.network.ShopApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -12,9 +11,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class ProductsRepositoryImpl @Inject constructor(
+class ProductsFetchingRepositoryImpl @Inject constructor(
     private val remoteDataSource: IRemoteDataSource
-) : ProductsRepository {
+) : ProductsFetchingRepository {
 
     var products = MutableLiveData<Response<List<Product>>>()
     var productById = MutableLiveData<Response<Product>>()
@@ -50,7 +49,7 @@ class ProductsRepositoryImpl @Inject constructor(
                 productById.postValue(Response.loading(null))
 
                 try {
-                    productById.postValue(Response.success(ShopApi.shopService.fetchProductById(id)))
+                    productById.postValue(Response.success(remoteDataSource.fetchProductById(id)))
                 } catch (e: Exception) {
                     productById.postValue(Response.error(null, e.localizedMessage))
                 }

@@ -1,10 +1,8 @@
-package com.abduqodirov.guitaronlineshop.view.adapter
+package com.abduqodirov.guitaronlineshop.view.ui.productdetails.imageslider
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.abduqodirov.guitaronlineshop.view.ui.ARG_IMAGE
-import com.abduqodirov.guitaronlineshop.view.ui.ImageFragment
 
 class ImagesCollectionAdapter(fragment: Fragment, private val images: List<String>) :
     FragmentStateAdapter(fragment) {

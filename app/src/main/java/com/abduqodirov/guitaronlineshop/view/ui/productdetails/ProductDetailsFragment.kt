@@ -15,9 +15,8 @@ import com.abduqodirov.guitaronlineshop.data.network.Status.ERROR
 import com.abduqodirov.guitaronlineshop.data.network.Status.LOADING
 import com.abduqodirov.guitaronlineshop.data.network.Status.SUCCESS
 import com.abduqodirov.guitaronlineshop.databinding.FragmentProductDetailsBinding
-import com.abduqodirov.guitaronlineshop.view.adapter.CommentsRecyclerAdapter
-import com.abduqodirov.guitaronlineshop.view.adapter.ImagesCollectionAdapter
 import com.abduqodirov.guitaronlineshop.view.ui.ShopApplication
+import com.abduqodirov.guitaronlineshop.view.ui.productdetails.imageslider.ImagesCollectionAdapter
 import com.abduqodirov.guitaronlineshop.view.util.formatPrice
 import com.abduqodirov.guitaronlineshop.view.util.formatRatingAverage
 import javax.inject.Inject

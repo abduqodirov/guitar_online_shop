@@ -1,13 +1,15 @@
 package com.abduqodirov.guitaronlineshop.di.component
 
 import android.content.Context
-import com.abduqodirov.guitaronlineshop.data.repository.ProductsRepository
+import com.abduqodirov.guitaronlineshop.data.repository.fetching.ProductsFetchingRepository
+import com.abduqodirov.guitaronlineshop.data.repository.submitting.SubmitProductRepository
 import com.abduqodirov.guitaronlineshop.di.module.AppModule
 import com.abduqodirov.guitaronlineshop.di.module.ProductViewModelModule
 import com.abduqodirov.guitaronlineshop.di.module.ProductsModuleBinds
 import com.abduqodirov.guitaronlineshop.di.module.ViewModelFactoryModule
 import com.abduqodirov.guitaronlineshop.view.ui.productdetails.ProductDetailsFragment
 import com.abduqodirov.guitaronlineshop.view.ui.productslist.ProductsListFragment
+import com.abduqodirov.guitaronlineshop.view.ui.submitnewproduct.SubmitNewProductFragment
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
@@ -32,5 +34,9 @@ interface AppComponent {
 
     fun inject(fragment: ProductDetailsFragment)
 
-    val productRepository: ProductsRepository
+    fun inject(fragment: SubmitNewProductFragment)
+
+    val productFetchingRepository: ProductsFetchingRepository
+
+    val submitProductRepository: SubmitProductRepository
 }

@@ -1,4 +1,4 @@
-package com.abduqodirov.guitaronlineshop.view.adapter
+package com.abduqodirov.guitaronlineshop.view.ui.productslist
 
 import android.view.LayoutInflater
 import android.view.View
