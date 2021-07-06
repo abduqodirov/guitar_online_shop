@@ -1,4 +1,4 @@
-package com.abduqodirov.guitaronlineshop.view.ui.productslist
+package com.abduqodirov.guitaronlineshop.view.screens.productslist
 
 import android.content.Context
 import android.os.Bundle
@@ -11,12 +11,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.abduqodirov.guitaronlineshop.R
 import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
-import com.abduqodirov.guitaronlineshop.data.model.Product
-import com.abduqodirov.guitaronlineshop.data.network.Status.ERROR
-import com.abduqodirov.guitaronlineshop.data.network.Status.LOADING
-import com.abduqodirov.guitaronlineshop.data.network.Status.SUCCESS
+// import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
+import com.abduqodirov.guitaronlineshop.data.network.Response
 import com.abduqodirov.guitaronlineshop.databinding.FragmentProductsListBinding
-import com.abduqodirov.guitaronlineshop.view.ui.ShopApplication
+import com.abduqodirov.guitaronlineshop.view.ShopApplication
+import com.abduqodirov.guitaronlineshop.view.mapper.ProductDisplayMapper
+import com.abduqodirov.guitaronlineshop.view.model.ProductForDisplay
 import javax.inject.Inject
 
 class ProductsListFragment : Fragment() {
@@ -67,22 +67,21 @@ class ProductsListFragment : Fragment() {
             {
 
                 it?.let { response ->
-                    when (response.status) {
+                    when (response) {
 
-                        SUCCESS -> {
-                            response.data.let { nullableProducts ->
-
-                                nullableProducts?.let { nullSafeProducts ->
-                                    populateViewsWithSuccessfullyFetchedData(nullSafeProducts)
+                        is Response.Success -> {
+                            populateViewsWithSuccessfullyFetchedData(
+                                response.data.map { fetched ->
+                                    ProductDisplayMapper().mapFetchedProduct(fetched as FetchingProduct)
                                 }
-                            }
+                            )
                         }
 
-                        ERROR -> {
+                        is Response.Failure -> {
                             switchUIToErrorState()
                         }
 
-                        LOADING -> {
+                        is Response.Loading -> {
                             switchUIToLoadingState()
                         }
                     }
@@ -91,7 +90,7 @@ class ProductsListFragment : Fragment() {
         )
     }
 
-    private fun populateViewsWithSuccessfullyFetchedData(products: List<Product>) {
+    private fun populateViewsWithSuccessfullyFetchedData(products: List<ProductForDisplay>) {
 
         switchUIToSuccessState()
 
@@ -103,7 +102,6 @@ class ProductsListFragment : Fragment() {
 
             val productAdapter = ProductsRecyclerAdapter(
                 ProductsRecyclerAdapter.ProductClickListener {
-
                     navigateToProductDetails(it)
                 }
             )
@@ -140,10 +138,10 @@ class ProductsListFragment : Fragment() {
         binding.productsMessageTxt.visibility = View.VISIBLE
     }
 
-    private fun navigateToProductDetails(it: Product) {
+    private fun navigateToProductDetails(it: ProductForDisplay) {
         findNavController().navigate(
             ProductsListFragmentDirections.actionProductsListFragmentToProductDetailsFragment(
-                (it as FetchingProduct).id
+                it.id
             )
         )
     }

@@ -27,15 +27,19 @@ class ProductsFetchingRepositoryImpl @Inject constructor(
 
             withContext(Dispatchers.IO) {
 
-                products.postValue(Response.loading(null))
+                products.postValue(Response.Loading)
 
                 try {
                     products.postValue(
-                        Response.success(data = remoteDataSource.fetchProducts())
+                        Response.Success(remoteDataSource.fetchProducts())
                     )
                 } catch (e: Exception) {
 
-                    products.postValue(Response.error(data = null, message = e.message))
+                    products.postValue(
+                        Response.Failure(
+                            errorMessage = e.localizedMessage ?: "Failed to load"
+                        )
+                    )
                     e.printStackTrace()
                 }
             }
@@ -46,12 +50,12 @@ class ProductsFetchingRepositoryImpl @Inject constructor(
         repoScope.launch {
             withContext(Dispatchers.IO) {
 
-                productById.postValue(Response.loading(null))
+                productById.postValue(Response.Loading)
 
                 try {
-                    productById.postValue(Response.success(remoteDataSource.fetchProductById(id)))
+                    productById.postValue(Response.Success(remoteDataSource.fetchProductById(id)))
                 } catch (e: Exception) {
-                    productById.postValue(Response.error(null, e.localizedMessage))
+                    productById.postValue(Response.Failure(e.localizedMessage ?: "Failed to load"))
                 }
             }
         }

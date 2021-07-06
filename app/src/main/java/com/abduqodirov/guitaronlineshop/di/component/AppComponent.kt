@@ -7,9 +7,9 @@ import com.abduqodirov.guitaronlineshop.di.module.AppModule
 import com.abduqodirov.guitaronlineshop.di.module.ProductViewModelModule
 import com.abduqodirov.guitaronlineshop.di.module.ProductsModuleBinds
 import com.abduqodirov.guitaronlineshop.di.module.ViewModelFactoryModule
-import com.abduqodirov.guitaronlineshop.view.ui.productdetails.ProductDetailsFragment
-import com.abduqodirov.guitaronlineshop.view.ui.productslist.ProductsListFragment
-import com.abduqodirov.guitaronlineshop.view.ui.submitnewproduct.SubmitNewProductFragment
+import com.abduqodirov.guitaronlineshop.view.screens.productdetails.ProductDetailsFragment
+import com.abduqodirov.guitaronlineshop.view.screens.productslist.ProductsListFragment
+import com.abduqodirov.guitaronlineshop.view.screens.submitnewproduct.SubmitNewProductFragment
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton

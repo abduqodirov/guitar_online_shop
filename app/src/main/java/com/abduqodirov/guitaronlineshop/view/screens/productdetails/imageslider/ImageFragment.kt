@@ -1,4 +1,4 @@
-package com.abduqodirov.guitaronlineshop.view.ui.productdetails.imageslider
+package com.abduqodirov.guitaronlineshop.view.screens.productdetails.imageslider
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -1,4 +1,4 @@
-package com.abduqodirov.guitaronlineshop.view.ui.submitnewproduct
+package com.abduqodirov.guitaronlineshop.view.screens.submitnewproduct
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

@@ -1,4 +1,4 @@
-package com.abduqodirov.guitaronlineshop.view.ui.submitnewproduct
+package com.abduqodirov.guitaronlineshop.view.screens.submitnewproduct
 
 import android.content.Context
 import android.os.Bundle
@@ -15,11 +15,8 @@ import com.abduqodirov.guitaronlineshop.R
 import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
 import com.abduqodirov.guitaronlineshop.data.model.SendingProduct
 import com.abduqodirov.guitaronlineshop.data.network.Response
-import com.abduqodirov.guitaronlineshop.data.network.Status.ERROR
-import com.abduqodirov.guitaronlineshop.data.network.Status.LOADING
-import com.abduqodirov.guitaronlineshop.data.network.Status.SUCCESS
 import com.abduqodirov.guitaronlineshop.databinding.FragmentSubmitNewProductBinding
-import com.abduqodirov.guitaronlineshop.view.ui.ShopApplication
+import com.abduqodirov.guitaronlineshop.view.ShopApplication
 import javax.inject.Inject
 
 private const val EDITTEXT_NAME_POSITION = 0
@@ -72,24 +69,25 @@ class SubmitNewProductFragment : Fragment() {
         viewModel.sentProduct.observe(
             viewLifecycleOwner,
             {
+
                 it.let { response ->
 
-                    when (response.status) {
+                    when (response) {
 
-                        LOADING -> {
+                        is Response.Loading -> {
                             switchUIToLoadingState()
                         }
 
-                        SUCCESS -> {
+                        is Response.Success -> {
                             binding.submitProductProgressBar.hide()
                             binding.submitProductMessageTxt.text =
                                 getString(R.string.successfully_uploaded)
                             binding.submitProductsProductDetailsBtn.visibility = View.VISIBLE
 
-                            setUpSuccessfullyUploadedButtonListener(response)
+                            setUpSuccessfullyUploadedButtonListener(response.data)
                         }
 
-                        ERROR -> {
+                        is Response.Failure -> {
                             switchUIToErrorState()
                         }
                     }
@@ -113,13 +111,12 @@ class SubmitNewProductFragment : Fragment() {
         binding.submitProductMessageTxt.visibility = View.INVISIBLE
     }
 
-    private fun setUpSuccessfullyUploadedButtonListener(response: Response<FetchingProduct>) {
+    private fun setUpSuccessfullyUploadedButtonListener(product: FetchingProduct) {
         binding.submitProductsProductDetailsBtn.setOnClickListener {
-            response.data?.let { product ->
-                navigateToProductDetailsScreen(
-                    product
-                )
-            }
+
+            navigateToProductDetailsScreen(
+                product
+            )
         }
     }
 
@@ -154,6 +151,7 @@ class SubmitNewProductFragment : Fragment() {
             val price = binding.submitProductPriceEdt.text.toString().toDouble()
             val desc = binding.submitProductDescEdt.text.toString()
 
+            // TODO o'zini pojosini qo'ysak keraksiz fieldlar ham yo'qoladi
             val sendingProduct = SendingProduct(
                 name = name,
                 price = price,

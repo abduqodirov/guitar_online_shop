@@ -25,14 +25,14 @@ class SubmitProductRepositoryImpl @Inject constructor(
         submitScope.launch {
             withContext(Dispatchers.IO) {
 
-                sentProduct.postValue(Response.loading(null))
+                sentProduct.postValue(Response.Loading)
 
                 try {
                     val resultProduct = remoteDataSource.submitProduct(sendingProduct)
-                    sentProduct.postValue(Response.success(resultProduct))
+                    sentProduct.postValue(Response.Success(resultProduct))
                 } catch (e: Exception) {
 
-                    sentProduct.postValue(Response.error(null, e.localizedMessage))
+                    sentProduct.postValue(Response.Failure(e.localizedMessage ?: "Failed to load"))
                     e.printStackTrace()
                 }
             }

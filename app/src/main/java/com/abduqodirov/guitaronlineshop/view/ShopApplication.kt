@@ -1,4 +1,4 @@
-package com.abduqodirov.guitaronlineshop.view.ui
+package com.abduqodirov.guitaronlineshop.view
 
 import android.app.Application
 import com.abduqodirov.guitaronlineshop.di.component.AppComponent

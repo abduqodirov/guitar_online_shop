@@ -1,4 +1,4 @@
-package com.abduqodirov.guitaronlineshop.view.ui.productslist
+package com.abduqodirov.guitaronlineshop.view.screens.productslist
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,15 +7,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.abduqodirov.guitaronlineshop.R
-import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
-import com.abduqodirov.guitaronlineshop.data.model.Product
 import com.abduqodirov.guitaronlineshop.databinding.ItemProductBinding
-import com.abduqodirov.guitaronlineshop.view.util.formatPrice
-import com.abduqodirov.guitaronlineshop.view.util.formatRatingAverage
+import com.abduqodirov.guitaronlineshop.view.model.ProductForDisplay
 import com.abduqodirov.guitaronlineshop.view.util.loadImageFromNetwork
 
 class ProductsRecyclerAdapter(private val productClickListener: ProductClickListener) :
-    ListAdapter<Product, ProductsRecyclerAdapter.ProductViewHolder>(ProductDiffCallback()) {
+    ListAdapter<ProductForDisplay, ProductsRecyclerAdapter.ProductViewHolder>(ProductDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
 
@@ -29,7 +26,7 @@ class ProductsRecyclerAdapter(private val productClickListener: ProductClickList
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
 
-        val product = getItem(position) as FetchingProduct
+        val product = getItem(position)
 
         if (product.photos.isNotEmpty() && product.photos[0].isNotEmpty()) {
 
@@ -42,10 +39,10 @@ class ProductsRecyclerAdapter(private val productClickListener: ProductClickList
         }
 
         holder.binding.itemProductName.text = product.name
-        holder.binding.itemProductPrice.text = product.price.formatPrice()
+        holder.binding.itemProductPrice.text = product.price
 
         holder.binding.itemProductCommentsCountTxt.text = product.comments.size.toString()
-        holder.binding.itemProductRatingTxt.text = product.rating.average().formatRatingAverage()
+        holder.binding.itemProductRatingTxt.text = product.rating
 
         if (product.comments.isEmpty()) {
             holder.binding.itemProductCommentsGroup.visibility = View.INVISIBLE
@@ -63,18 +60,24 @@ class ProductsRecyclerAdapter(private val productClickListener: ProductClickList
     inner class ProductViewHolder(val binding: ItemProductBinding) :
         RecyclerView.ViewHolder(binding.root)
 
-    class ProductDiffCallback : DiffUtil.ItemCallback<Product>() {
+    class ProductDiffCallback : DiffUtil.ItemCallback<ProductForDisplay>() {
 
-        override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
-            return (oldItem as FetchingProduct).id == (newItem as FetchingProduct).id
+        override fun areItemsTheSame(
+            oldItem: ProductForDisplay,
+            newItem: ProductForDisplay
+        ): Boolean {
+            return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean {
-            return (oldItem as FetchingProduct) == (newItem as FetchingProduct)
+        override fun areContentsTheSame(
+            oldItem: ProductForDisplay,
+            newItem: ProductForDisplay
+        ): Boolean {
+            return oldItem == newItem
         }
     }
 
-    class ProductClickListener(private val productClickListener: (product: Product) -> Unit) {
-        fun onProductClick(product: Product) = productClickListener(product)
+    class ProductClickListener(private val productClickListener: (product: ProductForDisplay) -> Unit) {
+        fun onProductClick(product: ProductForDisplay) = productClickListener(product)
     }
 }

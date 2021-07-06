@@ -1,4 +1,4 @@
-package com.abduqodirov.guitaronlineshop.view.ui.productdetails
+package com.abduqodirov.guitaronlineshop.view.screens.productdetails
 
 import android.content.Context
 import android.os.Bundle
@@ -11,14 +11,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
-import com.abduqodirov.guitaronlineshop.data.network.Status.ERROR
-import com.abduqodirov.guitaronlineshop.data.network.Status.LOADING
-import com.abduqodirov.guitaronlineshop.data.network.Status.SUCCESS
+import com.abduqodirov.guitaronlineshop.data.network.Response
 import com.abduqodirov.guitaronlineshop.databinding.FragmentProductDetailsBinding
-import com.abduqodirov.guitaronlineshop.view.ui.ShopApplication
-import com.abduqodirov.guitaronlineshop.view.ui.productdetails.imageslider.ImagesCollectionAdapter
-import com.abduqodirov.guitaronlineshop.view.util.formatPrice
-import com.abduqodirov.guitaronlineshop.view.util.formatRatingAverage
+import com.abduqodirov.guitaronlineshop.view.ShopApplication
+import com.abduqodirov.guitaronlineshop.view.mapper.ProductDisplayMapper
+import com.abduqodirov.guitaronlineshop.view.model.ProductForDisplay
+import com.abduqodirov.guitaronlineshop.view.screens.productdetails.imageslider.ImagesCollectionAdapter
 import javax.inject.Inject
 
 class ProductDetailsFragment : Fragment() {
@@ -75,24 +73,21 @@ class ProductDetailsFragment : Fragment() {
 
                 it.let { response ->
 
-                    when (response.status) {
+                    when (response) {
 
-                        LOADING -> {
+                        is Response.Loading -> {
                             switchUItoLoadingState()
                         }
 
-                        SUCCESS -> {
-                            response.data.let { product ->
-
-                                product?.let { nullSafeProduct ->
-                                    populateViewsWithSuccessfullyFetchedData(nullSafeProduct as FetchingProduct)
-                                }
-                            }
+                        is Response.Success -> {
+                            populateViewsWithSuccessfullyFetchedData(
+                                ProductDisplayMapper().mapFetchedProduct(response.data as FetchingProduct)
+                            )
                         }
 
-                        ERROR -> {
+                        is Response.Failure -> {
                             switchUItoErrorState()
-                            binding.detailsMessageTxt.text = it.message
+                            binding.detailsMessageTxt.text = response.errorMessage
                         }
                     }
                 }
@@ -100,17 +95,16 @@ class ProductDetailsFragment : Fragment() {
         )
     }
 
-    private fun populateViewsWithSuccessfullyFetchedData(product: FetchingProduct) {
+    private fun populateViewsWithSuccessfullyFetchedData(product: ProductForDisplay) {
         binding.detailsProgressBar.visibility = View.INVISIBLE
         binding.detailsErrorGroup.visibility = View.INVISIBLE
         binding.detailsDataGroup.visibility = View.VISIBLE
 
         binding.detailsNameTxt.text = product.name
-        binding.detailsPriceTxt.text = product.price.formatPrice()
+        binding.detailsPriceTxt.text = product.price
         binding.detailsDescTxt.text = product.description
 
-        binding.detailsRatingTxt.text =
-            product.rating.average().formatRatingAverage()
+        binding.detailsRatingTxt.text = product.rating
 
         if (product.rating.isEmpty()) {
             binding.detailsRatingGroup.visibility = View.INVISIBLE

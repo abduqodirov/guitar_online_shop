@@ -1,9 +1,9 @@
 package com.abduqodirov.guitaronlineshop.di.module
 
 import androidx.lifecycle.ViewModel
-import com.abduqodirov.guitaronlineshop.view.ui.productdetails.ProductDetailsViewModel
-import com.abduqodirov.guitaronlineshop.view.ui.productslist.ProductsViewModel
-import com.abduqodirov.guitaronlineshop.view.ui.submitnewproduct.SubmitProductViewModel
+import com.abduqodirov.guitaronlineshop.view.screens.productdetails.ProductDetailsViewModel
+import com.abduqodirov.guitaronlineshop.view.screens.productslist.ProductsViewModel
+import com.abduqodirov.guitaronlineshop.view.screens.submitnewproduct.SubmitProductViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap

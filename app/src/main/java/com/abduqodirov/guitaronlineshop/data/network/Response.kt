@@ -1,25 +1,10 @@
 package com.abduqodirov.guitaronlineshop.data.network
 
-data class Response<out T>(
-    val status: Status,
-    val data: T?,
-    val message: String?
+sealed class Response<out T : Any> {
 
-) {
+    data class Success<out T : Any>(val data: T) : Response<T>()
 
-    companion object {
+    data class Failure(val errorMessage: String) : Response<Nothing>()
 
-        fun <T> success(data: T): Response<T> =
-            Response(
-                status = Status.SUCCESS, data = data, message = null
-            )
-
-        fun <T> error(data: T?, message: String?): Response<T> =
-            Response(
-                status = Status.ERROR, data = data, message = message
-            )
-
-        fun <T> loading(data: T?): Response<T> =
-            Response(status = Status.LOADING, data = data, message = null)
-    }
+    object Loading : Response<Nothing>()
 }
