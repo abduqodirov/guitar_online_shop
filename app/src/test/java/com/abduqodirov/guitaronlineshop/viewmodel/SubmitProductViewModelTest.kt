@@ -1,5 +1,6 @@
 package com.abduqodirov.guitaronlineshop.viewmodel
 
+import com.abduqodirov.guitaronlineshop.view.viewmodel.SubmitProductViewModel
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before

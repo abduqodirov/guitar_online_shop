@@ -5,6 +5,7 @@ plugins {
     id 'kotlin-kapt'
     id "org.jmailen.kotlinter"
 }
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 30
@@ -71,5 +72,7 @@ dependencies {
     kapt 'com.github.bumptech.glide:compiler:4.12.0'
     implementation "com.github.bumptech.glide:okhttp3-integration:4.6.1"
 
-
+    //Dagger
+    implementation 'com.google.dagger:dagger:2.37'
+    kapt 'com.google.dagger:dagger-compiler:2.37'
 }

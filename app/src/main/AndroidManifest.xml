@@ -10,14 +10,15 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:name=".view.ui.ShopApplication"
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.GuitarOnlineShop">
 
         <meta-data
-            android:name="com.abduqodirov.guitaronlineshop.network.ShopGlideModule"
+            android:name="com.abduqodirov.guitaronlineshop.data.network.ShopGlideModule"
             android:value="AppGlideModule" />
 
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".view.ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
