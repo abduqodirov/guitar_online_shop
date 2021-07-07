@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
-import com.abduqodirov.guitaronlineshop.data.network.Response
+import com.abduqodirov.guitaronlineshop.data.model.Response
 import com.abduqodirov.guitaronlineshop.databinding.FragmentProductDetailsBinding
 import com.abduqodirov.guitaronlineshop.view.ShopApplication
 import com.abduqodirov.guitaronlineshop.view.mapper.mapFetchedProduct

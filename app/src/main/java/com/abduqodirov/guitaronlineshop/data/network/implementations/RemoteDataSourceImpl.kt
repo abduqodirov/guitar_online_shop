@@ -1,7 +1,9 @@
-package com.abduqodirov.guitaronlineshop.data.network
+package com.abduqodirov.guitaronlineshop.data.network.implementations
 
 import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
 import com.abduqodirov.guitaronlineshop.data.model.SendingProduct
+import com.abduqodirov.guitaronlineshop.data.network.IRemoteDataSource
+import com.abduqodirov.guitaronlineshop.data.network.retrofit.ShopService
 
 class RemoteDataSourceImpl(private val shopService: ShopService) : IRemoteDataSource {
 

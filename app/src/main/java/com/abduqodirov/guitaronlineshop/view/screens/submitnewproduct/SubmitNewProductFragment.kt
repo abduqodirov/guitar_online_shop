@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.abduqodirov.guitaronlineshop.R
 import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
-import com.abduqodirov.guitaronlineshop.data.network.Response
+import com.abduqodirov.guitaronlineshop.data.model.Response
 import com.abduqodirov.guitaronlineshop.databinding.FragmentSubmitNewProductBinding
 import com.abduqodirov.guitaronlineshop.view.ShopApplication
 import com.abduqodirov.guitaronlineshop.view.model.ProductForSendingScreen

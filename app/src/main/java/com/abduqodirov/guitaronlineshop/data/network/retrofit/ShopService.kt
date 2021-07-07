@@ -1,4 +1,4 @@
-package com.abduqodirov.guitaronlineshop.data.network
+package com.abduqodirov.guitaronlineshop.data.network.retrofit
 
 import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
 import com.abduqodirov.guitaronlineshop.data.model.SendingProduct

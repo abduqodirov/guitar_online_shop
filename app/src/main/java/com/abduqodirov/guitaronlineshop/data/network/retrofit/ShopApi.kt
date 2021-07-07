@@ -1,4 +1,4 @@
-package com.abduqodirov.guitaronlineshop.data.network
+package com.abduqodirov.guitaronlineshop.data.network.retrofit
 
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory

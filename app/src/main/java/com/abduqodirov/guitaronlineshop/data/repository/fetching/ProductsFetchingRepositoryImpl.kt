@@ -1,9 +1,9 @@
 package com.abduqodirov.guitaronlineshop.data.repository.fetching
 
 import androidx.lifecycle.MutableLiveData
-import com.abduqodirov.guitaronlineshop.data.model.Product
+import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
+import com.abduqodirov.guitaronlineshop.data.model.Response
 import com.abduqodirov.guitaronlineshop.data.network.IRemoteDataSource
-import com.abduqodirov.guitaronlineshop.data.network.Response
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -15,8 +15,8 @@ class ProductsFetchingRepositoryImpl @Inject constructor(
     private val remoteDataSource: IRemoteDataSource
 ) : ProductsFetchingRepository {
 
-    var products = MutableLiveData<Response<List<Product>>>()
-    var productById = MutableLiveData<Response<Product>>()
+    var products = MutableLiveData<Response<List<FetchingProduct>>>()
+    var productById = MutableLiveData<Response<FetchingProduct>>()
 
     private val repoJob = Job()
     private val repoScope = CoroutineScope(Dispatchers.Main + repoJob)

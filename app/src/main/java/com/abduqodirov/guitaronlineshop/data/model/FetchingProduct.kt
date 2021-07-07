@@ -24,4 +24,4 @@ data class FetchingProduct(
 
     @field:Json(name = "comments")
     val comments: List<String>
-) : Product()
+)

@@ -1,4 +1,4 @@
-package com.abduqodirov.guitaronlineshop.data.network
+package com.abduqodirov.guitaronlineshop.data.model
 
 sealed class Response<out T : Any> {
 
