@@ -5,6 +5,7 @@ import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
 import com.abduqodirov.guitaronlineshop.data.model.SendingProduct
 import com.abduqodirov.guitaronlineshop.data.network.IRemoteDataSource
 import com.abduqodirov.guitaronlineshop.data.network.Response
+import com.abduqodirov.guitaronlineshop.view.screens.submitnewproduct.di.FragmentScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -12,6 +13,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+@FragmentScope
 class SubmitProductRepositoryImpl @Inject constructor(
     private val remoteDataSource: IRemoteDataSource
 ) : SubmitProductRepository {

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/productsListFragment"
-        android:name="com.abduqodirov.guitaronlineshop.view.screens.productslist.ProductsListFragment"
+        android:name="com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist.ProductsListFragment"
         android:label="fragment_products_list"
         tools:layout="@layout/fragment_products_list" >
         <action
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/productDetailsFragment"
-        android:name="com.abduqodirov.guitaronlineshop.view.screens.productdetails.ProductDetailsFragment"
+        android:name="com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productdetails.ProductDetailsFragment"
         android:label="fragment_product_details"
         tools:layout="@layout/fragment_product_details" >
         <argument

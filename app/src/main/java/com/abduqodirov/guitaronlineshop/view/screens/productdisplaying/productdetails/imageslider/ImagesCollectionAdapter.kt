@@ -1,4 +1,4 @@
-package com.abduqodirov.guitaronlineshop.view.screens.productdetails.imageslider
+package com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productdetails.imageslider
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

@@ -1,19 +1,17 @@
-package com.abduqodirov.guitaronlineshop.view.screens.productdetails
+package com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist
 
 import androidx.lifecycle.ViewModel
 import com.abduqodirov.guitaronlineshop.data.repository.fetching.ProductsFetchingRepository
 import com.abduqodirov.guitaronlineshop.data.repository.fetching.ProductsFetchingRepositoryImpl
 import javax.inject.Inject
-import javax.inject.Named
 
-@Named("detail")
-class ProductDetailsViewModel @Inject constructor(
+class ProductsViewModel @Inject constructor(
     private val productsRepository: ProductsFetchingRepository
 ) : ViewModel() {
 
-    val product = (productsRepository as ProductsFetchingRepositoryImpl).productById
+    val products = (productsRepository as ProductsFetchingRepositoryImpl).products
 
-    fun refreshProduct(id: String) {
-        productsRepository.fetchProductById(id)
+    fun refreshProducts() {
+        productsRepository.fetchProducts()
     }
 }

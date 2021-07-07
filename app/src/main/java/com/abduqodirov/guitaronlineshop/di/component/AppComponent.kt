@@ -1,26 +1,21 @@
 package com.abduqodirov.guitaronlineshop.di.component
 
 import android.content.Context
-import com.abduqodirov.guitaronlineshop.data.repository.fetching.ProductsFetchingRepository
-import com.abduqodirov.guitaronlineshop.data.repository.submitting.SubmitProductRepository
 import com.abduqodirov.guitaronlineshop.di.module.AppModule
-import com.abduqodirov.guitaronlineshop.di.module.ProductViewModelModule
-import com.abduqodirov.guitaronlineshop.di.module.ProductsModuleBinds
 import com.abduqodirov.guitaronlineshop.di.module.ViewModelFactoryModule
-import com.abduqodirov.guitaronlineshop.view.screens.productdetails.ProductDetailsFragment
-import com.abduqodirov.guitaronlineshop.view.screens.productslist.ProductsListFragment
-import com.abduqodirov.guitaronlineshop.view.screens.submitnewproduct.SubmitNewProductFragment
+import com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.di.ProductDisplayingComponent
+import com.abduqodirov.guitaronlineshop.view.screens.submitnewproduct.di.SubmitComponent
 import dagger.BindsInstance
 import dagger.Component
+import dagger.Module
 import javax.inject.Singleton
 
 @Singleton
 @Component(
     modules = [
         AppModule::class,
-        ProductsModuleBinds::class,
         ViewModelFactoryModule::class,
-        ProductViewModelModule::class,
+        SubcomponentsModule::class
     ]
 )
 interface AppComponent {
@@ -30,13 +25,10 @@ interface AppComponent {
         fun create(@BindsInstance applicationContext: Context): AppComponent
     }
 
-    fun inject(fragment: ProductsListFragment)
+    fun submitComponent(): SubmitComponent.Factory
 
-    fun inject(fragment: ProductDetailsFragment)
-
-    fun inject(fragment: SubmitNewProductFragment)
-
-    val productFetchingRepository: ProductsFetchingRepository
-
-    val submitProductRepository: SubmitProductRepository
+    fun productsDisplayComponent(): ProductDisplayingComponent.Factory
 }
+
+@Module(subcomponents = [SubmitComponent::class, ProductDisplayingComponent::class])
+class SubcomponentsModule

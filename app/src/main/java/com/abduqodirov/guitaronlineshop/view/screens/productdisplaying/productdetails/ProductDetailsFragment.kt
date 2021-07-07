@@ -1,4 +1,4 @@
-package com.abduqodirov.guitaronlineshop.view.screens.productdetails
+package com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productdetails
 
 import android.content.Context
 import android.os.Bundle
@@ -16,7 +16,7 @@ import com.abduqodirov.guitaronlineshop.databinding.FragmentProductDetailsBindin
 import com.abduqodirov.guitaronlineshop.view.ShopApplication
 import com.abduqodirov.guitaronlineshop.view.mapper.mapFetchedProduct
 import com.abduqodirov.guitaronlineshop.view.model.ProductForDisplay
-import com.abduqodirov.guitaronlineshop.view.screens.productdetails.imageslider.ImagesCollectionAdapter
+import com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productdetails.imageslider.ImagesCollectionAdapter
 import javax.inject.Inject
 
 class ProductDetailsFragment : Fragment() {
@@ -33,7 +33,8 @@ class ProductDetailsFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        (requireActivity().application as ShopApplication).appComponent.inject(this)
+        (requireActivity().application as ShopApplication).appComponent.productsDisplayComponent()
+            .create().inject(this)
     }
 
     override fun onCreateView(

@@ -1,4 +1,4 @@
-package com.abduqodirov.guitaronlineshop.view.screens.productslist
+package com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist
 
 // import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
 import android.content.Context
@@ -32,7 +32,8 @@ class ProductsListFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
-        (requireActivity().application as ShopApplication).appComponent.inject(this)
+        (requireActivity().application as ShopApplication).appComponent.productsDisplayComponent()
+            .create().inject(this)
     }
 
     override fun onCreateView(

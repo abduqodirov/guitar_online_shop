@@ -1,4 +1,4 @@
-package com.abduqodirov.guitaronlineshop.view.screens.productslist
+package com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist
 
 import android.view.LayoutInflater
 import android.view.View

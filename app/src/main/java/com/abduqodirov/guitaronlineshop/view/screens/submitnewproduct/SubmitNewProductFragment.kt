@@ -36,7 +36,8 @@ class SubmitNewProductFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
-        (requireActivity().application as ShopApplication).appComponent.inject(this)
+        (requireActivity().application as ShopApplication).appComponent.submitComponent().create()
+            .inject(this)
     }
 
     override fun onCreateView(

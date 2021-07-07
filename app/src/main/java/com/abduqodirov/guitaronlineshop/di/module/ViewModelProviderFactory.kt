@@ -31,6 +31,7 @@ class ViewModelProviderFactory @Inject constructor(
         }
 
         return try {
+            @Suppress("UNCHECKED_CAST")
             creator.get() as T
         } catch (e: Exception) {
             throw RuntimeException(e)
