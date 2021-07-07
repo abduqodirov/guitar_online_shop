@@ -1,7 +1,7 @@
 package com.abduqodirov.guitaronlineshop.data.network
 
 import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
-import com.abduqodirov.guitaronlineshop.data.model.SendingProduct
+import com.abduqodirov.guitaronlineshop.data.model.SendingProductWithUploadedImages
 
 interface IRemoteDataSource {
 
@@ -9,5 +9,5 @@ interface IRemoteDataSource {
 
     suspend fun fetchProductById(id: String): FetchingProduct
 
-    suspend fun submitProduct(product: SendingProduct): FetchingProduct
+    suspend fun submitProduct(product: SendingProductWithUploadedImages): FetchingProduct
 }

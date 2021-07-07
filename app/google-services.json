@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "600765376544",
+    "project_id": "onlineshopguitar",
+    "storage_bucket": "onlineshopguitar.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:600765376544:android:a4a8327850b978b94c7445",
+        "android_client_info": {
+          "package_name": "com.abduqodirov.guitaronlineshop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "600765376544-h855s4809o7et8f5omt6gp3uhcclenrv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKxl17tyPOjqlhOGJiXDMf85mJ-mH8F7A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "600765376544-h855s4809o7et8f5omt6gp3uhcclenrv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

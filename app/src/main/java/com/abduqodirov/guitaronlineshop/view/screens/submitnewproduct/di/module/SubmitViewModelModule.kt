@@ -1,4 +1,4 @@
-package com.abduqodirov.guitaronlineshop.view.screens.submitnewproduct.di
+package com.abduqodirov.guitaronlineshop.view.screens.submitnewproduct.di.module
 
 import androidx.lifecycle.ViewModel
 import com.abduqodirov.guitaronlineshop.di.module.ViewModelKey

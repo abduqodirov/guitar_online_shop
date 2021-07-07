@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.abduqodirov.guitaronlineshop.data.repository.submitting.SubmitProductRepository
 import com.abduqodirov.guitaronlineshop.data.repository.submitting.SubmitProductRepositoryImpl
-import com.abduqodirov.guitaronlineshop.view.mapper.mapSubmittingProduct
 import com.abduqodirov.guitaronlineshop.view.model.ProductForSendingScreen
 import javax.inject.Inject
 
@@ -21,7 +20,7 @@ class SubmitProductViewModel @Inject constructor(
     private val validators = arrayOf(::isValidName, ::isValidPrice, ::isValidDesc)
 
     fun sendProduct(product: ProductForSendingScreen) {
-        submitRepo.sendProduct(mapSubmittingProduct(product))
+        submitRepo.sendProduct(product)
     }
 
     fun validateEditText(

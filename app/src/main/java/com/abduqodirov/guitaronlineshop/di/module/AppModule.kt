@@ -1,8 +1,8 @@
 package com.abduqodirov.guitaronlineshop.di.module
 
 import com.abduqodirov.guitaronlineshop.data.network.IRemoteDataSource
-import com.abduqodirov.guitaronlineshop.data.network.ShopApi
 import com.abduqodirov.guitaronlineshop.data.network.implementations.RemoteDataSourceImpl
+import com.abduqodirov.guitaronlineshop.data.network.retrofit.ShopApi
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

@@ -3,8 +3,8 @@ package com.abduqodirov.guitaronlineshop.di.component
 import android.content.Context
 import com.abduqodirov.guitaronlineshop.di.module.AppModule
 import com.abduqodirov.guitaronlineshop.di.module.ViewModelFactoryModule
-import com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.di.ProductDisplayingComponent
-import com.abduqodirov.guitaronlineshop.view.screens.submitnewproduct.di.SubmitComponent
+import com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.di.component.ProductDisplayingComponent
+import com.abduqodirov.guitaronlineshop.view.screens.submitnewproduct.di.component.SubmitComponent
 import dagger.BindsInstance
 import dagger.Component
 import dagger.Module

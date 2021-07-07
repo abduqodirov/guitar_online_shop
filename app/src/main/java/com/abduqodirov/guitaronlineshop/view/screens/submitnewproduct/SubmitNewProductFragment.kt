@@ -1,6 +1,7 @@
 package com.abduqodirov.guitaronlineshop.view.screens.submitnewproduct
 
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -151,13 +152,13 @@ class SubmitNewProductFragment : Fragment() {
             val name = binding.submitProductNameEdt.text.toString()
             val price = binding.submitProductPriceEdt.text.toString().toDouble()
             val desc = binding.submitProductDescEdt.text.toString()
+            val image = BitmapFactory.decodeResource(resources, R.drawable.img)
 
-            // TODO o'zini pojosini qo'ysak keraksiz fieldlar ham yo'qoladi
             val sendingProduct = ProductForSendingScreen(
                 name = name,
                 price = price,
                 description = desc,
-                photos = listOf(""),
+                photos = listOf(image),
             )
 
             viewModel.sendProduct(sendingProduct)

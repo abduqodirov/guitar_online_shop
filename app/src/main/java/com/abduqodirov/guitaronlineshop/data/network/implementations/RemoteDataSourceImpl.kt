@@ -1,7 +1,7 @@
 package com.abduqodirov.guitaronlineshop.data.network.implementations
 
 import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
-import com.abduqodirov.guitaronlineshop.data.model.SendingProduct
+import com.abduqodirov.guitaronlineshop.data.model.SendingProductWithUploadedImages
 import com.abduqodirov.guitaronlineshop.data.network.IRemoteDataSource
 import com.abduqodirov.guitaronlineshop.data.network.retrofit.ShopService
 
@@ -15,7 +15,7 @@ class RemoteDataSourceImpl(private val shopService: ShopService) : IRemoteDataSo
         return shopService.fetchProductById(id)
     }
 
-    override suspend fun submitProduct(product: SendingProduct): FetchingProduct {
+    override suspend fun submitProduct(product: SendingProductWithUploadedImages): FetchingProduct {
         return shopService.submitProduct(product)
     }
 }

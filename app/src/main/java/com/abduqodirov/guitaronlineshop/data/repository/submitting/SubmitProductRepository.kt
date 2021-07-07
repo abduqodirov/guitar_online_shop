@@ -1,8 +1,8 @@
 package com.abduqodirov.guitaronlineshop.data.repository.submitting
 
-import com.abduqodirov.guitaronlineshop.data.model.SendingProduct
+import com.abduqodirov.guitaronlineshop.view.model.ProductForSendingScreen
 
 interface SubmitProductRepository {
 
-    fun sendProduct(sendingProduct: SendingProduct)
+    fun sendProduct(sendingProduct: ProductForSendingScreen)
 }

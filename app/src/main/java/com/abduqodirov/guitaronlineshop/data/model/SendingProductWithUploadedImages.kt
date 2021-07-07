@@ -2,7 +2,7 @@ package com.abduqodirov.guitaronlineshop.data.model
 
 import com.squareup.moshi.Json
 
-data class SendingProduct(
+data class SendingProductWithUploadedImages(
 
     @field:Json(name = "name")
     val name: String,

@@ -1,9 +1,11 @@
-package com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.di
+package com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.di.component
 
 import com.abduqodirov.guitaronlineshop.data.repository.fetching.ProductsFetchingRepository
+import com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.di.module.ProductDisplayModuleBinds
+import com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.di.module.ProductViewModelModule
 import com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productdetails.ProductDetailsFragment
 import com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist.ProductsListFragment
-import com.abduqodirov.guitaronlineshop.view.screens.submitnewproduct.di.FragmentScope
+import com.abduqodirov.guitaronlineshop.view.screens.submitnewproduct.di.component.FragmentScope
 import dagger.Subcomponent
 
 @FragmentScope

@@ -4,6 +4,7 @@ plugins {
     id 'androidx.navigation.safeargs'
     id 'kotlin-kapt'
     id "org.jmailen.kotlinter"
+    id 'com.google.gms.google-services'
 }
 apply plugin: 'kotlin-kapt'
 
@@ -75,4 +76,7 @@ dependencies {
     //Dagger
     implementation 'com.google.dagger:dagger:2.37'
     kapt 'com.google.dagger:dagger-compiler:2.37'
+
+    //Firebase storage
+    implementation 'com.google.firebase:firebase-storage-ktx:20.0.0'
 }
