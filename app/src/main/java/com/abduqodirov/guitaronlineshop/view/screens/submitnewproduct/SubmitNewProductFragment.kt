@@ -13,10 +13,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.abduqodirov.guitaronlineshop.R
 import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
-import com.abduqodirov.guitaronlineshop.data.model.SendingProduct
 import com.abduqodirov.guitaronlineshop.data.network.Response
 import com.abduqodirov.guitaronlineshop.databinding.FragmentSubmitNewProductBinding
 import com.abduqodirov.guitaronlineshop.view.ShopApplication
+import com.abduqodirov.guitaronlineshop.view.model.ProductForSendingScreen
 import javax.inject.Inject
 
 private const val EDITTEXT_NAME_POSITION = 0
@@ -152,13 +152,11 @@ class SubmitNewProductFragment : Fragment() {
             val desc = binding.submitProductDescEdt.text.toString()
 
             // TODO o'zini pojosini qo'ysak keraksiz fieldlar ham yo'qoladi
-            val sendingProduct = SendingProduct(
+            val sendingProduct = ProductForSendingScreen(
                 name = name,
                 price = price,
                 description = desc,
                 photos = listOf(""),
-                comments = listOf(""),
-                rating = listOf(2.5, 4.5)
             )
 
             viewModel.sendProduct(sendingProduct)

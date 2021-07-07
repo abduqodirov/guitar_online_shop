@@ -1,5 +1,6 @@
 package com.abduqodirov.guitaronlineshop.view.screens.productslist
 
+// import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,11 +12,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.abduqodirov.guitaronlineshop.R
 import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
-// import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
 import com.abduqodirov.guitaronlineshop.data.network.Response
 import com.abduqodirov.guitaronlineshop.databinding.FragmentProductsListBinding
 import com.abduqodirov.guitaronlineshop.view.ShopApplication
-import com.abduqodirov.guitaronlineshop.view.mapper.ProductDisplayMapper
+import com.abduqodirov.guitaronlineshop.view.mapper.mapFetchedProduct
 import com.abduqodirov.guitaronlineshop.view.model.ProductForDisplay
 import javax.inject.Inject
 
@@ -72,7 +72,7 @@ class ProductsListFragment : Fragment() {
                         is Response.Success -> {
                             populateViewsWithSuccessfullyFetchedData(
                                 response.data.map { fetched ->
-                                    ProductDisplayMapper().mapFetchedProduct(fetched as FetchingProduct)
+                                    mapFetchedProduct(fetched as FetchingProduct)
                                 }
                             )
                         }

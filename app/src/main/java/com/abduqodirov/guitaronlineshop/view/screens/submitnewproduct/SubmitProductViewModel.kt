@@ -2,9 +2,10 @@ package com.abduqodirov.guitaronlineshop.view.screens.submitnewproduct
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.abduqodirov.guitaronlineshop.data.model.SendingProduct
 import com.abduqodirov.guitaronlineshop.data.repository.submitting.SubmitProductRepository
 import com.abduqodirov.guitaronlineshop.data.repository.submitting.SubmitProductRepositoryImpl
+import com.abduqodirov.guitaronlineshop.view.mapper.mapSubmittingProduct
+import com.abduqodirov.guitaronlineshop.view.model.ProductForSendingScreen
 import javax.inject.Inject
 
 private const val MINIMUM_DESC_LENGTH = 10
@@ -13,14 +14,14 @@ class SubmitProductViewModel @Inject constructor(
     private val submitRepo: SubmitProductRepository
 ) : ViewModel() {
 
-    val formInputsValidationLive = MutableLiveData<Array<Boolean>>(arrayOf(false, false, false))
+    val formInputsValidationLive = MutableLiveData(arrayOf(false, false, false))
 
     val sentProduct = (submitRepo as SubmitProductRepositoryImpl).sentProduct
 
     private val validators = arrayOf(::isValidName, ::isValidPrice, ::isValidDesc)
 
-    fun sendProduct(product: SendingProduct) {
-        submitRepo.sendProduct(product)
+    fun sendProduct(product: ProductForSendingScreen) {
+        submitRepo.sendProduct(mapSubmittingProduct(product))
     }
 
     fun validateEditText(

@@ -14,7 +14,7 @@ import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
 import com.abduqodirov.guitaronlineshop.data.network.Response
 import com.abduqodirov.guitaronlineshop.databinding.FragmentProductDetailsBinding
 import com.abduqodirov.guitaronlineshop.view.ShopApplication
-import com.abduqodirov.guitaronlineshop.view.mapper.ProductDisplayMapper
+import com.abduqodirov.guitaronlineshop.view.mapper.mapFetchedProduct
 import com.abduqodirov.guitaronlineshop.view.model.ProductForDisplay
 import com.abduqodirov.guitaronlineshop.view.screens.productdetails.imageslider.ImagesCollectionAdapter
 import javax.inject.Inject
@@ -81,7 +81,7 @@ class ProductDetailsFragment : Fragment() {
 
                         is Response.Success -> {
                             populateViewsWithSuccessfullyFetchedData(
-                                ProductDisplayMapper().mapFetchedProduct(response.data as FetchingProduct)
+                                mapFetchedProduct(response.data as FetchingProduct)
                             )
                         }
 
