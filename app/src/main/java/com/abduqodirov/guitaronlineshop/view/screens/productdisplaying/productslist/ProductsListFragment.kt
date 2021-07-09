@@ -11,11 +11,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.abduqodirov.guitaronlineshop.R
-import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
-import com.abduqodirov.guitaronlineshop.data.model.Response
 import com.abduqodirov.guitaronlineshop.databinding.FragmentProductsListBinding
 import com.abduqodirov.guitaronlineshop.view.ShopApplication
-import com.abduqodirov.guitaronlineshop.view.mapper.mapFetchedProduct
 import com.abduqodirov.guitaronlineshop.view.model.ProductForDisplay
 import javax.inject.Inject
 
@@ -63,30 +60,35 @@ class ProductsListFragment : Fragment() {
     }
 
     private fun observeProductsData() {
+
         viewModel.products.observe(
             viewLifecycleOwner,
             {
 
-                it?.let { response ->
-                    when (response) {
+                populateViewsWithSuccessfullyFetchedData(
+                    it
+                )
 
-                        is Response.Success -> {
-                            populateViewsWithSuccessfullyFetchedData(
-                                response.data.map { fetched ->
-                                    mapFetchedProduct(fetched as FetchingProduct)
-                                }
-                            )
-                        }
-
-                        is Response.Failure -> {
-                            switchUIToErrorState()
-                        }
-
-                        is Response.Loading -> {
-                            switchUIToLoadingState()
-                        }
-                    }
-                }
+                // it?.let { response ->
+                //     when (response) {
+                //
+                //         is Response.Success -> {
+                //             populateViewsWithSuccessfullyFetchedData(
+                //                 response.data.map { fetched ->
+                //                     mapFetchedProduct(fetched as FetchingProduct)
+                //                 }
+                //             )
+                //         }
+                //
+                //         is Response.Failure -> {
+                //             switchUIToErrorState()
+                //         }
+                //
+                //         is Response.Loading -> {
+                //             switchUIToLoadingState()
+                //         }
+                //     }
+                // }
             }
         )
     }
