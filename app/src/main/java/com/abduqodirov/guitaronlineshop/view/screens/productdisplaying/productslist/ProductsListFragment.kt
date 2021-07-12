@@ -1,6 +1,5 @@
 package com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist
 
-// import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.abduqodirov.guitaronlineshop.R
+import com.abduqodirov.guitaronlineshop.data.model.Response
 import com.abduqodirov.guitaronlineshop.databinding.FragmentProductsListBinding
 import com.abduqodirov.guitaronlineshop.view.ShopApplication
 import com.abduqodirov.guitaronlineshop.view.model.ProductForDisplay
@@ -65,30 +65,24 @@ class ProductsListFragment : Fragment() {
             viewLifecycleOwner,
             {
 
-                populateViewsWithSuccessfullyFetchedData(
-                    it
-                )
+                it?.let { response ->
+                    when (response) {
 
-                // it?.let { response ->
-                //     when (response) {
-                //
-                //         is Response.Success -> {
-                //             populateViewsWithSuccessfullyFetchedData(
-                //                 response.data.map { fetched ->
-                //                     mapFetchedProduct(fetched as FetchingProduct)
-                //                 }
-                //             )
-                //         }
-                //
-                //         is Response.Failure -> {
-                //             switchUIToErrorState()
-                //         }
-                //
-                //         is Response.Loading -> {
-                //             switchUIToLoadingState()
-                //         }
-                //     }
-                // }
+                        is Response.Success -> {
+                            populateViewsWithSuccessfullyFetchedData(
+                                response.data
+                            )
+                        }
+
+                        is Response.Failure -> {
+                            switchUIToErrorState()
+                        }
+
+                        is Response.Loading -> {
+                            switchUIToLoadingState()
+                        }
+                    }
+                }
             }
         )
     }

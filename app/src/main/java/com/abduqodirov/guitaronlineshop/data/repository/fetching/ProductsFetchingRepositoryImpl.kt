@@ -25,6 +25,8 @@ class ProductsFetchingRepositoryImpl @Inject constructor(
 
     override fun fetchProducts(): Flow<List<FetchingProduct>> = flow {
 
+        emit(remoteDataSource.fetchProducts())
+
         // repoScope.launch {
         //
         //     withContext(Dispatchers.IO) {
@@ -37,7 +39,7 @@ class ProductsFetchingRepositoryImpl @Inject constructor(
         // products.postValue(
         //     Response.Success(remoteDataSource.fetchProducts())
         // )
-        emit(remoteDataSource.fetchProducts())
+
         // } catch (e: Exception) {
         //
         //     // products.postValue(
