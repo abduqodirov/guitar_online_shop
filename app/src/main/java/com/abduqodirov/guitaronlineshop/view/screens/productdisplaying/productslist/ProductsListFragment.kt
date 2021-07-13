@@ -2,18 +2,23 @@ package com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.products
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.abduqodirov.guitaronlineshop.R
-import com.abduqodirov.guitaronlineshop.data.model.Response
 import com.abduqodirov.guitaronlineshop.databinding.FragmentProductsListBinding
 import com.abduqodirov.guitaronlineshop.view.ShopApplication
 import com.abduqodirov.guitaronlineshop.view.model.ProductForDisplay
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ProductsListFragment : Fragment() {
@@ -25,6 +30,10 @@ class ProductsListFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel by viewModels<ProductsViewModel> { providerFactory }
+
+    private var productsListScope: Job? = null
+
+    private var counter = 0
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -47,7 +56,7 @@ class ProductsListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.refreshProducts()
+        // viewModel.refreshProducts()
 
         observeProductsData()
 
@@ -61,54 +70,95 @@ class ProductsListFragment : Fragment() {
 
     private fun observeProductsData() {
 
-        viewModel.products.observe(
-            viewLifecycleOwner,
-            {
-
-                it?.let { response ->
-                    when (response) {
-
-                        is Response.Success -> {
-                            populateViewsWithSuccessfullyFetchedData(
-                                response.data
-                            )
-                        }
-
-                        is Response.Failure -> {
-                            switchUIToErrorState()
-                        }
-
-                        is Response.Loading -> {
-                            switchUIToLoadingState()
-                        }
-                    }
-                }
+        val productAdapter = ProductsRecyclerAdapter(
+            ProductsRecyclerAdapter.ProductClickListener {
+                navigateToProductDetails(it)
             }
         )
-    }
 
-    private fun populateViewsWithSuccessfullyFetchedData(products: List<ProductForDisplay>) {
+        binding.productsRecycler.adapter = productAdapter
+        binding.productsRecycler.setHasFixedSize(true)
 
-        switchUIToSuccessState()
-
-        if (products.isEmpty()) {
-            binding.productsMessageTxt.text =
-                getString(R.string.no_products)
-            binding.productsMessageTxt.visibility = View.VISIBLE
-        } else {
-
-            val productAdapter = ProductsRecyclerAdapter(
-                ProductsRecyclerAdapter.ProductClickListener {
-                    navigateToProductDetails(it)
+        // TODO O'zi kerakmi shu, menda bir martta chaqiriladiku
+        // productsListScope?.cancel()
+        lifecycleScope.launch {
+            viewModel.fetchProducts()
+                .catch { e ->
+                    Log.d("acmm", "observeProductsData: error occured  ")
+                    e.printStackTrace()
                 }
-            )
-
-            binding.productsRecycler.adapter = productAdapter
-            binding.productsRecycler.setHasFixedSize(true)
-
-            productAdapter.submitList(products.reversed())
+                .collect {
+                    Log.d("acmm", "observeProductsData: ishga tushdi $counter")
+                    counter++
+                    productAdapter.submitData(it)
+                    switchUIToSuccessState()
+                }
         }
+
+        // viewModel.products.observe(
+        //     viewLifecycleOwner,
+        //     {
+        //
+        //         it?.let { response ->
+        //             when (response) {
+        //
+        //                 is Response.Success -> {
+        //                     populateViewsWithSuccessfullyFetchedData(
+        //                         response.data
+        //                     )
+        //                 }
+        //
+        //                 is Response.Failure -> {
+        //                     switchUIToErrorState()
+        //                 }
+        //
+        //                 is Response.Loading -> {
+        //                     switchUIToLoadingState()
+        //                 }
+        //             }
+        //         }
+        //     }
+        // )
     }
+
+    // TODO pagingga maxSize berish kerak, bo'lmasa juda ko'p productlarni saqlavoradi.
+
+    // private fun populateViewsWithSuccessfullyFetchedData(products: List<ProductForDisplay>) {
+    //
+    //     switchUIToSuccessState()
+    //
+    //     if (products.isEmpty()) {
+    //         binding.productsMessageTxt.text =
+    //             getString(R.string.no_products)
+    //         binding.productsMessageTxt.visibility = View.VISIBLE
+    //     } else {
+    //
+    //         val productAdapter = ProductsRecyclerAdapter(
+    //             ProductsRecyclerAdapter.ProductClickListener {
+    //                 navigateToProductDetails(it)
+    //             }
+    //         )
+    //
+    //         binding.productsRecycler.adapter = productAdapter
+    //         binding.productsRecycler.setHasFixedSize(true)
+    //
+    //     }
+    // }
+
+    // TODO kerakmikin mengayam shu
+    // private fun initSearch(query: String) {
+    //     // First part of the method is unchanged
+    //
+    //     // Scroll to top when the list is refreshed from network.
+    //     lifecycleScope.launch {
+    //         adapter.loadStateFlow
+    //             // Only emit when REFRESH LoadState changes.
+    //             .distinctUntilChangedBy { it.refresh }
+    //             // Only react to cases where REFRESH completes i.e., NotLoading.
+    //             .filter { it.refresh is LoadState.NotLoading }
+    //             .collect { binding.list.scrollToPosition(0) }
+    //     }
+    // }
 
     private fun switchUIToLoadingState() {
         binding.productsProgressBar.visibility = View.VISIBLE
@@ -146,6 +196,7 @@ class ProductsListFragment : Fragment() {
     private fun setUpViewListeners() {
         binding.productsRetryButton.setOnClickListener {
             viewModel.refreshProducts()
+            viewModel.fetchProducts()
         }
 
         binding.productsAddNewProductBtn.setOnClickListener {

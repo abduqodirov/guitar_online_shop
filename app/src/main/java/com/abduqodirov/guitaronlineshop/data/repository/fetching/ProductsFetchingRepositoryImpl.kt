@@ -1,9 +1,13 @@
 package com.abduqodirov.guitaronlineshop.data.repository.fetching
 
 import androidx.lifecycle.MutableLiveData
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
 import com.abduqodirov.guitaronlineshop.data.model.Response
 import com.abduqodirov.guitaronlineshop.data.network.IRemoteDataSource
+import com.abduqodirov.guitaronlineshop.data.network.paging.ProductsPagingSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -24,34 +28,14 @@ class ProductsFetchingRepositoryImpl @Inject constructor(
     private val repoScope = CoroutineScope(Dispatchers.Main + repoJob)
 
     override fun fetchProducts(): Flow<List<FetchingProduct>> = flow {
-
         emit(remoteDataSource.fetchProducts())
+    }
 
-        // repoScope.launch {
-        //
-        //     withContext(Dispatchers.IO) {
-
-        // emit(Response.Loading)
-
-        // products.postValue(Response.Loading)
-
-        // try {
-        // products.postValue(
-        //     Response.Success(remoteDataSource.fetchProducts())
-        // )
-
-        // } catch (e: Exception) {
-        //
-        //     // products.postValue(
-        //     //     Response.Failure(
-        //     //         errorMessage = e.localizedMessage ?: "Failed to load"
-        //     //     )
-        //     // )
-        //     emit(Response.Failure(e.localizedMessage))
-        //     e.printStackTrace()
-        // }
-        //     }
-        // }
+    override fun fetchPaginatedProducts(): Flow<PagingData<FetchingProduct>> {
+        return Pager(
+            config = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = false),
+            pagingSourceFactory = { ProductsPagingSource(remoteDataSource) }
+        ).flow
     }
 
     override fun fetchProductById(id: String) {
@@ -67,5 +51,9 @@ class ProductsFetchingRepositoryImpl @Inject constructor(
                 }
             }
         }
+    }
+
+    companion object {
+        const val PAGE_SIZE = 10
     }
 }

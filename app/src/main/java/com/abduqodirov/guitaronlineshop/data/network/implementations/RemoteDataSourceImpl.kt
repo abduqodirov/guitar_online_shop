@@ -1,6 +1,7 @@
 package com.abduqodirov.guitaronlineshop.data.network.implementations
 
 import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
+import com.abduqodirov.guitaronlineshop.data.model.PageProducts
 import com.abduqodirov.guitaronlineshop.data.model.SendingProductWithUploadedImages
 import com.abduqodirov.guitaronlineshop.data.network.IRemoteDataSource
 import com.abduqodirov.guitaronlineshop.data.network.retrofit.ShopService
@@ -9,6 +10,10 @@ class RemoteDataSourceImpl(private val shopService: ShopService) : IRemoteDataSo
 
     override suspend fun fetchProducts(): List<FetchingProduct> {
         return shopService.fetchProducts()
+    }
+
+    override suspend fun fetchPaginatedProducts(pageIndex: Int, limit: Int): PageProducts {
+        return shopService.fetchPaginatedProducts(pageIndex = pageIndex, limit = limit)
     }
 
     override suspend fun fetchProductById(id: String): FetchingProduct {

@@ -1,0 +1,47 @@
+package com.abduqodirov.guitaronlineshop.data.network.paging
+
+import androidx.paging.PagingSource
+import androidx.paging.PagingState
+import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
+import com.abduqodirov.guitaronlineshop.data.network.IRemoteDataSource
+
+const val PRODUCTS_STARTING_INDEX = 1
+
+class ProductsPagingSource(
+    private val remoteDataSource: IRemoteDataSource
+) : PagingSource<Int, FetchingProduct>() {
+
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, FetchingProduct> {
+
+        return try {
+            val currentPageIndex = params.key ?: PRODUCTS_STARTING_INDEX
+            val response = remoteDataSource.fetchPaginatedProducts(
+                pageIndex = currentPageIndex,
+                limit = params.loadSize
+            )
+
+            // TODO ohirgi pagega kelganimizni totalCount orqali tekshirib olsa bo'ladi. totalCount - params.loadSize
+            val nextPageIndex = if (response.products.isEmpty()) {
+                null
+            } else {
+                currentPageIndex + 1
+            }
+
+            LoadResult.Page(
+                data = response.products,
+                prevKey = if (currentPageIndex == PRODUCTS_STARTING_INDEX) null else -1,
+                nextKey = nextPageIndex
+            )
+        } catch (e: Exception) {
+            // TODO error olinganini hisobga olmagan UI
+            return LoadResult.Error(e)
+        }
+    }
+
+    override fun getRefreshKey(state: PagingState<Int, FetchingProduct>): Int? {
+        return state.anchorPosition?.let { anchorPosition ->
+            state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
+                ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
+        }
+    }
+}
