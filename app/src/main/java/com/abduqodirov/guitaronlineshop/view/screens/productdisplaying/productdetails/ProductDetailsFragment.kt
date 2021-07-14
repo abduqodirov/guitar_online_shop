@@ -60,6 +60,7 @@ class ProductDetailsFragment : Fragment() {
         binding.detailsRetryBtn.setOnClickListener {
             viewModel.refreshProduct(id)
         }
+        // TODO commentlar null bo'lsa animationni o'chirib qo'yaverish kerak
     }
 
     override fun onDestroy() {

@@ -37,7 +37,7 @@ class SubmitProductRepositoryImpl @Inject constructor(
                 try {
                     val urlsOfUploadedImages = arrayListOf<String>("")
 
-                    // TODO UNCOMMENT
+                    // TODO uncomment commented lines
                     // sendingProduct.photos.forEach {
                     //     urlsOfUploadedImages.add(imageUploader.uploadImage(it))
                     // }

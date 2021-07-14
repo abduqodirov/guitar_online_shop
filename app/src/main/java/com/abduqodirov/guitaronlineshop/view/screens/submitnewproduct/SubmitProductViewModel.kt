@@ -1,6 +1,5 @@
 package com.abduqodirov.guitaronlineshop.view.screens.submitnewproduct
 
-import android.graphics.Bitmap
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.abduqodirov.guitaronlineshop.data.repository.submitting.SubmitProductRepository
@@ -19,19 +18,6 @@ class SubmitProductViewModel @Inject constructor(
     val sentProduct = (submitRepo as SubmitProductRepositoryImpl).sentProduct
 
     private val validators = arrayOf(::isValidName, ::isValidPrice, ::isValidDesc)
-
-    fun flood(bitmap: Bitmap) {
-        for (i in 1..100) {
-            val product = ProductForSendingScreen(
-                name = "$i product",
-                price = i.toDouble() * 10.toDouble(),
-                description = "$i lorem",
-                photos = listOf(bitmap)
-            )
-
-            submitRepo.sendProduct(product)
-        }
-    }
 
     fun sendProduct(product: ProductForSendingScreen) {
         submitRepo.sendProduct(product)

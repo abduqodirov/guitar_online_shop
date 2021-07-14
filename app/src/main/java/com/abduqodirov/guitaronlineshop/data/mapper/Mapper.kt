@@ -12,7 +12,7 @@ fun mapSubmittingProduct(
         price = productForSending.price,
         description = productForSending.description,
         photos = images,
-        comments = listOf(""),
+        comments = listOf(),
         rating = listOf(),
     )
 }
