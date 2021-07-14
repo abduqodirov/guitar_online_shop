@@ -5,6 +5,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
 import com.abduqodirov.guitaronlineshop.data.network.IRemoteDataSource
+import com.abduqodirov.guitaronlineshop.data.network.PAGE_LIMIT
 
 const val PRODUCTS_STARTING_INDEX = 1
 
@@ -20,7 +21,7 @@ class ProductsPagingSource(
             val currentPageIndex = params.key ?: PRODUCTS_STARTING_INDEX
             val response = remoteDataSource.fetchPaginatedProducts(
                 pageIndex = currentPageIndex,
-                limit = params.loadSize
+                limit = PAGE_LIMIT
             )
 
             // TODO ohirgi pagega kelganimizni totalCount orqali tekshirib olsa bo'ladi. totalCount - params.loadSize

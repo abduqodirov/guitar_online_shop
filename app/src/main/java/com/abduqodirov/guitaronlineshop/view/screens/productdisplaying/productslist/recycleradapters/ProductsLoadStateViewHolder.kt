@@ -1,5 +1,6 @@
 package com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist.recycleradapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
@@ -30,6 +31,7 @@ class ProductsLoadStateViewHolder(
 
     companion object {
         fun create(parent: ViewGroup, retry: () -> Unit): ProductsLoadStateViewHolder {
+            Log.d("lstt", "create: loadStateViewholder creating requested")
 
             val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_footer_products_loading, parent, false)

@@ -2,6 +2,7 @@ package com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.products
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -77,17 +78,21 @@ class ProductsListFragment : Fragment() {
             }
         )
 
-        productAdapter.withLoadStateHeaderAndFooter(
+        binding.productsRecycler.adapter = productAdapter.withLoadStateHeaderAndFooter(
             header = ProductsLoadStateAdapter(
-                retry = { productAdapter.retry() }
+                retry = {
+                    Log.d("fragmentda", "observeProductsData: header retyry")
+                    productAdapter.retry()
+                }
             ),
             footer = ProductsLoadStateAdapter(
-                retry = { productAdapter.retry() }
+                retry = {
+                    Log.d("fragmentda", "observeProductsData: footer retyry")
+                    productAdapter.retry()
+                }
             )
         )
-
-        binding.productsRecycler.adapter = productAdapter
-        binding.productsRecycler.setHasFixedSize(true)
+        // binding.productsRecycler.setHasFixedSize(true)
 
         // TODO O'zi kerakmi shu, menda bir martta chaqiriladiku
         // productsListScope?.cancel()

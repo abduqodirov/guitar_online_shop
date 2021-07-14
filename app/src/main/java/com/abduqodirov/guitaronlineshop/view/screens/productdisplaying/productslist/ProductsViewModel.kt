@@ -28,10 +28,10 @@ class ProductsViewModel @Inject constructor(
 
     private var paginatedProducts: Flow<PagingData<ProductForDisplay>>? = null
 
-    init {
-        // refreshProducts()
-        fetchProducts()
-    }
+    // init {
+    //     // refreshProducts()
+    //     fetchProducts()
+    // }
 
     fun fetchProducts(): Flow<PagingData<ProductForDisplay>> {
 

@@ -1,6 +1,5 @@
 package com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist.recycleradapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,11 +18,9 @@ class ProductsRecyclerAdapter(private val productClickListener: ProductClickList
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
 
-        Log.d("rcmm", "onCreateViewHolder: crr")
-        val binding =
-            ItemProductBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false
-            )
+        val binding = ItemProductBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false
+        )
 
         return ProductViewHolder(binding)
     }

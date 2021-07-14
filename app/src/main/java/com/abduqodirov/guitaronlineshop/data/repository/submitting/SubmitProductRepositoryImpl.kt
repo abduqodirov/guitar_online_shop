@@ -35,11 +35,12 @@ class SubmitProductRepositoryImpl @Inject constructor(
                 sentProduct.postValue(Response.Loading)
 
                 try {
-                    val urlsOfUploadedImages = arrayListOf<String>()
+                    val urlsOfUploadedImages = arrayListOf<String>("")
 
-                    sendingProduct.photos.forEach {
-                        urlsOfUploadedImages.add(imageUploader.uploadImage(it))
-                    }
+                    // TODO UNCOMMENT
+                    // sendingProduct.photos.forEach {
+                    //     urlsOfUploadedImages.add(imageUploader.uploadImage(it))
+                    // }
 
                     val productWithUploadedImages =
                         mapSubmittingProduct(sendingProduct, urlsOfUploadedImages)
