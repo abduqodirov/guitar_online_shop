@@ -1,6 +1,5 @@
 package com.abduqodirov.guitaronlineshop.data.network.paging
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
@@ -14,8 +13,6 @@ class ProductsPagingSource(
 ) : PagingSource<Int, FetchingProduct>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, FetchingProduct> {
-
-        Log.d("pagingda", "load: ${params.loadSize}")
 
         return try {
             val currentPageIndex = params.key ?: PRODUCTS_STARTING_INDEX
