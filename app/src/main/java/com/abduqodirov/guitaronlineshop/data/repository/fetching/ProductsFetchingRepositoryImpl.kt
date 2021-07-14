@@ -21,7 +21,6 @@ class ProductsFetchingRepositoryImpl @Inject constructor(
     private val remoteDataSource: IRemoteDataSource
 ) : ProductsFetchingRepository {
 
-    // var products = MutableLiveData<Response<List<FetchingProduct>>>()
     var productById = MutableLiveData<Response<FetchingProduct>>()
 
     private val repoJob = Job()

@@ -2,7 +2,6 @@ package com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.products
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +14,8 @@ import com.abduqodirov.guitaronlineshop.R
 import com.abduqodirov.guitaronlineshop.databinding.FragmentProductsListBinding
 import com.abduqodirov.guitaronlineshop.view.ShopApplication
 import com.abduqodirov.guitaronlineshop.view.model.ProductForDisplay
+import com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist.recycleradapters.ProductsLoadStateAdapter
+import com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist.recycleradapters.ProductsRecyclerAdapter
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
@@ -76,6 +77,15 @@ class ProductsListFragment : Fragment() {
             }
         )
 
+        productAdapter.withLoadStateHeaderAndFooter(
+            header = ProductsLoadStateAdapter(
+                retry = { productAdapter.retry() }
+            ),
+            footer = ProductsLoadStateAdapter(
+                retry = { productAdapter.retry() }
+            )
+        )
+
         binding.productsRecycler.adapter = productAdapter
         binding.productsRecycler.setHasFixedSize(true)
 
@@ -84,11 +94,9 @@ class ProductsListFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.fetchProducts()
                 .catch { e ->
-                    Log.d("acmm", "observeProductsData: error occured  ")
                     e.printStackTrace()
                 }
                 .collect {
-                    Log.d("acmm", "observeProductsData: ishga tushdi $counter")
                     counter++
                     productAdapter.submitData(it)
                     switchUIToSuccessState()
@@ -195,7 +203,7 @@ class ProductsListFragment : Fragment() {
 
     private fun setUpViewListeners() {
         binding.productsRetryButton.setOnClickListener {
-            viewModel.refreshProducts()
+            // viewModel.refreshProducts()
             viewModel.fetchProducts()
         }
 

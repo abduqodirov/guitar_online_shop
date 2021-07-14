@@ -1,4 +1,4 @@
-package com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist
+package com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist.recycleradapters
 
 import android.util.Log
 import android.view.LayoutInflater
