@@ -60,9 +60,6 @@ class SubmitNewProductFragment : Fragment() {
         setUpViewClickListeners()
 
         observeSendingProductStatusAndData()
-        val image = BitmapFactory.decodeResource(resources, R.drawable.img)
-
-        viewModel.flood(image)
     }
 
     override fun onDestroy() {

@@ -31,7 +31,7 @@ class ProductsRecyclerAdapter(private val productClickListener: ProductClickList
 
         // TODO null bo'lganda datalar qo'yvorish
         if (product != null) {
-            if (product.photos.isNotEmpty() && product.photos[0].isNotEmpty()) {
+            if (product.photos.isNotEmpty()) {
 
                 holder.binding.itemProductImage.loadImageFromNetwork(
                     url = product.photos[0],
