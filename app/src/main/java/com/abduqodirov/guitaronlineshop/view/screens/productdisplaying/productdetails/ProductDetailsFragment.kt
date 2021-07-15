@@ -10,7 +10,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
-import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
 import com.abduqodirov.guitaronlineshop.data.model.Response
 import com.abduqodirov.guitaronlineshop.databinding.FragmentProductDetailsBinding
 import com.abduqodirov.guitaronlineshop.view.ShopApplication
@@ -83,7 +82,7 @@ class ProductDetailsFragment : Fragment() {
 
                         is Response.Success -> {
                             populateViewsWithSuccessfullyFetchedData(
-                                mapFetchedProduct(response.data as FetchingProduct)
+                                mapFetchedProduct(response.data)
                             )
                         }
 
@@ -119,7 +118,6 @@ class ProductDetailsFragment : Fragment() {
             )
         binding.detailsImagePager.adapter = imagesCollectionAdapter
 
-        // TODO empty comments shouldn't be displayed
         val commentAdapter = CommentsRecyclerAdapter()
 
         binding.detailsCommentsRecycler.setHasFixedSize(true)

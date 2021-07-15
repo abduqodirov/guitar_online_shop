@@ -2,7 +2,6 @@ package com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.products
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +16,6 @@ import com.abduqodirov.guitaronlineshop.view.ShopApplication
 import com.abduqodirov.guitaronlineshop.view.model.ProductForDisplay
 import com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist.recycleradapters.ProductsLoadStateAdapter
 import com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist.recycleradapters.ProductsRecyclerAdapter
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -32,10 +30,6 @@ class ProductsListFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel by viewModels<ProductsViewModel> { providerFactory }
-
-    private var productsListScope: Job? = null
-
-    private var counter = 0
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -58,8 +52,6 @@ class ProductsListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // viewModel.refreshProducts()
-
         observeProductsData()
 
         setUpViewListeners()
@@ -81,28 +73,23 @@ class ProductsListFragment : Fragment() {
         binding.productsRecycler.adapter = productAdapter.withLoadStateHeaderAndFooter(
             header = ProductsLoadStateAdapter(
                 retry = {
-                    Log.d("fragmentda", "observeProductsData: header retyry")
                     productAdapter.retry()
                 }
             ),
             footer = ProductsLoadStateAdapter(
                 retry = {
-                    Log.d("fragmentda", "observeProductsData: footer retyry")
                     productAdapter.retry()
                 }
             )
         )
-        // binding.productsRecycler.setHasFixedSize(true)
+        binding.productsRecycler.setHasFixedSize(true)
 
-        // TODO O'zi kerakmi shu, menda bir martta chaqiriladiku
-        // productsListScope?.cancel()
         lifecycleScope.launch {
             viewModel.fetchProducts()
                 .catch { e ->
                     e.printStackTrace()
                 }
                 .collect {
-                    counter++
                     productAdapter.submitData(it)
                     switchUIToSuccessState()
                 }
@@ -208,7 +195,6 @@ class ProductsListFragment : Fragment() {
 
     private fun setUpViewListeners() {
         binding.productsRetryButton.setOnClickListener {
-            // viewModel.refreshProducts()
             viewModel.fetchProducts()
         }
 

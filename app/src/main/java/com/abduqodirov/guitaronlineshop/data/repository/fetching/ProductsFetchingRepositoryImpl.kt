@@ -26,16 +26,9 @@ class ProductsFetchingRepositoryImpl @Inject constructor(
     private val repoJob = Job()
     private val repoScope = CoroutineScope(Dispatchers.Main + repoJob)
 
-    override fun fetchProducts(): Flow<List<FetchingProduct>> = flow {
-        emit(remoteDataSource.fetchProducts())
-    }
-
     override fun fetchPaginatedProducts(): Flow<PagingData<FetchingProduct>> {
         return Pager(
-            config = PagingConfig(
-                pageSize = PAGE_SIZE,
-
-            ),
+            config = PagingConfig(pageSize = PAGE_SIZE),
             pagingSourceFactory = { ProductsPagingSource(remoteDataSource) }
         ).flow
     }
