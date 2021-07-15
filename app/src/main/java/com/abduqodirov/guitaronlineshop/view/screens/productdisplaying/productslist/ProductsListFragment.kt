@@ -2,16 +2,15 @@ package com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.products
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.paging.LoadState
 import com.abduqodirov.guitaronlineshop.R
 import com.abduqodirov.guitaronlineshop.databinding.FragmentProductsListBinding
 import com.abduqodirov.guitaronlineshop.view.ShopApplication
@@ -23,6 +22,10 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+const val PRODUCTS_FRAGMENT_RESULT_KEY = "produtcs_fragment_result"
+
+const val PRODUCTS_FRAGMENT_LOW_PRICE = "products_low_price"
+
 class ProductsListFragment : Fragment() {
 
     @Inject
@@ -32,8 +35,6 @@ class ProductsListFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel by viewModels<ProductsViewModel> { providerFactory }
-
-    private lateinit var productAdapter: ProductsRecyclerAdapter
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -56,11 +57,11 @@ class ProductsListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initAdapter()
-
         observeProductsData()
 
         setUpViewListeners()
+
+        // setupFilteringListener()
     }
 
     override fun onDestroy() {
@@ -70,17 +71,7 @@ class ProductsListFragment : Fragment() {
 
     private fun observeProductsData() {
 
-        lifecycleScope.launch {
-            viewModel.fetchProducts()
-                .catch { e -> } // TODO catch this one also
-                .collect {
-                    productAdapter.submitData(it)
-                }
-        }
-    }
-
-    private fun initAdapter() {
-        productAdapter = ProductsRecyclerAdapter(
+        val productAdapter = ProductsRecyclerAdapter(
             ProductsRecyclerAdapter.ProductClickListener {
                 navigateToProductDetails(it)
             }
@@ -100,31 +91,91 @@ class ProductsListFragment : Fragment() {
         )
         binding.productsRecycler.setHasFixedSize(true)
 
-        setUpViewVisibilities()
+        lifecycleScope.launch {
+            viewModel.fetchProducts()
+                .catch { e ->
+                    Log.d("ftt", "observeProductsData: fragmentda tutdim")
+                    e.printStackTrace()
+                }
+                .collect {
+                    productAdapter.submitData(it)
+                    switchUIToSuccessState()
+                }
+        }
+
+        // viewModel.products.observe(
+        //     viewLifecycleOwner,
+        //     {
+        //
+        //         it?.let { response ->
+        //             when (response) {
+        //
+        //                 is Response.Success -> {
+        //                     populateViewsWithSuccessfullyFetchedData(
+        //                         response.data
+        //                     )
+        //                 }
+        //
+        //                 is Response.Failure -> {
+        //                     switchUIToErrorState()
+        //                 }
+        //
+        //                 is Response.Loading -> {
+        //                     switchUIToLoadingState()
+        //                 }
+        //             }
+        //         }
+        //     }
+        // )
     }
 
-    private fun setUpViewVisibilities() {
-        productAdapter.addLoadStateListener { loadState ->
+    // TODO pagingga maxSize berish kerak, bo'lmasa juda ko'p productlarni saqlavoradi.
 
-            binding.productsProgressBar.isVisible = loadState.source.refresh is LoadState.Loading
+    // private fun populateViewsWithSuccessfullyFetchedData(products: List<ProductForDisplay>) {
+    //
+    //     switchUIToSuccessState()
+    //
+    //     if (products.isEmpty()) {
+    //         binding.productsMessageTxt.text =
+    //             getString(R.string.no_products)
+    //         binding.productsMessageTxt.visibility = View.VISIBLE
+    //     } else {
+    //
+    //         val productAdapter = ProductsRecyclerAdapter(
+    //             ProductsRecyclerAdapter.ProductClickListener {
+    //                 navigateToProductDetails(it)
+    //             }
+    //         )
+    //
+    //         binding.productsRecycler.adapter = productAdapter
+    //         binding.productsRecycler.setHasFixedSize(true)
+    //
+    //     }
+    // }
 
-            binding.productsRecycler.isVisible = loadState.source.refresh is LoadState.NotLoading
+    private fun switchUIToLoadingState() {
+        binding.productsProgressBar.visibility = View.VISIBLE
 
-            binding.productsRetryButton.isVisible = loadState.source.refresh is LoadState.Error
-            binding.productsErrorTxt.isVisible = loadState.source.refresh is LoadState.Error
+        binding.productsRecycler.visibility = View.GONE
+        binding.productsRetryButton.visibility = View.GONE
+        binding.productsMessageTxt.visibility = View.GONE
+    }
 
-            if (loadState.source.refresh is LoadState.Error) {
-                binding.productsErrorTxt.text =
-                    (loadState.source.refresh as LoadState.Error).error.localizedMessage
-            }
+    private fun switchUIToSuccessState() {
+        binding.productsRecycler.visibility = View.VISIBLE
 
-            val isListEmpty =
-                loadState.refresh is LoadState.NotLoading && productAdapter.itemCount == 0
-            if (isListEmpty) {
-                binding.produstsEmptyListTxt.text = getString(R.string.no_products)
-                binding.produstsEmptyListTxt.isVisible = isListEmpty
-            }
-        }
+        binding.productsProgressBar.visibility = View.GONE
+        binding.productsRetryButton.visibility = View.GONE
+        binding.productsMessageTxt.visibility = View.GONE
+    }
+
+    private fun switchUIToErrorState() {
+        binding.productsRecycler.visibility = View.INVISIBLE
+        binding.productsProgressBar.visibility = View.INVISIBLE
+
+        binding.productsMessageTxt.text = getString(R.string.product_fetching_failure)
+        binding.productsRetryButton.visibility = View.VISIBLE
+        binding.productsMessageTxt.visibility = View.VISIBLE
     }
 
     private fun navigateToProductDetails(it: ProductForDisplay) {
@@ -136,15 +187,20 @@ class ProductsListFragment : Fragment() {
     }
 
     private fun setUpViewListeners() {
-
         binding.productsRetryButton.setOnClickListener {
-            observeProductsData()
+            viewModel.fetchProducts()
         }
 
         binding.productsAddNewProductBtn.setOnClickListener {
             findNavController().navigate(
                 ProductsListFragmentDirections.actionProductsListFragmentToSubmitNewProductFragment()
             )
+        }
+
+        val filterFragment = FilteringSortingBottomSheetFragment()
+
+        binding.productsFilteringBtn.setOnClickListener {
+            filterFragment.show(requireActivity().supportFragmentManager, "filter")
         }
     }
 
