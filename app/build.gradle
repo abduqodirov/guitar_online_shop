@@ -81,4 +81,7 @@ dependencies {
 
     //Firebase storage
     implementation 'com.google.firebase:firebase-storage-ktx:20.0.0'
+
+    //Timber for logging
+    implementation 'com.jakewharton.timber:timber:4.7.1'
 }

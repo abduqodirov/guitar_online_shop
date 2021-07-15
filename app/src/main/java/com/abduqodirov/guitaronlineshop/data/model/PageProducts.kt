@@ -17,10 +17,8 @@ data class PageProducts(
     val totalCount: Long,
 
     @field:Json(name = "max")
-    val max: Long,
+    val max: Float,
 
     @field:Json(name = "min")
-    val min: Long,
-
-    val nextPage: Int? = null
+    val min: Float,
 )

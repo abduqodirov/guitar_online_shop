@@ -14,8 +14,7 @@ interface ShopService {
     @GET("/products")
     suspend fun fetchProducts(): List<FetchingProduct>
 
-    // TODO hardcoded highPrice. Backend engineer should create another endpoint for pagination without filters.
-    @GET("/products/search?nameFilter=&lowPrice=0&highPrice=9999999")
+    @GET("/products/search?nameFilter=&lowPrice=0&highPrice=0")
     suspend fun fetchPaginatedProducts(
         @Query("page") pageIndex: Int,
         @Query("limit") limit: Int,
