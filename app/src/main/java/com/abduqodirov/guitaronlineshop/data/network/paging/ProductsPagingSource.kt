@@ -21,12 +21,10 @@ class ProductsPagingSource(
                 limit = PAGE_LIMIT
             )
 
-            // TODO ohirgi pagega kelganimizni totalCount orqali tekshirib olsa bo'ladi. totalCount - params.loadSize
             val nextPageIndex = if (response.products.isEmpty()) {
                 null
             } else {
                 currentPageIndex + 1
-                // TODO duplicate ketib qolyapti, to'g'rilash kerak
             }
 
             LoadResult.Page(
@@ -35,7 +33,6 @@ class ProductsPagingSource(
                 nextKey = nextPageIndex
             )
         } catch (e: Exception) {
-            // TODO error olinganini hisobga olmagan UI
             return LoadResult.Error(e)
         }
     }
