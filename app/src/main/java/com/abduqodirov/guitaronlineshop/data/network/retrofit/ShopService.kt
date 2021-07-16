@@ -14,10 +14,12 @@ interface ShopService {
     @GET("/products")
     suspend fun fetchProducts(): List<FetchingProduct>
 
-    @GET("/products/search?nameFilter=&lowPrice=0&highPrice=0")
+    @GET("/products/search?nameFilter")
     suspend fun fetchPaginatedProducts(
         @Query("page") pageIndex: Int,
         @Query("limit") limit: Int,
+        @Query("lowPrice") lowPrice: Int,
+        @Query("highPrice") highPrice: Int,
     ): PageProducts
 
     @GET("/products/{id}")

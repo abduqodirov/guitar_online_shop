@@ -7,9 +7,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.abduqodirov.guitaronlineshop.R
 import com.abduqodirov.guitaronlineshop.databinding.DialogFragmentSortingAndFilteringBinding
+import com.abduqodirov.guitaronlineshop.view.model.SortingFilteringFields
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class FilteringSortingBottomSheetFragment : BottomSheetDialogFragment() {
+class FilteringSortingBottomSheetFragment(
+    private val listener: SortingAndFilteringChangeListener
+) : BottomSheetDialogFragment() {
 
     private var _binding: DialogFragmentSortingAndFilteringBinding? = null
     private val binding get() = _binding!!
@@ -32,6 +35,13 @@ class FilteringSortingBottomSheetFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.filteringApplyBtn.setOnClickListener {
+
+            val sortingFilteringFields = SortingFilteringFields(
+                lowPrice = binding.filteringLowPriceEdt.text.toString().toInt(),
+                highPrice = binding.filteringHighPriceEdt.text.toString().toInt()
+            )
+
+            listener.onFieldsChangeListener(sortingFilteringFields)
             dismiss()
         }
     }
@@ -43,9 +53,10 @@ class FilteringSortingBottomSheetFragment : BottomSheetDialogFragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(onLowPriceChangeSetListener: () -> Unit) {
-
-            FilteringSortingBottomSheetFragment()
+        fun newInstance(
+            onSortingFilteringFieldsChangeListener: SortingAndFilteringChangeListener
+        ): FilteringSortingBottomSheetFragment {
+            return FilteringSortingBottomSheetFragment(onSortingFilteringFieldsChangeListener)
         }
     }
 }

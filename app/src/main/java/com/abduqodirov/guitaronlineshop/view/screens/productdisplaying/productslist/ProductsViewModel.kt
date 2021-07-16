@@ -10,6 +10,7 @@ import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
 import com.abduqodirov.guitaronlineshop.data.repository.fetching.ProductsFetchingRepository
 import com.abduqodirov.guitaronlineshop.view.mapper.mapFetchedProduct
 import com.abduqodirov.guitaronlineshop.view.model.ProductForDisplay
+import com.abduqodirov.guitaronlineshop.view.model.SortingFilteringFields
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -22,10 +23,10 @@ class ProductsViewModel @Inject constructor(
 
     val products = paginatedProducts?.asLiveData()
 
-    fun fetchProducts(): Flow<PagingData<ProductForDisplay>> {
+    fun fetchProducts(fields: SortingFilteringFields): Flow<PagingData<ProductForDisplay>> {
 
         val newResult: Flow<PagingData<ProductForDisplay>> =
-            productsRepository.fetchPaginatedProducts().map { value: PagingData<FetchingProduct> ->
+            productsRepository.fetchPaginatedProducts(fields).map { value: PagingData<FetchingProduct> ->
                 value.map {
                     mapFetchedProduct(it)
                 }
