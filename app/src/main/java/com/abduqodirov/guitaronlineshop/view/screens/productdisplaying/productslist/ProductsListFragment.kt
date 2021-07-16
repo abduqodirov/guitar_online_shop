@@ -123,10 +123,10 @@ class ProductsListFragment : Fragment() {
             }
 
             val isListEmpty =
-                loadState.refresh is LoadState.NotLoading && productAdapter.itemCount == 0
+                loadState.source.refresh !is LoadState.Error && loadState.refresh is LoadState.NotLoading && productAdapter.itemCount == 0
+            binding.produstsEmptyListTxt.isVisible = isListEmpty
             if (isListEmpty) {
                 binding.produstsEmptyListTxt.text = getString(R.string.no_products)
-                binding.produstsEmptyListTxt.isVisible = isListEmpty
             }
         }
     }

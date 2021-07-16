@@ -84,9 +84,9 @@
         android:layout_height="wrap_content"
         android:text="@string/retry"
         android:visibility="gone"
-        app:layout_constraintStart_toStartOf="@id/products_message_txt"
-        app:layout_constraintEnd_toEndOf="@id/products_message_txt"
-        app:layout_constraintTop_toBottomOf="@id/products_message_txt"
+        app:layout_constraintStart_toStartOf="@id/products_error_txt"
+        app:layout_constraintEnd_toEndOf="@id/products_error_txt"
+        app:layout_constraintTop_toBottomOf="@id/products_error_txt"
         tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
