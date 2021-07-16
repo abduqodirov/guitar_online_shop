@@ -5,13 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import androidx.fragment.app.DialogFragment
 import com.abduqodirov.guitaronlineshop.R
 import com.abduqodirov.guitaronlineshop.databinding.DialogFragmentSortingAndFilteringBinding
+import com.abduqodirov.guitaronlineshop.view.model.SortOrderOption
 import com.abduqodirov.guitaronlineshop.view.model.SortingFilteringFields
+import com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist.adapters.SortOrderOptionsAdapter
 import com.abduqodirov.guitaronlineshop.view.util.orders
 import com.abduqodirov.guitaronlineshop.view.util.sortByOptions
+import com.abduqodirov.guitaronlineshop.view.util.sortOrderOptions
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class FilteringSortingBottomSheetFragment(
@@ -41,12 +43,10 @@ class FilteringSortingBottomSheetFragment(
         var selectedSortBy = sortByOptions[0]
         var selectedOrderOfSort = orders[0]
 
-        setSortSpinnerListener { selectedField ->
-            selectedSortBy = selectedField
-        }
+        setSortAndOrderSpinnerListener { selectedOption ->
 
-        setOrderSpinnerListener { selectedOrder ->
-            selectedOrderOfSort = selectedOrder
+            selectedSortBy = selectedOption.sortBy
+            selectedOrderOfSort = selectedOption.orderBy
         }
 
         binding.filteringApplyBtn.setOnClickListener {
@@ -65,38 +65,10 @@ class FilteringSortingBottomSheetFragment(
         }
     }
 
-    private fun setOrderSpinnerListener(orderSelectedListener: (orderBy: String) -> Unit) {
-        val orderAdapter = ArrayAdapter(
+    private fun setSortAndOrderSpinnerListener(sortSelectedListener: (choice: SortOrderOption) -> Unit) {
+        val sortAdapter = SortOrderOptionsAdapter(
             requireContext(),
-            android.R.layout.simple_spinner_item,
-            orders
-        )
-
-        orderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-        binding.dialogFilterOrderSpinner.adapter = orderAdapter
-
-        binding.dialogFilterOrderSpinner.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    orderSelectedListener(sortByOptions[position])
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                }
-            }
-    }
-
-    private fun setSortSpinnerListener(sortSelectedListener: (sort: String) -> Unit) {
-        val sortAdapter = ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_spinner_item,
-            sortByOptions
+            sortOrderOptions
         )
 
         sortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -110,7 +82,7 @@ class FilteringSortingBottomSheetFragment(
                     position: Int,
                     id: Long
                 ) {
-                    sortSelectedListener(sortByOptions[position])
+                    sortSelectedListener(sortOrderOptions[position])
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
