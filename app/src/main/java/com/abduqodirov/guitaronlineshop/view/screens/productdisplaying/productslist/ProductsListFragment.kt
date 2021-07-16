@@ -113,6 +113,7 @@ class ProductsListFragment : Fragment() {
             binding.productsProgressBar.isVisible = loadState.source.refresh is LoadState.Loading
 
             binding.productsRecycler.isVisible = loadState.source.refresh is LoadState.NotLoading
+            binding.productsFilteringBtn.isVisible = loadState.source.refresh is LoadState.NotLoading
 
             binding.productsRetryButton.isVisible = loadState.source.refresh is LoadState.Error
             binding.productsErrorTxt.isVisible = loadState.source.refresh is LoadState.Error
@@ -123,7 +124,7 @@ class ProductsListFragment : Fragment() {
             }
 
             val isListEmpty =
-                loadState.source.refresh !is LoadState.Error && loadState.refresh is LoadState.NotLoading && productAdapter.itemCount == 0
+                loadState.refresh is LoadState.NotLoading && productAdapter.itemCount == 0
             binding.produstsEmptyListTxt.isVisible = isListEmpty
             if (isListEmpty) {
                 binding.produstsEmptyListTxt.text = getString(R.string.no_products)
