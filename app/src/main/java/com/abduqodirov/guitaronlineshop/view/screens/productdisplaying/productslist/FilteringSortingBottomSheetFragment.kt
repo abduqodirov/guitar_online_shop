@@ -10,6 +10,7 @@ import androidx.fragment.app.DialogFragment
 import com.abduqodirov.guitaronlineshop.R
 import com.abduqodirov.guitaronlineshop.databinding.DialogFragmentSortingAndFilteringBinding
 import com.abduqodirov.guitaronlineshop.view.model.SortingFilteringFields
+import com.abduqodirov.guitaronlineshop.view.util.orders
 import com.abduqodirov.guitaronlineshop.view.util.sortByOptions
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
@@ -38,28 +39,14 @@ class FilteringSortingBottomSheetFragment(
         super.onViewCreated(view, savedInstanceState)
 
         var selectedSortBy = sortByOptions[0]
+        var selectedOrderOfSort = orders[0]
 
-        val sortAdapter = ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_spinner_item,
-            sortByOptions
-        )
+        setSortSpinnerListener { selectedField ->
+            selectedSortBy = selectedField
+        }
 
-        sortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.dialogFilterSortSpinner.adapter = sortAdapter
-
-        binding.dialogFilterSortSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                selectedSortBy = sortByOptions[position]
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
+        setOrderSpinnerListener { selectedOrder ->
+            selectedOrderOfSort = selectedOrder
         }
 
         binding.filteringApplyBtn.setOnClickListener {
@@ -69,12 +56,66 @@ class FilteringSortingBottomSheetFragment(
                 lowPrice = binding.filteringLowPriceEdt.text.toString().toInt(),
                 highPrice = binding.filteringHighPriceEdt.text.toString().toInt(),
                 sortBy = selectedSortBy,
-                nameFilter = ""
+                nameFilter = "",
+                order = selectedOrderOfSort
             )
 
             listener.onFieldsChangeListener(sortingFilteringFields)
             dismiss()
         }
+    }
+
+    private fun setOrderSpinnerListener(orderSelectedListener: (orderBy: String) -> Unit) {
+        val orderAdapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_item,
+            orders
+        )
+
+        orderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        binding.dialogFilterOrderSpinner.adapter = orderAdapter
+
+        binding.dialogFilterOrderSpinner.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    orderSelectedListener(sortByOptions[position])
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                }
+            }
+    }
+
+    private fun setSortSpinnerListener(sortSelectedListener: (sort: String) -> Unit) {
+        val sortAdapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_item,
+            sortByOptions
+        )
+
+        sortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.dialogFilterSortSpinner.adapter = sortAdapter
+
+        binding.dialogFilterSortSpinner.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    sortSelectedListener(sortByOptions[position])
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                }
+            }
     }
 
     override fun onDestroyView() {

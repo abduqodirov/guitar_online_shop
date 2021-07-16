@@ -22,6 +22,7 @@ interface ShopService {
         @Query("nameFilter") nameFilter: String,
         @Query("lowPrice") lowPrice: Int,
         @Query("highPrice") highPrice: Int,
+        @Query("orderOfSort") orderOfSort: String
     ): PageProducts
 
     @GET("/products/{id}")

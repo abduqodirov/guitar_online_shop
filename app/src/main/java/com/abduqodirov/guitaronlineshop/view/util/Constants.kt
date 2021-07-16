@@ -7,10 +7,13 @@ const val OMIT_PRICE_FILTER_VALUE = 0
 
 val sortByOptions = arrayOf("name", "price") // TODO make dynamic
 
+val orders = arrayOf("ASC", "DESC")
+
 val defaultFields =
     SortingFilteringFields(
         OMIT_PRICE_FILTER_VALUE,
         OMIT_PRICE_FILTER_VALUE,
         sortByOptions[0],
-        ""
+        "",
+        orders[0]
     )
