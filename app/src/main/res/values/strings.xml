@@ -11,4 +11,6 @@
     <string name="submit_products_hint_description">Enter description</string>
     <string name="successfully_uploaded">Successfully uploaded</string>
     <string name="show_product">Show product</string>
+    <string name="apply">Apply</string>
+    <string name="filter">Filter</string>
 </resources>

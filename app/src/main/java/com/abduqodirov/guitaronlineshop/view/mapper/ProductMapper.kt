@@ -7,6 +7,7 @@ import com.abduqodirov.guitaronlineshop.view.util.formatRatingAverage
 
 fun mapFetchedProduct(fetchingProduct: FetchingProduct): ProductForDisplay {
 
+    var formattedRatingAverage = ""
     var ratingAverage = 0.0
 
     fetchingProduct.rating.forEach {
@@ -16,6 +17,9 @@ fun mapFetchedProduct(fetchingProduct: FetchingProduct): ProductForDisplay {
     }
 
     ratingAverage /= fetchingProduct.rating.size
+    if (ratingAverage > 1.0) {
+        formattedRatingAverage = ratingAverage.formatRatingAverage()
+    }
 
     // TODO we will remove once we restricted null and empty string values on backend
     val validatedComments = arrayListOf<String>()
@@ -42,7 +46,7 @@ fun mapFetchedProduct(fetchingProduct: FetchingProduct): ProductForDisplay {
         price = fetchingProduct.price.formatPrice(),
         description = fetchingProduct.description,
         photos = validatedPhotos,
-        rating = ratingAverage.formatRatingAverage(),
+        rating = formattedRatingAverage,
         comments = validatedComments
     )
 }

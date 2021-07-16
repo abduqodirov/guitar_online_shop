@@ -89,7 +89,7 @@
         android:id="@+id/details_rating_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="rating_icon, details_rating_txt" />
+        app:constraint_referenced_ids="details_rating_icon, details_rating_txt" />
 
     <View
         android:id="@+id/horizontal_border"
@@ -114,7 +114,7 @@
         android:id="@+id/details_data_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="details_name_txt, details_price_txt, details_desc_txt, details_comments_recycler, details_rating_txt, details_rating_icon" />
+        app:constraint_referenced_ids="details_name_txt, details_price_txt, details_desc_txt, details_comments_recycler, details_rating_txt" />
 
 
     <androidx.core.widget.ContentLoadingProgressBar
