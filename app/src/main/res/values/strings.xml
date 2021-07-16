@@ -13,4 +13,6 @@
     <string name="show_product">Show product</string>
     <string name="apply">Apply</string>
     <string name="filter">Filter</string>
+    <string name="max_price">maxPrice</string>
+    <string name="min_price">Min price</string>
 </resources>

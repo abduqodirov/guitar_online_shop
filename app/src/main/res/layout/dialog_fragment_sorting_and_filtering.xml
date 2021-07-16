@@ -6,12 +6,30 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
+    <Spinner
+        android:id="@+id/dialog_filter_sort_spinner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:spinnerMode="dropdown"
+        app:layout_constraintEnd_toStartOf="@id/dialog_filter_order_spinner"/>
+
+    <Spinner
+        android:id="@+id/dialog_filter_order_spinner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/dialog_filter_sort_spinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/input_layout_low_price_dialog_filter"
         android:layout_width="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/input_layout_high_price_dialog_filter"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dialog_filter_sort_spinner"
         android:layout_height="wrap_content"
         app:boxBackgroundColor="@color/white">
 
@@ -22,7 +40,7 @@
             android:inputType="number"
             android:maxLines="1"
             tools:text="0"
-            android:hint="hint" />
+            android:hint="@string/min_price" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -30,7 +48,7 @@
         android:layout_width="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/input_layout_low_price_dialog_filter"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dialog_filter_sort_spinner"
         android:layout_height="wrap_content"
         app:boxBackgroundColor="@color/white">
 
@@ -41,7 +59,7 @@
             android:inputType="number"
             android:maxLines="1"
             android:layout_height="wrap_content"
-            android:hint="hint" />
+            android:hint="@string/max_price" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button

@@ -22,7 +22,9 @@ class RemoteDataSourceImpl(private val shopService: ShopService) : IRemoteDataSo
             pageIndex = pageIndex,
             limit = limit,
             lowPrice = fields.lowPrice,
-            highPrice = fields.highPrice
+            highPrice = fields.highPrice,
+            sortedBy = fields.sortBy,
+            nameFilter = fields.nameFilter
         )
     }
 
