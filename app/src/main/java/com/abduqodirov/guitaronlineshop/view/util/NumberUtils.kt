@@ -15,3 +15,11 @@ fun Double.formatRatingAverage(): String {
     // TODO 0.0 rating bo'lsa ham ko'rsatmaslik kerak
     return formatter.format(this)
 }
+
+fun String.toIntOrZeroIfEmpty(): Int {
+    return if (this.isEmpty()) {
+        0
+    } else {
+        this.toInt()
+    }
+}

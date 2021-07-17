@@ -14,7 +14,9 @@ import com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productsl
 import com.abduqodirov.guitaronlineshop.view.util.orders
 import com.abduqodirov.guitaronlineshop.view.util.sortByOptions
 import com.abduqodirov.guitaronlineshop.view.util.sortOrderOptions
+import com.abduqodirov.guitaronlineshop.view.util.toIntOrZeroIfEmpty
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.snackbar.Snackbar
 
 class FilteringSortingBottomSheetFragment(
     private val listener: SortingAndFilteringChangeListener
@@ -51,18 +53,29 @@ class FilteringSortingBottomSheetFragment(
 
         binding.filteringApplyBtn.setOnClickListener {
 
-            // TODO emtpy bo'lganda 0 qo'yvorish kerak
-            val sortingFilteringFields = SortingFilteringFields(
-                lowPrice = binding.filteringLowPriceEdt.text.toString().toInt(),
-                highPrice = binding.filteringHighPriceEdt.text.toString().toInt(),
-                sortBy = selectedSortBy,
-                nameFilter = "",
-                order = selectedOrderOfSort
-            )
+            try {
+                val sortingFilteringFields = SortingFilteringFields(
+                    lowPrice = binding.filteringLowPriceEdt.text.toString().toIntOrZeroIfEmpty(),
+                    highPrice = binding.filteringHighPriceEdt.text.toString().toIntOrZeroIfEmpty(),
+                    sortBy = selectedSortBy,
+                    nameFilter = "",
+                    order = selectedOrderOfSort
+                )
 
-            listener.onFieldsChangeListener(sortingFilteringFields)
-            dismiss()
+                if (sortingFilteringFields.arePricesValid()) {
+                    listener.onFieldsChangeListener(sortingFilteringFields)
+                    dismiss()
+                } else {
+                    showErrorWithSnackBar(getString(R.string.low_high_balance_error))
+                }
+            } catch (number: NumberFormatException) {
+                showErrorWithSnackBar(getString(R.string.int_limit))
+            }
         }
+    }
+
+    private fun showErrorWithSnackBar(msg: String) {
+        Snackbar.make(binding.dialogFilterRoot, msg, Snackbar.LENGTH_LONG).show()
     }
 
     private fun setSortAndOrderSpinnerListener(sortSelectedListener: (choice: SortOrderOption) -> Unit) {
