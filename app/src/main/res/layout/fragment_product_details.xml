@@ -14,6 +14,16 @@
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toTopOf="@id/details_name_txt"
         app:layout_constraintTop_toTopOf="parent" />
+    
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/details_image_tab_layout"
+        app:tabGravity="center"
+        app:tabIndicator="@drawable/tab_dot_selected"
+        app:tabIndicatorColor="@color/black"
+        app:tabIndicatorGravity="center"
+        app:tabBackground="@drawable/tab_dot_unselected"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/details_name_txt"
@@ -99,7 +109,7 @@
         android:id="@+id/details_data_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="details_image, details_name_txt, details_price_txt, details_desc_txt, details_comments_recycler, details_rating_txt, details_rating_icon" />
+        app:constraint_referenced_ids="details_image_pager, details_name_txt, details_price_txt, details_desc_txt, details_comments_recycler, details_rating_txt, details_rating_icon" />
 
 
     <androidx.core.widget.ContentLoadingProgressBar

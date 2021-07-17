@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.abduqodirov.guitaronlineshop.model.FetchingProduct
-import com.abduqodirov.guitaronlineshop.model.Product
 import com.abduqodirov.guitaronlineshop.model.SendingProduct
 import com.abduqodirov.guitaronlineshop.network.Response
 import com.abduqodirov.guitaronlineshop.network.ShopApi
@@ -22,7 +21,6 @@ class SubmitProductViewModel : ViewModel() {
 
     fun sendProduct(product: SendingProduct) {
 
-
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
 
@@ -36,10 +34,7 @@ class SubmitProductViewModel : ViewModel() {
                     _sendingProduct.postValue(Response.error(null, e.localizedMessage))
                     e.printStackTrace()
                 }
-
             }
         }
-
     }
-
 }

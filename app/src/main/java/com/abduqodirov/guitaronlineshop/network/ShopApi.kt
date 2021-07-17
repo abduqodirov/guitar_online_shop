@@ -1,7 +1,6 @@
 package com.abduqodirov.guitaronlineshop.network
 
 import com.abduqodirov.guitaronlineshop.model.FetchingProduct
-import com.abduqodirov.guitaronlineshop.model.Product
 import com.abduqodirov.guitaronlineshop.model.SendingProduct
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -26,7 +25,6 @@ interface ShopService {
 
     @POST("/products")
     fun submitProductCallback(@Body product: SendingProduct): Call<FetchingProduct>
-
 }
 
 val retrofit = Retrofit.Builder()

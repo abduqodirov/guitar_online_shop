@@ -24,14 +24,10 @@ class ProductDetailsViewModel : ViewModel() {
 
                 try {
                     _productLive.postValue(Response.success(ShopApi.shopService.fetchProductById(id)))
-
                 } catch (e: Exception) {
                     _productLive.postValue(Response.error(null, e.localizedMessage))
                 }
             }
-
         }
-
     }
-
 }

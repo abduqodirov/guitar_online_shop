@@ -16,7 +16,7 @@ class ImageFragment : Fragment() {
     private var _binding: FragmentImageBinding? = null
     private val binding get() = _binding!!
 
-    //TODO onDestroyda null qivorish kk
+    // TODO onDestroyda null qivorish kk
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,9 +40,7 @@ class ImageFragment : Fragment() {
                     .error(R.drawable.no_img)
 
                     .into(binding.pagerItemImage)
-
             }
-
         }
     }
 
@@ -50,5 +48,4 @@ class ImageFragment : Fragment() {
         @JvmStatic
         fun newInstance() = ImageFragment()
     }
-
 }

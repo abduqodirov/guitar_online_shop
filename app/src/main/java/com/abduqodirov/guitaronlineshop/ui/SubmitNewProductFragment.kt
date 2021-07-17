@@ -12,9 +12,10 @@ import androidx.navigation.fragment.findNavController
 import com.abduqodirov.guitaronlineshop.R
 import com.abduqodirov.guitaronlineshop.databinding.FragmentSubmitNewProductBinding
 import com.abduqodirov.guitaronlineshop.model.FetchingProduct
-import com.abduqodirov.guitaronlineshop.model.Product
 import com.abduqodirov.guitaronlineshop.model.SendingProduct
-import com.abduqodirov.guitaronlineshop.network.Status.*
+import com.abduqodirov.guitaronlineshop.network.Status.ERROR
+import com.abduqodirov.guitaronlineshop.network.Status.LOADING
+import com.abduqodirov.guitaronlineshop.network.Status.SUCCESS
 import com.abduqodirov.guitaronlineshop.viewmodel.SubmitProductViewModel
 
 private const val EDITTEXT_NAME_POSITION = 0
@@ -44,12 +45,13 @@ class SubmitNewProductFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.formInputsValidationLive.observe(
+            viewLifecycleOwner,
+            Observer {
 
-        viewModel.formInputsValidationLive.observe(viewLifecycleOwner, Observer {
-
-            binding.submitProductSendBtn.isEnabled = !it.contains(false)
-
-        })
+                binding.submitProductSendBtn.isEnabled = !it.contains(false)
+            }
+        )
 
         binding.submitProductNameEdt.addTextChangedListener {
 
@@ -81,43 +83,43 @@ class SubmitNewProductFragment : Fragment() {
             )
 
             viewModel.sendProduct(sendingProduct)
-
         }
 
-        viewModel.sendingProduct.observe(viewLifecycleOwner, {
-            it.let { response ->
+        viewModel.sendingProduct.observe(
+            viewLifecycleOwner,
+            {
+                it.let { response ->
 
-                when (response.status) {
+                    when (response.status) {
 
-                    LOADING -> {
-                        binding.submitProductSendBtn.visibility = View.INVISIBLE
-                        binding.submitProductProgressBar.visibility = View.VISIBLE
-                        binding.submitProductMessageTxt.visibility = View.INVISIBLE
-                    }
+                        LOADING -> {
+                            binding.submitProductSendBtn.visibility = View.INVISIBLE
+                            binding.submitProductProgressBar.visibility = View.VISIBLE
+                            binding.submitProductMessageTxt.visibility = View.INVISIBLE
+                        }
 
-                    SUCCESS -> {
-                        binding.submitProductProgressBar.hide()
-                        binding.submitProductMessageTxt.text =
-                            getString(R.string.successfully_uploaded)
-                        binding.submitProductsProductDetailsBtn.visibility = View.VISIBLE
+                        SUCCESS -> {
+                            binding.submitProductProgressBar.hide()
+                            binding.submitProductMessageTxt.text =
+                                getString(R.string.successfully_uploaded)
+                            binding.submitProductsProductDetailsBtn.visibility = View.VISIBLE
 
-                        binding.submitProductsProductDetailsBtn.setOnClickListener {
-                            response.data?.let { product -> navigateToProductDetailsScreen(product) }
+                            binding.submitProductsProductDetailsBtn.setOnClickListener {
+                                response.data?.let { product -> navigateToProductDetailsScreen(product) }
+                            }
+                        }
+
+                        ERROR -> {
+                            binding.submitProductProgressBar.hide()
+                            binding.submitProductSendBtn.visibility = View.VISIBLE
+                            binding.submitProductMessageTxt.text =
+                                getString(R.string.error_on_sending_product)
+                            binding.submitProductMessageTxt.visibility = View.VISIBLE
                         }
                     }
-
-                    ERROR -> {
-                        binding.submitProductProgressBar.hide()
-                        binding.submitProductSendBtn.visibility = View.VISIBLE
-                        binding.submitProductMessageTxt.text =
-                            getString(R.string.error_on_sending_product)
-                        binding.submitProductMessageTxt.visibility = View.VISIBLE
-                    }
-
                 }
-
             }
-        })
+        )
     }
 
     private fun navigateToProductDetailsScreen(product: FetchingProduct) {
@@ -137,9 +139,7 @@ class SubmitNewProductFragment : Fragment() {
         val result = validationLogic(text)
         oldValidation?.set(position, result)
         viewModel.formInputsValidationLive.value = oldValidation
-
     }
-
 
     private fun isValidName(name: String) = name.isNotEmpty()
 
@@ -155,7 +155,6 @@ class SubmitNewProductFragment : Fragment() {
     private fun isValidDesc(desc: String): Boolean {
         return desc.isNotEmpty() && desc.length > MINIMUM_DESC_LENGTH
     }
-
 
     companion object {
         @JvmStatic

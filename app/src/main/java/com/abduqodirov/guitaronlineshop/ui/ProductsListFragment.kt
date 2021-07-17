@@ -12,7 +12,9 @@ import com.abduqodirov.guitaronlineshop.adapter.ProductsRecyclerAdapter
 import com.abduqodirov.guitaronlineshop.databinding.FragmentProductsListBinding
 import com.abduqodirov.guitaronlineshop.model.FetchingProduct
 import com.abduqodirov.guitaronlineshop.model.Product
-import com.abduqodirov.guitaronlineshop.network.Status.*
+import com.abduqodirov.guitaronlineshop.network.Status.ERROR
+import com.abduqodirov.guitaronlineshop.network.Status.LOADING
+import com.abduqodirov.guitaronlineshop.network.Status.SUCCESS
 import com.abduqodirov.guitaronlineshop.viewmodel.ProductsViewModel
 
 class ProductsListFragment : Fragment() {
@@ -21,7 +23,8 @@ class ProductsListFragment : Fragment() {
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
 
@@ -33,11 +36,12 @@ class ProductsListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val productAdapter = ProductsRecyclerAdapter(ProductsRecyclerAdapter.ProductClickListener {
+        val productAdapter = ProductsRecyclerAdapter(
+            ProductsRecyclerAdapter.ProductClickListener {
 
-            navigateToProductDetails(it)
-
-        })
+                navigateToProductDetails(it)
+            }
+        )
 
         binding.productsRecycler.adapter = productAdapter
         binding.productsRecycler.setHasFixedSize(true)
@@ -46,41 +50,41 @@ class ProductsListFragment : Fragment() {
 
         viewModel.refreshProducts()
 
-        viewModel.products.observe(viewLifecycleOwner, {
+        viewModel.products.observe(
+            viewLifecycleOwner,
+            {
 
-            it?.let { response ->
-                when (response.status) {
+                it?.let { response ->
+                    when (response.status) {
 
-                    SUCCESS -> {
-                        stopProgressBar()
-                        response.data.let { products ->
-                            if (products == null || products.isEmpty()) {
-                                binding.productsMessageTxt.text = getString(R.string.no_products)
-                                binding.productsMessageTxt.visibility = View.VISIBLE
-                            } else {
-                                productAdapter.submitList(products.reversed())
+                        SUCCESS -> {
+                            stopProgressBar()
+                            response.data.let { products ->
+                                if (products == null || products.isEmpty()) {
+                                    binding.productsMessageTxt.text = getString(R.string.no_products)
+                                    binding.productsMessageTxt.visibility = View.VISIBLE
+                                } else {
+                                    productAdapter.submitList(products.reversed())
+                                }
                             }
+                        }
 
+                        ERROR -> {
+                            stopProgressBar()
+                            binding.productsMessageTxt.text =
+                                getString(R.string.product_fetching_failure)
+                            binding.productsRetryButton.visibility = View.VISIBLE
+                            binding.productsMessageTxt.visibility = View.VISIBLE
+                            binding.productsRecycler.visibility = View.INVISIBLE
+                        }
+
+                        LOADING -> {
+                            startProgressBar()
                         }
                     }
-
-                    ERROR -> {
-                        stopProgressBar()
-                        binding.productsMessageTxt.text =
-                            getString(R.string.product_fetching_failure)
-                        binding.productsRetryButton.visibility = View.VISIBLE
-                        binding.productsMessageTxt.visibility = View.VISIBLE
-                        binding.productsRecycler.visibility = View.INVISIBLE
-                    }
-
-                    LOADING -> {
-                        startProgressBar()
-                    }
-
                 }
             }
-
-        })
+        )
 
         binding.productsRetryButton.setOnClickListener {
             viewModel.refreshProducts()
@@ -91,7 +95,6 @@ class ProductsListFragment : Fragment() {
                 ProductsListFragmentDirections.actionProductsListFragmentToSubmitNewProductFragment()
             )
         }
-
     }
 
     private fun navigateToProductDetails(it: Product) {
@@ -106,14 +109,12 @@ class ProductsListFragment : Fragment() {
         binding.productsRecycler.visibility = View.GONE
         binding.productsRetryButton.visibility = View.GONE
         binding.productsMessageTxt.visibility = View.GONE
-
     }
 
     private fun stopProgressBar() {
         binding.productsProgressBar.visibility = View.GONE
         binding.productsRecycler.visibility = View.VISIBLE
         binding.productsRetryButton.visibility = View.GONE
-
     }
 
     companion object {

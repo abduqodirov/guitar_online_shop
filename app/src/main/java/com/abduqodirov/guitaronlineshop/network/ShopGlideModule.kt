@@ -13,8 +13,7 @@ import java.security.cert.X509Certificate
 import javax.net.ssl.SSLContext
 import javax.net.ssl.X509TrustManager
 
-
-//Created my own Glide Module to replace OkHttpClient in order to download images from the untrusted server (without SSL certificate)
+// Created my own Glide Module to replace OkHttpClient in order to download images from the untrusted server (without SSL certificate)
 @GlideModule
 class ShopGlideModule : AppGlideModule() {
 
@@ -23,8 +22,6 @@ class ShopGlideModule : AppGlideModule() {
 
         val okHttpClient = unsafeOkHttpClient()
         registry.replace(GlideUrl::class.java, InputStream::class.java, OkHttpUrlLoader.Factory(okHttpClient))
-
-
     }
 
     private fun unsafeOkHttpClient(): OkHttpClient {
@@ -32,7 +29,7 @@ class ShopGlideModule : AppGlideModule() {
         val sslContext = SSLContext.getInstance("SSL")
         sslContext.init(null, arrayOf(unsafeTrustManager), null)
         return OkHttpClient.Builder()
-            .sslSocketFactory(sslContext.socketFactory,  unsafeTrustManager)
+            .sslSocketFactory(sslContext.socketFactory, unsafeTrustManager)
             .hostnameVerifier { hostName, sslSession -> true }
             .build()
     }
@@ -50,5 +47,4 @@ class ShopGlideModule : AppGlideModule() {
             }
         }
     }
-
 }

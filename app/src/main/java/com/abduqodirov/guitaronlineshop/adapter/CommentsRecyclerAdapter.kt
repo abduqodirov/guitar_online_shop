@@ -33,5 +33,4 @@ class CommentsRecyclerAdapter :
             return oldItem == newItem
         }
     }
-
 }
