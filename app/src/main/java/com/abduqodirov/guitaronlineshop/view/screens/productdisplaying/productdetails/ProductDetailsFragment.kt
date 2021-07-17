@@ -16,6 +16,7 @@ import com.abduqodirov.guitaronlineshop.view.ShopApplication
 import com.abduqodirov.guitaronlineshop.view.mapper.mapFetchedProduct
 import com.abduqodirov.guitaronlineshop.view.model.ProductForDisplay
 import com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productdetails.imageslider.ImagesCollectionAdapter
+import com.google.android.material.tabs.TabLayoutMediator
 import javax.inject.Inject
 
 class ProductDetailsFragment : Fragment() {
@@ -55,6 +56,8 @@ class ProductDetailsFragment : Fragment() {
         viewModel.refreshProduct(id)
 
         observeProductDetails()
+
+        setUpTabLayout()
 
         binding.detailsRetryBtn.setOnClickListener {
             viewModel.refreshProduct(id)
@@ -123,6 +126,14 @@ class ProductDetailsFragment : Fragment() {
         binding.detailsCommentsRecycler.setHasFixedSize(true)
         binding.detailsCommentsRecycler.adapter = commentAdapter
         commentAdapter.submitList(product.comments)
+    }
+
+    private fun setUpTabLayout() {
+        TabLayoutMediator(
+            binding.detailsImageTabLayout,
+            binding.detailsImagePager
+        ) { tab, position ->
+        }.attach()
     }
 
     private fun switchUItoErrorState() {
