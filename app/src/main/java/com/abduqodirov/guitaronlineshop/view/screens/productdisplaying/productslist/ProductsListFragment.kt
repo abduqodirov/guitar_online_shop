@@ -6,9 +6,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SearchView
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -27,6 +28,7 @@ import com.abduqodirov.guitaronlineshop.view.util.defaultFilteringConfigs
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 class ProductsListFragment : Fragment() {
@@ -91,13 +93,32 @@ class ProductsListFragment : Fragment() {
 
         setUpSearchView(searchView)
 
+        setupListenerOfSearch(searchItem)
+
         return super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    private fun setupListenerOfSearch(searchItem: MenuItem) {
+        searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+            override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+                Timber.d("Ochildi menu")
+                return true
+            }
+
+            override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+                val clearedNameFilter = currentFilteringFields.copy(nameFilter = "")
+                applyFilterAndRefreshList(clearedNameFilter)
+                Timber.d("Close invoked")
+                Timber.d("Yopildi menu")
+                return true
+            }
+        })
     }
 
     /**
      * Requests data from ViewModel and submits to RecyclerView
      *
-     * @param fields Optional query parameters
+     * @param settings Optional query parameters
      * Default value is for fetching all the products without any filter
      *
      */
@@ -185,7 +206,13 @@ class ProductsListFragment : Fragment() {
 
         val filterFragment = FilteringSortingBottomSheetFragment.newInstance(
             onSortingFilteringFieldsChangeListener = SortingAndFilteringChangeListener { fields ->
-                applyFilterAndRefreshList(fields)
+
+                // Persevering nameFilter between filtering changes
+                applyFilterAndRefreshList(
+                    fields.copy(
+                        nameFilter = currentFilteringFields.nameFilter
+                    )
+                )
             }
         )
 
@@ -202,7 +229,6 @@ class ProductsListFragment : Fragment() {
                 )
 
                 applyFilterAndRefreshList(filterSettingsWithSearch)
-
                 return true
             }
 
@@ -218,6 +244,7 @@ class ProductsListFragment : Fragment() {
         if (currentFilteringFields == settings) {
             return
         }
+
         currentFilteringFields = settings
         observeProductsData(currentFilteringFields)
     }
