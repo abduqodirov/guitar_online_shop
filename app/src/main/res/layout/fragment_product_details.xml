@@ -23,6 +23,7 @@
         app:tabIndicatorGravity="center"
         app:tabBackground="@drawable/tab_dot_unselected"
         android:layout_width="match_parent"
+        app:layout_constraintBottom_toBottomOf="@id/details_image_pager"
         android:layout_height="wrap_content" />
 
     <TextView

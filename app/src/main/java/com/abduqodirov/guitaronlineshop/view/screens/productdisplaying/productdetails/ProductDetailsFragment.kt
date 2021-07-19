@@ -57,8 +57,6 @@ class ProductDetailsFragment : Fragment() {
 
         observeProductDetails()
 
-        setUpTabLayout()
-
         binding.detailsRetryBtn.setOnClickListener {
             viewModel.refreshProduct(id)
         }
@@ -126,6 +124,8 @@ class ProductDetailsFragment : Fragment() {
         binding.detailsCommentsRecycler.setHasFixedSize(true)
         binding.detailsCommentsRecycler.adapter = commentAdapter
         commentAdapter.submitList(product.comments)
+
+        setUpTabLayout()
     }
 
     private fun setUpTabLayout() {

@@ -17,4 +17,5 @@
     <string name="min_price">Min price</string>
     <string name="int_limit">Sorry we don\'t have so much expensive guitars</string>
     <string name="low_high_balance_error">Minimum price should be smaller than Maximum price</string>
+    <string name="search_product">Qidir shettan</string>
 </resources>

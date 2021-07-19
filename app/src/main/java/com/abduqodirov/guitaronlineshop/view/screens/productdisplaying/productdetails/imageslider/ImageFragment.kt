@@ -35,7 +35,7 @@ class ImageFragment : Fragment() {
 
                 binding.pagerItemImage.loadImageFromNetwork(
                     url = it.getString(ARG_IMAGE).toString(),
-                    errorImg = R.drawable.no_img
+                    errorImg = R.drawable.img
                 )
             }
         }
