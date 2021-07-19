@@ -5,20 +5,23 @@ import androidx.paging.PagingState
 import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
 import com.abduqodirov.guitaronlineshop.data.network.IRemoteDataSource
 import com.abduqodirov.guitaronlineshop.data.network.PAGE_LIMIT
+import com.abduqodirov.guitaronlineshop.view.model.SortingFilteringFields
 
 const val PRODUCTS_STARTING_INDEX = 1
 
 class ProductsPagingSource(
-    private val remoteDataSource: IRemoteDataSource
+    private val dataSource: IRemoteDataSource,
+    private val fields: SortingFilteringFields
 ) : PagingSource<Int, FetchingProduct>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, FetchingProduct> {
 
         return try {
             val currentPageIndex = params.key ?: PRODUCTS_STARTING_INDEX
-            val response = remoteDataSource.fetchPaginatedProducts(
+            val response = dataSource.fetchPaginatedProducts(
                 pageIndex = currentPageIndex,
-                limit = PAGE_LIMIT
+                limit = PAGE_LIMIT,
+                fields = fields
             )
 
             val nextPageIndex = if (response.products.isEmpty()) {

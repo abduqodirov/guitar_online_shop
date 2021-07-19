@@ -15,3 +15,7 @@
 local.properties
 /.idea/
 /app/src/main/java/com/abduqodirov/guitaronlineshop/mockdata.kt
+/.idea/codeStyles/Project.xml
+/.idea/codeStyles/codeStyleConfig.xml
+/.idea/inspectionProfiles/ktlint.xml
+/.idea/inspectionProfiles/profiles_settings.xml

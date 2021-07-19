@@ -8,6 +8,7 @@ import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
 import com.abduqodirov.guitaronlineshop.data.model.Response
 import com.abduqodirov.guitaronlineshop.data.network.IRemoteDataSource
 import com.abduqodirov.guitaronlineshop.data.network.paging.ProductsPagingSource
+import com.abduqodirov.guitaronlineshop.view.model.SortingFilteringFields
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -26,10 +27,15 @@ class ProductsFetchingRepositoryImpl @Inject constructor(
     private val repoJob = Job()
     private val repoScope = CoroutineScope(Dispatchers.Main + repoJob)
 
-    override fun fetchPaginatedProducts(): Flow<PagingData<FetchingProduct>> {
+    override fun fetchPaginatedProducts(fields: SortingFilteringFields): Flow<PagingData<FetchingProduct>> {
         return Pager(
             config = PagingConfig(pageSize = PAGE_SIZE),
-            pagingSourceFactory = { ProductsPagingSource(remoteDataSource) }
+            pagingSourceFactory = {
+                ProductsPagingSource(
+                    dataSource = remoteDataSource,
+                    fields = fields
+                )
+            }
         ).flow
     }
 

@@ -1,4 +1,4 @@
-package com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist.recycleradapters
+package com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist.adapters
 
 import android.view.ViewGroup
 import androidx.paging.LoadState

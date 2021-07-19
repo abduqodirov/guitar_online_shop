@@ -16,16 +16,14 @@ import com.abduqodirov.guitaronlineshop.R
 import com.abduqodirov.guitaronlineshop.databinding.FragmentProductsListBinding
 import com.abduqodirov.guitaronlineshop.view.ShopApplication
 import com.abduqodirov.guitaronlineshop.view.model.ProductForDisplay
-import com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist.recycleradapters.ProductsLoadStateAdapter
-import com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist.recycleradapters.ProductsRecyclerAdapter
+import com.abduqodirov.guitaronlineshop.view.model.SortingFilteringFields
+import com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist.adapters.ProductsLoadStateAdapter
+import com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist.adapters.ProductsRecyclerAdapter
+import com.abduqodirov.guitaronlineshop.view.util.defaultFields
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
-const val PRODUCTS_FRAGMENT_RESULT_KEY = "produtcs_fragment_result"
-
-const val PRODUCTS_FRAGMENT_LOW_PRICE = "products_low_price"
 
 class ProductsListFragment : Fragment() {
 
@@ -72,15 +70,23 @@ class ProductsListFragment : Fragment() {
         _binding = null
     }
 
-    private fun observeProductsData() {
+    /**
+     * Requests data from ViewModel and submits to RecyclerView
+     *
+     * @param fields Optional query parameters
+     * Default value is for fetching all the products without any filter
+     *
+     */
+    private fun observeProductsData(fields: SortingFilteringFields = defaultFields) {
 
         lifecycleScope.launch {
-            viewModel.fetchProducts()
+            viewModel.fetchProducts(fields)
                 .catch { e -> } // TODO catch this one also
                 .collect {
                     productAdapter.submitData(it)
                 }
         }
+        binding.productsRecycler.scrollToPosition(0)
     }
 
     private fun initAdapter() {
@@ -113,6 +119,7 @@ class ProductsListFragment : Fragment() {
             binding.productsProgressBar.isVisible = loadState.source.refresh is LoadState.Loading
 
             binding.productsRecycler.isVisible = loadState.source.refresh is LoadState.NotLoading
+            binding.productsFilteringBtn.isVisible = loadState.source.refresh is LoadState.NotLoading
 
             binding.productsRetryButton.isVisible = loadState.source.refresh is LoadState.Error
             binding.productsErrorTxt.isVisible = loadState.source.refresh is LoadState.Error
@@ -123,7 +130,7 @@ class ProductsListFragment : Fragment() {
             }
 
             val isListEmpty =
-                loadState.source.refresh !is LoadState.Error && loadState.refresh is LoadState.NotLoading && productAdapter.itemCount == 0
+                loadState.refresh is LoadState.NotLoading && productAdapter.itemCount == 0
             binding.produstsEmptyListTxt.isVisible = isListEmpty
             if (isListEmpty) {
                 binding.produstsEmptyListTxt.text = getString(R.string.no_products)
@@ -151,7 +158,11 @@ class ProductsListFragment : Fragment() {
             )
         }
 
-        val filterFragment = FilteringSortingBottomSheetFragment()
+        val filterFragment = FilteringSortingBottomSheetFragment.newInstance(
+            onSortingFilteringFieldsChangeListener = SortingAndFilteringChangeListener { fields ->
+                observeProductsData(fields)
+            }
+        )
 
         binding.productsFilteringBtn.setOnClickListener {
             filterFragment.show(requireActivity().supportFragmentManager, "filter")
