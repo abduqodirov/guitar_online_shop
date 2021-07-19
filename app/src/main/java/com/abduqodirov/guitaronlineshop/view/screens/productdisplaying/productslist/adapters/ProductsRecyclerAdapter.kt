@@ -35,10 +35,10 @@ class ProductsRecyclerAdapter(private val productClickListener: ProductClickList
 
                 holder.binding.itemProductImage.loadImageFromNetwork(
                     url = product.photos[0],
-                    errorImg = R.drawable.no_img,
+                    errorImg = R.drawable.img,
                 )
             } else {
-                holder.binding.itemProductImage.setImageResource(R.drawable.no_img)
+                holder.binding.itemProductImage.setImageResource(R.drawable.img)
             }
         }
 

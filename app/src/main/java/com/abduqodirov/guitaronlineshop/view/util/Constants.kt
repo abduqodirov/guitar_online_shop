@@ -23,7 +23,7 @@ val sortOrderOptions = arrayOf(
     )
 )
 
-val defaultFields =
+val defaultFilteringConfigs =
     SortingFilteringFields(
         OMIT_PRICE_FILTER_VALUE,
         OMIT_PRICE_FILTER_VALUE,

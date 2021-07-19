@@ -1,10 +1,14 @@
 package com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist
 
+import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -19,7 +23,7 @@ import com.abduqodirov.guitaronlineshop.view.model.ProductForDisplay
 import com.abduqodirov.guitaronlineshop.view.model.SortingFilteringFields
 import com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist.adapters.ProductsLoadStateAdapter
 import com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist.adapters.ProductsRecyclerAdapter
-import com.abduqodirov.guitaronlineshop.view.util.defaultFields
+import com.abduqodirov.guitaronlineshop.view.util.defaultFilteringConfigs
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -37,6 +41,8 @@ class ProductsListFragment : Fragment() {
 
     private lateinit var productAdapter: ProductsRecyclerAdapter
 
+    private var currentFilteringFields: SortingFilteringFields = defaultFilteringConfigs
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
@@ -52,6 +58,7 @@ class ProductsListFragment : Fragment() {
 
         _binding = FragmentProductsListBinding.inflate(layoutInflater, container, false)
 
+        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -60,7 +67,7 @@ class ProductsListFragment : Fragment() {
 
         initAdapter()
 
-        observeProductsData()
+        observeProductsData(currentFilteringFields)
 
         setUpViewListeners()
     }
@@ -70,6 +77,23 @@ class ProductsListFragment : Fragment() {
         _binding = null
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+
+        inflater.inflate(R.menu.products_list_search_menu, menu)
+
+        val searchItem = menu.findItem(R.id.action_search)
+        val searchManager =
+            requireContext().getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val searchView = searchItem.actionView as SearchView
+
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
+        searchView.isIconified = false
+
+        setUpSearchView(searchView)
+
+        return super.onCreateOptionsMenu(menu, inflater)
+    }
+
     /**
      * Requests data from ViewModel and submits to RecyclerView
      *
@@ -77,10 +101,10 @@ class ProductsListFragment : Fragment() {
      * Default value is for fetching all the products without any filter
      *
      */
-    private fun observeProductsData(fields: SortingFilteringFields = defaultFields) {
+    private fun observeProductsData(settings: SortingFilteringFields) {
 
         lifecycleScope.launch {
-            viewModel.fetchProducts(fields)
+            viewModel.fetchProducts(settings)
                 .catch { e -> } // TODO catch this one also
                 .collect {
                     productAdapter.submitData(it)
@@ -119,7 +143,8 @@ class ProductsListFragment : Fragment() {
             binding.productsProgressBar.isVisible = loadState.source.refresh is LoadState.Loading
 
             binding.productsRecycler.isVisible = loadState.source.refresh is LoadState.NotLoading
-            binding.productsFilteringBtn.isVisible = loadState.source.refresh is LoadState.NotLoading
+            binding.productsFilteringBtn.isVisible =
+                loadState.source.refresh is LoadState.NotLoading
 
             binding.productsRetryButton.isVisible = loadState.source.refresh is LoadState.Error
             binding.productsErrorTxt.isVisible = loadState.source.refresh is LoadState.Error
@@ -149,7 +174,7 @@ class ProductsListFragment : Fragment() {
     private fun setUpViewListeners() {
 
         binding.productsRetryButton.setOnClickListener {
-            observeProductsData()
+            observeProductsData(currentFilteringFields)
         }
 
         binding.productsAddNewProductBtn.setOnClickListener {
@@ -160,13 +185,41 @@ class ProductsListFragment : Fragment() {
 
         val filterFragment = FilteringSortingBottomSheetFragment.newInstance(
             onSortingFilteringFieldsChangeListener = SortingAndFilteringChangeListener { fields ->
-                observeProductsData(fields)
+                applyFilterAndRefreshList(fields)
             }
         )
 
         binding.productsFilteringBtn.setOnClickListener {
             filterFragment.show(requireActivity().supportFragmentManager, "filter")
         }
+    }
+
+    private fun setUpSearchView(searchView: SearchView) {
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                val filterSettingsWithSearch = currentFilteringFields.copy(
+                    nameFilter = query ?: ""
+                )
+
+                applyFilterAndRefreshList(filterSettingsWithSearch)
+
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return true
+            }
+        })
+    }
+
+    private fun applyFilterAndRefreshList(settings: SortingFilteringFields) {
+
+        // If filtering settings are the same, there is no need to refresh
+        if (currentFilteringFields == settings) {
+            return
+        }
+        currentFilteringFields = settings
+        observeProductsData(currentFilteringFields)
     }
 
     companion object {
