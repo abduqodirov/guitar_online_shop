@@ -18,4 +18,6 @@
     <string name="int_limit">Sorry we don\'t have so much expensive guitars</string>
     <string name="low_high_balance_error">Minimum price should be smaller than Maximum price</string>
     <string name="search_product">Qidir shettan</string>
+    <string name="sort_price_min_to_max">Price: low to high</string>
+    <string name="sort_price_max_to_min">Price: from hight to low</string>
 </resources>

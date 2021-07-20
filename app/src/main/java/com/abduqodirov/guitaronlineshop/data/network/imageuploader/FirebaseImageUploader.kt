@@ -14,6 +14,7 @@ class FirebaseImageUploader : ImageUploader {
         suspendCancellableCoroutine { continuation ->
             val storage = FirebaseStorage.getInstance()
 
+            // TODO hardcoded image filename. Impact: overwrites images.
             val imageRef = storage.getReference("image.png")
 
             val baos = ByteArrayOutputStream()

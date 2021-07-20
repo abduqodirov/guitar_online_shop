@@ -28,7 +28,6 @@ import com.abduqodirov.guitaronlineshop.view.util.defaultFilteringConfigs
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 class ProductsListFragment : Fragment() {
@@ -101,27 +100,17 @@ class ProductsListFragment : Fragment() {
     private fun setupListenerOfSearch(searchItem: MenuItem) {
         searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
-                Timber.d("Ochildi menu")
                 return true
             }
 
             override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
                 val clearedNameFilter = currentFilteringFields.copy(nameFilter = "")
                 applyFilterAndRefreshList(clearedNameFilter)
-                Timber.d("Close invoked")
-                Timber.d("Yopildi menu")
                 return true
             }
         })
     }
 
-    /**
-     * Requests data from ViewModel and submits to RecyclerView
-     *
-     * @param settings Optional query parameters
-     * Default value is for fetching all the products without any filter
-     *
-     */
     private fun observeProductsData(settings: SortingFilteringFields) {
 
         lifecycleScope.launch {
