@@ -6,15 +6,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".view.screens.BottomNavScreen">
 
-    <fragment
+    <FrameLayout
         android:id="@+id/bottom_fragment_container_view"
-        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/bottom_fragment_menu"
         app:layout_constraintTop_toTopOf="parent"
-        app:navGraph="@navigation/bottom_nav"
-        app:defaultNavHost="true"
         />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
