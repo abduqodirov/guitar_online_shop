@@ -13,6 +13,9 @@
        <action
            android:id="@+id/action_bottomMain_to_productDetailsFragment"
            app:destination="@id/productDetailsFragment" />
+       <action
+           android:id="@+id/action_bottomMain_to_submitNewProductFragment"
+           app:destination="@id/submitNewProductFragment" />
    </fragment>
     <fragment
         android:id="@+id/productDetailsFragment"

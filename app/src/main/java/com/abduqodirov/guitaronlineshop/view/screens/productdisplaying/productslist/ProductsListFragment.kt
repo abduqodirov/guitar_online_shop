@@ -176,12 +176,13 @@ class ProductsListFragment : Fragment() {
     }
 
     private fun navigateToProductDetails(it: ProductForDisplay) {
-        val mainNavController = Navigation.findNavController(requireActivity(), R.id.main_fragment_container_view)
+        val mainNavController = Navigation.findNavController(
+            requireActivity(),
+            R.id.main_fragment_container_view
+        )
 
         mainNavController.navigate(
-            BottomNavScreenDirections.actionBottomMainToProductDetailsFragment(
-                it.id
-            )
+            BottomNavScreenDirections.actionBottomMainToProductDetailsFragment(it.id)
         )
     }
 
@@ -189,13 +190,6 @@ class ProductsListFragment : Fragment() {
 
         binding.productsRetryButton.setOnClickListener {
             observeProductsData(currentFilteringFields)
-        }
-
-        binding.productsAddNewProductBtn.setOnClickListener {
-            // TODO profile screendan submitga navigate qilish kerak
-            // findNavController().navigate(
-            //     ProductsListFragmentDirections.actionProductsListFragmentToSubmitNewProductFragment()
-            // )
         }
 
         val filterFragment = FilteringSortingBottomSheetFragment.newInstance(
