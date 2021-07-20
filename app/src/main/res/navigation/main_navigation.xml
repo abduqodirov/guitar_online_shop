@@ -3,20 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_navigation"
-    app:startDestination="@id/productsListFragment">
+    app:startDestination="@id/bottomMain">
 
-    <fragment
-        android:id="@+id/productsListFragment"
-        android:name="com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist.ProductsListFragment"
-        android:label="fragment_products_list"
-        tools:layout="@layout/fragment_products_list" >
-        <action
-            android:id="@+id/action_productsListFragment_to_productDetailsFragment"
-            app:destination="@id/productDetailsFragment" />
-        <action
-            android:id="@+id/action_productsListFragment_to_submitNewProductFragment"
-            app:destination="@id/submitNewProductFragment" />
-    </fragment>
+   <fragment
+       android:id="@+id/bottomMain"
+       android:name="com.abduqodirov.guitaronlineshop.view.screens.BottomNavScreen"
+       android:label="fragment_bottom_nav"
+       tools:layout="@layout/fragment_bottom_nav_screen">
+       <action
+           android:id="@+id/action_bottomMain_to_productDetailsFragment"
+           app:destination="@id/productDetailsFragment" />
+   </fragment>
     <fragment
         android:id="@+id/productDetailsFragment"
         android:name="com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productdetails.ProductDetailsFragment"

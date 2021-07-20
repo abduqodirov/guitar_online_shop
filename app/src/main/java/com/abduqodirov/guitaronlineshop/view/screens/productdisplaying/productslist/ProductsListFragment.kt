@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import com.abduqodirov.guitaronlineshop.R
@@ -22,6 +23,7 @@ import com.abduqodirov.guitaronlineshop.databinding.FragmentProductsListBinding
 import com.abduqodirov.guitaronlineshop.view.ShopApplication
 import com.abduqodirov.guitaronlineshop.view.model.ProductForDisplay
 import com.abduqodirov.guitaronlineshop.view.model.SortingFilteringFields
+import com.abduqodirov.guitaronlineshop.view.screens.BottomNavScreenDirections
 import com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist.adapters.ProductsLoadStateAdapter
 import com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist.adapters.ProductsRecyclerAdapter
 import com.abduqodirov.guitaronlineshop.view.util.defaultFilteringConfigs
@@ -174,8 +176,10 @@ class ProductsListFragment : Fragment() {
     }
 
     private fun navigateToProductDetails(it: ProductForDisplay) {
-        findNavController().navigate(
-            ProductsListFragmentDirections.actionProductsListFragmentToProductDetailsFragment(
+        val mainNavController = Navigation.findNavController(requireActivity(), R.id.main_fragment_container_view)
+
+        mainNavController.navigate(
+            BottomNavScreenDirections.actionBottomMainToProductDetailsFragment(
                 it.id
             )
         )
@@ -188,9 +192,10 @@ class ProductsListFragment : Fragment() {
         }
 
         binding.productsAddNewProductBtn.setOnClickListener {
-            findNavController().navigate(
-                ProductsListFragmentDirections.actionProductsListFragmentToSubmitNewProductFragment()
-            )
+            // TODO profile screendan submitga navigate qilish kerak
+            // findNavController().navigate(
+            //     ProductsListFragmentDirections.actionProductsListFragmentToSubmitNewProductFragment()
+            // )
         }
 
         val filterFragment = FilteringSortingBottomSheetFragment.newInstance(
