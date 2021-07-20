@@ -11,8 +11,8 @@ import com.abduqodirov.guitaronlineshop.databinding.DialogFragmentSortingAndFilt
 import com.abduqodirov.guitaronlineshop.view.model.SortOrderOption
 import com.abduqodirov.guitaronlineshop.view.model.SortingFilteringFields
 import com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist.adapters.SortOrderOptionsAdapter
-import com.abduqodirov.guitaronlineshop.view.util.orders
-import com.abduqodirov.guitaronlineshop.view.util.sortByOptions
+import com.abduqodirov.guitaronlineshop.view.util.ORDER_ASC
+import com.abduqodirov.guitaronlineshop.view.util.ORDER_BY_NAME
 import com.abduqodirov.guitaronlineshop.view.util.sortOrderOptions
 import com.abduqodirov.guitaronlineshop.view.util.toIntOrZeroIfEmpty
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -42,8 +42,8 @@ class FilteringSortingBottomSheetFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var selectedSortBy = sortByOptions[0]
-        var selectedOrderOfSort = orders[0]
+        var selectedSortBy = ORDER_BY_NAME
+        var selectedOrderOfSort = ORDER_ASC
 
         setSortAndOrderSpinnerListener { selectedOption ->
 

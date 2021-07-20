@@ -20,7 +20,7 @@ class SortOrderOptionsAdapter(context: Context, options: Array<SortOrderOption>)
         }
 
         val optionTitle = view!!.findViewById<TextView>(android.R.id.text1)
-        optionTitle.text = option?.displayingTitle
+        optionTitle.text = option?.displayingTitleResId?.let { context.getString(it) }
 
         return view
     }
@@ -35,7 +35,7 @@ class SortOrderOptionsAdapter(context: Context, options: Array<SortOrderOption>)
         }
 
         val optionTitle = view!!.findViewById<TextView>(android.R.id.text1)
-        optionTitle.text = option?.displayingTitle
+        optionTitle.text = option?.displayingTitleResId?.let { context.getString(it) }
 
         return view
     }

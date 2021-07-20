@@ -11,7 +11,7 @@ class ImagesCollectionAdapter(fragment: Fragment, private val images: List<Strin
 
     override fun createFragment(position: Int): Fragment {
 
-        val fragment = ImageFragment()
+        val fragment = ImageFragment.newInstance()
         fragment.arguments = Bundle().apply {
             putString(ARG_IMAGE, images[position])
         }
