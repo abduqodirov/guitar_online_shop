@@ -80,6 +80,7 @@ class ProductsListFragment : Fragment() {
         _binding = null
     }
 
+    // TODO har safar chaqirilib ketib, lupani ko'paytirib tashayapti
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
 
         inflater.inflate(R.menu.products_list_search_menu, menu)

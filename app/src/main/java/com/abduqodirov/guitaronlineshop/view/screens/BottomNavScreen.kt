@@ -10,13 +10,18 @@ import com.abduqodirov.guitaronlineshop.R
 import com.abduqodirov.guitaronlineshop.databinding.FragmentBottomNavScreenBinding
 import com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist.ProductsListFragment
 import com.abduqodirov.guitaronlineshop.view.screens.profile.ProfileFragment
+import timber.log.Timber
 
 class BottomNavScreen : Fragment() {
 
     private var _binding: FragmentBottomNavScreenBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var activeFragment: Fragment
+    private lateinit var fManager: FragmentManager
+    private var activeFragment: Fragment? = null
+
+    private var productsScreen: Fragment? = null
+    private var profileScreen: Fragment? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -24,38 +29,80 @@ class BottomNavScreen : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentBottomNavScreenBinding.inflate(inflater, container, false)
+        Timber.d("onCreateView")
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        Timber.d("onViewCreated")
+
         setUpBottomNavigation()
+        setUpBottomMenuListeners()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Timber.d("onStart")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Timber.d("onResume")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Timber.d("onStop")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Timber.d("onDestroy")
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        Timber.d("onDestroyView")
         _binding = null
     }
 
     private fun setUpBottomNavigation() {
-        val fragmentManager = requireActivity().supportFragmentManager
+        fManager = requireActivity().supportFragmentManager
 
-        val productsScreen = ProductsListFragment.newInstance()
-        val profileScreen = ProfileFragment.newInstance()
+        if (productsScreen == null) {
+            productsScreen = ProductsListFragment.newInstance()
+        }
 
-        activeFragment = productsScreen
+        if (profileScreen == null) {
+            profileScreen = ProfileFragment.newInstance()
+        }
 
-        fragmentManager.beginTransaction().apply {
-            add(R.id.bottom_fragment_container_view, productsScreen)
-            add(R.id.bottom_fragment_container_view, profileScreen).hide(profileScreen)
+        if (activeFragment == null) {
+            activeFragment = productsScreen
+        }
+
+        fManager.beginTransaction().apply {
+            if (!productsScreen!!.isAdded) {
+                add(R.id.bottom_fragment_container_view, productsScreen!!).hide(productsScreen!!)
+            }
+
+            if (!profileScreen!!.isAdded) {
+                add(R.id.bottom_fragment_container_view, profileScreen!!).hide(profileScreen!!)
+            }
+            show(activeFragment!!)
         }.commit()
+    }
+
+    private fun setUpBottomMenuListeners() {
+        fManager = requireActivity().supportFragmentManager
 
         binding.bottomFragmentMenu.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
-                R.id.productsListFragment -> switchFragmentTo(productsScreen, fragmentManager)
+                R.id.productsListFragment -> switchFragmentTo(productsScreen, fManager)
 
-                R.id.profileFragment -> switchFragmentTo(profileScreen, fragmentManager)
+                R.id.profileFragment -> switchFragmentTo(profileScreen, fManager)
 
                 else -> false
             }
@@ -63,12 +110,16 @@ class BottomNavScreen : Fragment() {
     }
 
     private fun switchFragmentTo(
-        selectedFragment: Fragment,
+        selectedFragment: Fragment?,
         fragmentManager: FragmentManager
     ): Boolean {
         fragmentManager.beginTransaction().also {
-            it.hide(activeFragment)
-            it.show(selectedFragment)
+            if (activeFragment != null) {
+                it.hide(activeFragment!!)
+            }
+            if (selectedFragment != null) {
+                it.show(selectedFragment)
+            }
         }.commit()
         activeFragment = selectedFragment
         return true
