@@ -1,10 +1,13 @@
 package com.abduqodirov.guitaronlineshop.view.screens.submitnewproduct
 
+import android.graphics.Bitmap
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.abduqodirov.guitaronlineshop.data.repository.submitting.SubmitProductRepository
 import com.abduqodirov.guitaronlineshop.data.repository.submitting.SubmitProductRepositoryImpl
 import com.abduqodirov.guitaronlineshop.view.model.ProductForSendingScreen
+import timber.log.Timber
 import javax.inject.Inject
 
 private const val MINIMUM_DESC_LENGTH = 10
@@ -17,11 +20,38 @@ class SubmitProductViewModel @Inject constructor(
 
     val sentProduct = (submitRepo as SubmitProductRepositoryImpl).sentProduct
 
+    private val _submittingImages = MutableLiveData<ArrayList<Bitmap>>(arrayListOf())
+    val submittingImages: LiveData<ArrayList<Bitmap>> = _submittingImages
+
     private val validators = arrayOf(::isValidName, ::isValidPrice, ::isValidDesc)
 
     fun sendProduct(product: ProductForSendingScreen) {
         submitRepo.sendProduct(product)
         // TODO bitmap yo'q bo'lsa error bervorarkan
+    }
+
+    fun addImage(bitmap: Bitmap) {
+        var oldImages = submittingImages.value
+        val newImages = arrayListOf<Bitmap>()
+
+        newImages.addAll(oldImages!!)
+        newImages.add(bitmap)
+        _submittingImages.value = newImages
+    }
+
+    fun removeImage(position: Int) {
+        val oldImages = submittingImages.value
+        val newImages = arrayListOf<Bitmap>()
+
+        oldImages?.forEachIndexed { index, bitmap ->
+            if (index != position) {
+                newImages.add(bitmap)
+            } else {
+                Timber.d("$position tushib qoldi")
+            }
+        }
+
+        _submittingImages.value = newImages
     }
 
     fun validateEditText(

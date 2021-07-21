@@ -12,12 +12,15 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.abduqodirov.guitaronlineshop.R
 import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
 import com.abduqodirov.guitaronlineshop.data.model.Response
 import com.abduqodirov.guitaronlineshop.databinding.FragmentSubmitNewProductBinding
 import com.abduqodirov.guitaronlineshop.view.ShopApplication
 import com.abduqodirov.guitaronlineshop.view.model.ProductForSendingScreen
+import com.abduqodirov.guitaronlineshop.view.screens.submitnewproduct.adapters.ImageChooserAdapter
+import timber.log.Timber
 import javax.inject.Inject
 
 private const val EDITTEXT_NAME_POSITION = 0
@@ -59,7 +62,33 @@ class SubmitNewProductFragment : Fragment() {
 
         setUpViewClickListeners()
 
+        setupImageChooser()
+
         observeSendingProductStatusAndData()
+    }
+
+    private fun setupImageChooser() {
+        val imagesAdapter = ImageChooserAdapter(
+            ImageChooserAdapter.ImageRemoveCallback {
+                viewModel.removeImage(it)
+            }
+        )
+
+        binding.submitImagesReycler.layoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+        binding.submitImagesReycler.adapter = imagesAdapter
+        binding.submitImagesReycler.setHasFixedSize(true)
+
+        viewModel.submittingImages.observe(
+            viewLifecycleOwner,
+            Observer {
+                Timber.d("livedata observed")
+                imagesAdapter.submitList(it)
+            }
+        )
     }
 
     override fun onDestroy() {
@@ -147,6 +176,13 @@ class SubmitNewProductFragment : Fragment() {
     }
 
     private fun setUpViewClickListeners() {
+
+        binding.submitAddNewImageBtn.setOnClickListener {
+            val image = BitmapFactory.decodeResource(resources, R.drawable.img)
+
+            viewModel.addImage(image)
+        }
+
         binding.submitProductSendBtn.setOnClickListener {
 
             val name = binding.submitProductNameEdt.text.toString()

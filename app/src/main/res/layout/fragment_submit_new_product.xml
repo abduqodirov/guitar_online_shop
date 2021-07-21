@@ -8,7 +8,10 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/input_layout_submit_name"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="16dp"
         android:layout_height="wrap_content"
         app:boxBackgroundColor="@color/white"
         app:layout_constraintTop_toTopOf="parent">
@@ -23,8 +26,10 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/input_layout_submit_price"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/input_layout_submit_name"
+        app:layout_constraintEnd_toEndOf="@id/input_layout_submit_name"
         app:boxBackgroundColor="@color/white"
         app:layout_constraintTop_toBottomOf="@id/input_layout_submit_name">
 
@@ -40,8 +45,10 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/input_layout_submit_desc"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/input_layout_submit_name"
+        app:layout_constraintEnd_toEndOf="@id/input_layout_submit_name"
         android:hint="@string/submit_products_hint_description"
         app:boxBackgroundColor="@color/white"
         app:layout_constraintTop_toBottomOf="@id/input_layout_submit_price">
@@ -54,6 +61,22 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/submit_images_reycler"
+        app:layout_constraintTop_toBottomOf="@id/input_layout_submit_desc"
+        app:layout_constraintStart_toStartOf="@id/input_layout_submit_name"
+        app:layout_constraintEnd_toEndOf="@id/input_layout_submit_name"
+        android:layout_width="0dp"
+        android:layout_height="80dp" />
+
+    <Button
+        android:id="@+id/submit_add_new_image_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/submit_images_reycler"
+        app:layout_constraintStart_toStartOf="@id/input_layout_submit_name"
+        app:layout_constraintEnd_toEndOf="@id/input_layout_submit_name"/>
+
     <Button
         android:id="@+id/submit_product_send_btn"
         android:layout_width="wrap_content"
@@ -62,7 +85,7 @@
         android:text="@string/send_product"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/input_layout_submit_desc" />
+        app:layout_constraintTop_toBottomOf="@id/submit_add_new_image_btn" />
 
     <androidx.core.widget.ContentLoadingProgressBar
         android:id="@+id/submit_product_progress_bar"
