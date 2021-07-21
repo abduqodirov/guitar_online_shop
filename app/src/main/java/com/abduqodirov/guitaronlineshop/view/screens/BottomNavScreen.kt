@@ -1,5 +1,6 @@
 package com.abduqodirov.guitaronlineshop.view.screens
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +23,23 @@ class BottomNavScreen : Fragment() {
 
     private var productsScreen: Fragment? = null
     private var profileScreen: Fragment? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Timber.d("onCreate")
+        // setUpBottomNavigation()
+    }
+
+    override fun onAttach(context: Context) {
+
+        super.onAttach(context)
+        Timber.d("onAttach")
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        Timber.d("onDetach")
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -68,16 +86,24 @@ class BottomNavScreen : Fragment() {
         _binding = null
     }
 
+    override fun onPause() {
+        super.onPause()
+        Timber.d("onPause")
+    }
+
     private fun setUpBottomNavigation() {
         fManager = requireActivity().supportFragmentManager
 
-        if (productsScreen == null) {
-            productsScreen = ProductsListFragment.newInstance()
-        }
+        productsScreen = ProductsListFragment.newInstance()
+        profileScreen = ProfileFragment.newInstance()
 
-        if (profileScreen == null) {
-            profileScreen = ProfileFragment.newInstance()
-        }
+        // if (productsScreen == null) {
+        //     productsScreen = ProductsListFragment.newInstance()
+        // }
+        //
+        // if (profileScreen == null) {
+        //     profileScreen = ProfileFragment.newInstance()
+        // }
 
         if (activeFragment == null) {
             activeFragment = productsScreen
@@ -85,13 +111,27 @@ class BottomNavScreen : Fragment() {
 
         fManager.beginTransaction().apply {
             if (!productsScreen!!.isAdded) {
-                add(R.id.bottom_fragment_container_view, productsScreen!!).hide(productsScreen!!)
+                Timber.d("Products screen hali qo'shilmagandi endi qo'shyabmiz")
+                add(R.id.bottom_fragment_container_view, productsScreen!!)
+            } else {
+                Timber.d("Qo'shib bo'lignan products")
             }
+            hide(productsScreen!!)
 
             if (!profileScreen!!.isAdded) {
-                add(R.id.bottom_fragment_container_view, profileScreen!!).hide(profileScreen!!)
+                Timber.d("profile screen hali qo'shilmagandi endi qo'shyabmiz")
+                add(R.id.bottom_fragment_container_view, profileScreen!!)
+            } else {
+                Timber.d("Qo'shib bo'lignan Profile")
             }
-            show(activeFragment!!)
+            hide(profileScreen!!)
+
+            if (activeFragment != null) {
+                show(activeFragment!!)
+                Timber.d("Null emas active fragment va u: $activeFragment")
+            } else {
+                Timber.d("Active fragment null")
+            }
         }.commit()
     }
 

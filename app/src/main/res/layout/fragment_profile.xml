@@ -27,7 +27,7 @@
         android:textColor="@color/black"
         android:layout_marginHorizontal="32dp"
         android:layout_marginTop="16dp"
-        tools:text="Oybekjonxo'ja Hamdambekjonov Falonchi o'g'li"
+        android:text="Oybekjonxo'ja Hamdambekjonov Falonchi o'g'li"
         />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

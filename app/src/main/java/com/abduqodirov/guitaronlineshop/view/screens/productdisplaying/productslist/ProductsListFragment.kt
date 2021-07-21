@@ -16,7 +16,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import com.abduqodirov.guitaronlineshop.R
 import com.abduqodirov.guitaronlineshop.databinding.FragmentProductsListBinding
@@ -30,6 +29,7 @@ import com.abduqodirov.guitaronlineshop.view.util.defaultFilteringConfigs
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 class ProductsListFragment : Fragment() {
@@ -46,11 +46,37 @@ class ProductsListFragment : Fragment() {
 
     private var currentFilteringFields: SortingFilteringFields = defaultFilteringConfigs
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Timber.d("onCreate")
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Timber.d("onStart")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Timber.d("onPause")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Timber.d("onStop")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Timber.d("onResume")
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
         (requireActivity().application as ShopApplication).appComponent.productsDisplayComponent()
             .create().inject(this)
+        Timber.d("onAttach")
     }
 
     override fun onCreateView(
@@ -61,6 +87,7 @@ class ProductsListFragment : Fragment() {
 
         _binding = FragmentProductsListBinding.inflate(layoutInflater, container, false)
 
+        Timber.d("onCreateView")
         setHasOptionsMenu(true)
         return binding.root
     }
@@ -73,16 +100,29 @@ class ProductsListFragment : Fragment() {
         observeProductsData(currentFilteringFields)
 
         setUpViewListeners()
+        Timber.d("onViewCreated")
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Timber.d("onDestroyView")
+        _binding = null
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        _binding = null
+        Timber.d("onDestroy")
+    }
+
+    override fun onDestroyOptionsMenu() {
+        super.onDestroyOptionsMenu()
+        Timber.d("onDestroyOptionsMenu")
     }
 
     // TODO har safar chaqirilib ketib, lupani ko'paytirib tashayapti
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
 
+        Timber.d("onCreateOptionsMenu")
         inflater.inflate(R.menu.products_list_search_menu, menu)
 
         val searchItem = menu.findItem(R.id.action_search)
