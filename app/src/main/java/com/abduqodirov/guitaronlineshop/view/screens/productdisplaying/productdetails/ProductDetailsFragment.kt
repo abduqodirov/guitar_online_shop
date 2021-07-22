@@ -112,6 +112,8 @@ class ProductDetailsFragment : Fragment() {
             binding.detailsRatingGroup.visibility = View.INVISIBLE
         }
 
+        // TODO load bo'lmaydigan imglarni olib tashlash kerak.
+        // Balki error bo'lgan imagelarni countini yig'ib birdan oshishi bilan Visibility = gone qivoraverish kerak.
         val imagesCollectionAdapter =
             ImagesCollectionAdapter(
                 this,

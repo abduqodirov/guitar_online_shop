@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.abduqodirov.guitaronlineshop">
 
+    <uses-feature android:name="android.hardware.camera"
+        android:required="false" />
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -25,6 +28,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:authorities="com.abduqodirov.guitaronlineshop.fileprovider"
+            android:name="androidx.core.content.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_products_images" />
+        </provider>
 
     </application>
 </manifest>

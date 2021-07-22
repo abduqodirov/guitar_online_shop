@@ -1,16 +1,16 @@
 package com.abduqodirov.guitaronlineshop.view.screens.submitnewproduct.adapters
 
-import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.abduqodirov.guitaronlineshop.databinding.ItemSubmitImageBinding
+import com.abduqodirov.guitaronlineshop.view.model.UploadingImage
 import timber.log.Timber
 
 class ImageChooserAdapter(private val callback: ImageRemoveCallback) :
-    ListAdapter<Bitmap, ImageChooserAdapter.ImageViewHolder>(ImageDiffCallback()) {
+    ListAdapter<UploadingImage, ImageChooserAdapter.ImageViewHolder>(ImageDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
         val binding =
@@ -19,7 +19,7 @@ class ImageChooserAdapter(private val callback: ImageRemoveCallback) :
     }
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
-        holder.binding.itemImage.setImageBitmap(getItem(position))
+        holder.binding.itemImage.setImageBitmap(getItem(position).bitmap)
         holder.binding.itemRemoveBtn.setOnClickListener {
             Timber.d("Remove command $position")
             callback.onImageRemoved(position)
@@ -33,13 +33,13 @@ class ImageChooserAdapter(private val callback: ImageRemoveCallback) :
         fun onImageRemoved(position: Int) = callback(position)
     }
 
-    class ImageDiffCallback : DiffUtil.ItemCallback<Bitmap>() {
-        override fun areItemsTheSame(oldItem: Bitmap, newItem: Bitmap): Boolean {
-            return oldItem == newItem
+    class ImageDiffCallback : DiffUtil.ItemCallback<UploadingImage>() {
+        override fun areItemsTheSame(oldItem: UploadingImage, newItem: UploadingImage): Boolean {
+            return oldItem.path == newItem.path
         }
 
-        override fun areContentsTheSame(oldItem: Bitmap, newItem: Bitmap): Boolean {
-            return oldItem.sameAs(newItem)
+        override fun areContentsTheSame(oldItem: UploadingImage, newItem: UploadingImage): Boolean {
+            return oldItem == newItem
         }
     }
 }

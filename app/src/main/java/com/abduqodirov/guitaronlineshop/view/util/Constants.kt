@@ -36,3 +36,5 @@ val defaultFilteringConfigs =
         OMIT_NAME_FILTER,
         ORDER_ASC
     )
+
+const val PROVIDER_AUTHORITY_PRODUCTS = "com.abduqodirov.guitaronlineshop.fileprovider"

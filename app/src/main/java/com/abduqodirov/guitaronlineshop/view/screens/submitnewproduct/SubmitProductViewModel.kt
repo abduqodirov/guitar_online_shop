@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.abduqodirov.guitaronlineshop.data.repository.submitting.SubmitProductRepository
 import com.abduqodirov.guitaronlineshop.data.repository.submitting.SubmitProductRepositoryImpl
 import com.abduqodirov.guitaronlineshop.view.model.ProductForSendingScreen
+import com.abduqodirov.guitaronlineshop.view.model.UploadingImage
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -20,8 +21,8 @@ class SubmitProductViewModel @Inject constructor(
 
     val sentProduct = (submitRepo as SubmitProductRepositoryImpl).sentProduct
 
-    private val _submittingImages = MutableLiveData<ArrayList<Bitmap>>(arrayListOf())
-    val submittingImages: LiveData<ArrayList<Bitmap>> = _submittingImages
+    private val _submittingImages = MutableLiveData<ArrayList<UploadingImage>>(arrayListOf())
+    val submittingImages: LiveData<ArrayList<UploadingImage>> = _submittingImages
 
     private val validators = arrayOf(::isValidName, ::isValidPrice, ::isValidDesc)
 
@@ -30,22 +31,43 @@ class SubmitProductViewModel @Inject constructor(
         // TODO bitmap yo'q bo'lsa error bervorarkan
     }
 
-    fun addImage(bitmap: Bitmap) {
-        var oldImages = submittingImages.value
-        val newImages = arrayListOf<Bitmap>()
-
+    fun addImage(thumbnail: Bitmap, path: String) {
+        val oldImages = submittingImages.value
+        val newImages = arrayListOf<UploadingImage>()
         newImages.addAll(oldImages!!)
-        newImages.add(bitmap)
+
+        newImages.add(
+            UploadingImage(
+                thumbnail,
+                path
+            )
+        )
+
         _submittingImages.value = newImages
     }
 
+    // fun addImage(path: String) {
+    //     val oldImages = submittingImages.value
+    //     val newImages = arrayListOf<UploadingImage>()
+    //     newImages.addAll(oldImages!!)
+    //
+    //     newImages.add(
+    //         UploadingImage(
+    //             null,
+    //             path
+    //         )
+    //     )
+    //
+    //     _submittingImages.value = newImages
+    // }
+
     fun removeImage(position: Int) {
         val oldImages = submittingImages.value
-        val newImages = arrayListOf<Bitmap>()
+        val newImages = arrayListOf<UploadingImage>()
 
-        oldImages?.forEachIndexed { index, bitmap ->
+        oldImages?.forEachIndexed { index, image ->
             if (index != position) {
-                newImages.add(bitmap)
+                newImages.add(image)
             } else {
                 Timber.d("$position tushib qoldi")
             }

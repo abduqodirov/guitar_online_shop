@@ -1,11 +1,19 @@
 package com.abduqodirov.guitaronlineshop.view.screens.submitnewproduct
 
+import android.app.Activity.RESULT_OK
+import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.FileProvider
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -20,12 +28,18 @@ import com.abduqodirov.guitaronlineshop.databinding.FragmentSubmitNewProductBind
 import com.abduqodirov.guitaronlineshop.view.ShopApplication
 import com.abduqodirov.guitaronlineshop.view.model.ProductForSendingScreen
 import com.abduqodirov.guitaronlineshop.view.screens.submitnewproduct.adapters.ImageChooserAdapter
+import com.abduqodirov.guitaronlineshop.view.util.PROVIDER_AUTHORITY_PRODUCTS
 import timber.log.Timber
+import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.Date
 import javax.inject.Inject
 
 private const val EDITTEXT_NAME_POSITION = 0
 private const val EDITTEXT_PRICE_POSITION = 1
 private const val EDITTEXT_DESC_POSITION = 2
+private const val REQUEST_CODE_CAMERA_IMAGE = 101
 
 class SubmitNewProductFragment : Fragment() {
 
@@ -36,6 +50,8 @@ class SubmitNewProductFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel by viewModels<SubmitProductViewModel> { viewModelFactory }
+
+    private lateinit var currentPhotoPath: String
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -96,6 +112,39 @@ class SubmitNewProductFragment : Fragment() {
         _binding = null
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == REQUEST_CODE_CAMERA_IMAGE && resultCode == RESULT_OK) {
+
+            displayTakenImage(currentPhotoPath)
+            currentPhotoPath = ""
+        }
+    }
+
+    private fun displayTakenImage(photoPath: String) {
+        val targetH: Int = binding.submitImagesReycler.height
+        val targetW: Int = binding.submitImagesReycler.height
+
+        val bmOptions = BitmapFactory.Options().apply {
+
+            inJustDecodeBounds = true
+
+            BitmapFactory.decodeFile(photoPath, this)
+
+            val photoW: Int = outWidth
+            val photoH: Int = outHeight
+
+            val scaleFactor: Int = Math.max(1, Math.min(photoW / targetW, photoH / targetH))
+
+            inJustDecodeBounds = false
+            inSampleSize = scaleFactor
+            inPurgeable = true
+        }
+
+        BitmapFactory.decodeFile(photoPath, bmOptions)?.also {
+            viewModel.addImage(it, photoPath)
+        }
+    }
+
     private fun observeSendingProductStatusAndData() {
         viewModel.sentProduct.observe(
             viewLifecycleOwner,
@@ -145,9 +194,7 @@ class SubmitNewProductFragment : Fragment() {
     private fun setUpSuccessfullyUploadedButtonListener(product: FetchingProduct) {
         binding.submitProductsProductDetailsBtn.setOnClickListener {
 
-            navigateToProductDetailsScreen(
-                product
-            )
+            navigateToProductDetailsScreen(product)
         }
     }
 
@@ -178,9 +225,8 @@ class SubmitNewProductFragment : Fragment() {
     private fun setUpViewClickListeners() {
 
         binding.submitAddNewImageBtn.setOnClickListener {
-            val image = BitmapFactory.decodeResource(resources, R.drawable.img)
-
-            viewModel.addImage(image)
+            // TODO get image from gallery
+            takeImageWithCamera()
         }
 
         binding.submitProductSendBtn.setOnClickListener {
@@ -188,16 +234,67 @@ class SubmitNewProductFragment : Fragment() {
             val name = binding.submitProductNameEdt.text.toString()
             val price = binding.submitProductPriceEdt.text.toString().toDouble()
             val desc = binding.submitProductDescEdt.text.toString()
-            val image = BitmapFactory.decodeResource(resources, R.drawable.img)
+            // val image = BitmapFactory.decodeResource(resources, R.drawable.img)
+
+            val images = arrayListOf<Bitmap>()
+
+            viewModel.submittingImages.value?.forEach {
+
+                val image = BitmapFactory.decodeFile(it.path)
+                images.add(image)
+            }
 
             val sendingProduct = ProductForSendingScreen(
                 name = name,
                 price = price,
                 description = desc,
-                photos = listOf(image),
+                photos = images
             )
 
             viewModel.sendProduct(sendingProduct)
+        }
+    }
+
+    private fun takeImageWithCamera() {
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
+        val photoFile: File? = try {
+            createImageFile()
+        } catch (e: IOException) {
+            // TODO UI da ko'rsatish kerakmasmikin
+            Timber.d("Exception while creating a file: ")
+            e.printStackTrace()
+            null
+        }
+
+        photoFile?.also {
+            val photoUri: Uri = FileProvider.getUriForFile(
+                requireContext(),
+                PROVIDER_AUTHORITY_PRODUCTS,
+                it
+            )
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+            try {
+                // TODO hasSystemFeature bn tekshirish kerak oldin
+                startActivityForResult(intent, REQUEST_CODE_CAMERA_IMAGE)
+            } catch (e: ActivityNotFoundException) {
+                Timber.d("Bunaqa activity yo'q ekan")
+                e.printStackTrace()
+                // TODO UI da ko'rsatish
+            }
+        }
+    }
+
+    private fun createImageFile(): File {
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val storageDir = requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(
+            "Product_$timeStamp",
+            ".jpg",
+            storageDir
+        ).apply {
+            // TODO gallerydan olganda nima qilamiz
+            currentPhotoPath = absolutePath
         }
     }
 

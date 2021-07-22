@@ -10,15 +10,15 @@ import kotlin.coroutines.resumeWithException
 class FirebaseImageUploader : ImageUploader {
 
     @ExperimentalCoroutinesApi
-    override suspend fun uploadImage(bitmap: Bitmap): String =
+    override suspend fun uploadImage(bitmap: Bitmap, name: String): String =
         suspendCancellableCoroutine { continuation ->
             val storage = FirebaseStorage.getInstance()
 
             // TODO hardcoded image filename. Impact: overwrites images.
-            val imageRef = storage.getReference("image.png")
+            val imageRef = storage.getReference("${name}_${System.currentTimeMillis()}.jpg")
 
             val baos = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
+            bitmap.compress(Bitmap.CompressFormat.PNG, 75, baos)
             val uploadingData = baos.toByteArray()
 
             val uploadTask = imageRef.putBytes(uploadingData)
