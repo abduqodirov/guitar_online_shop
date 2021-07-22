@@ -19,23 +19,26 @@ class ImageChooserAdapter(private val callback: ImageRemoveCallback) :
     }
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
+        // TODO displays bitmap in the POJO Uploading Image.
+        // If image's source is camera so it shows rescaled image.
+        //
         holder.binding.itemImage.setImageBitmap(getItem(position).bitmap)
         holder.binding.itemRemoveBtn.setOnClickListener {
             Timber.d("Remove command $position")
-            callback.onImageRemoved(position)
+            callback.onImageRemoved(getItem(position))
         }
     }
 
     inner class ImageViewHolder(val binding: ItemSubmitImageBinding) :
         RecyclerView.ViewHolder(binding.root)
 
-    class ImageRemoveCallback(val callback: (position: Int) -> Unit) {
-        fun onImageRemoved(position: Int) = callback(position)
+    class ImageRemoveCallback(val callback: (image: UploadingImage) -> Unit) {
+        fun onImageRemoved(image: UploadingImage) = callback(image)
     }
 
     class ImageDiffCallback : DiffUtil.ItemCallback<UploadingImage>() {
         override fun areItemsTheSame(oldItem: UploadingImage, newItem: UploadingImage): Boolean {
-            return oldItem.path == newItem.path
+            return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(oldItem: UploadingImage, newItem: UploadingImage): Boolean {

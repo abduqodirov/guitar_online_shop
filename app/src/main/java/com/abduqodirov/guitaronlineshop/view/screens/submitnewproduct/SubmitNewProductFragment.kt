@@ -39,7 +39,9 @@ import javax.inject.Inject
 private const val EDITTEXT_NAME_POSITION = 0
 private const val EDITTEXT_PRICE_POSITION = 1
 private const val EDITTEXT_DESC_POSITION = 2
+
 private const val REQUEST_CODE_CAMERA_IMAGE = 101
+private const val REQUEST_CODE_PICK_IMAGE = 202
 
 class SubmitNewProductFragment : Fragment() {
 
@@ -50,8 +52,6 @@ class SubmitNewProductFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel by viewModels<SubmitProductViewModel> { viewModelFactory }
-
-    private lateinit var currentPhotoPath: String
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -86,7 +86,7 @@ class SubmitNewProductFragment : Fragment() {
     private fun setupImageChooser() {
         val imagesAdapter = ImageChooserAdapter(
             ImageChooserAdapter.ImageRemoveCallback {
-                viewModel.removeImage(it)
+                viewModel.removeImage(it.id)
             }
         )
 
@@ -113,22 +113,33 @@ class SubmitNewProductFragment : Fragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_CODE_CAMERA_IMAGE && resultCode == RESULT_OK) {
 
-            displayTakenImage(currentPhotoPath)
-            currentPhotoPath = ""
+        if (resultCode == RESULT_OK) {
+
+            if (requestCode == REQUEST_CODE_CAMERA_IMAGE) {
+                downscaleAndAddToImagesArray(viewModel.currentPhotoPath)
+                viewModel.currentPhotoPath = ""
+            }
+
+            if (requestCode == REQUEST_CODE_PICK_IMAGE) {
+                // TODO show error instead of just breaking
+                val imgUri: Uri = data?.data ?: return
+
+                val inputStream = requireActivity().contentResolver.openInputStream(imgUri)
+                val bitmap = BitmapFactory.decodeStream(inputStream)
+                viewModel.addImage(bitmap)
+            }
         }
     }
 
-    private fun displayTakenImage(photoPath: String) {
+    private fun downscaleAndAddToImagesArray(photoPath: String) {
         val targetH: Int = binding.submitImagesReycler.height
         val targetW: Int = binding.submitImagesReycler.height
 
+        // TODO extract the part which works only with bitmap to a method
         val bmOptions = BitmapFactory.Options().apply {
 
             inJustDecodeBounds = true
-
-            BitmapFactory.decodeFile(photoPath, this)
 
             val photoW: Int = outWidth
             val photoH: Int = outHeight
@@ -225,8 +236,7 @@ class SubmitNewProductFragment : Fragment() {
     private fun setUpViewClickListeners() {
 
         binding.submitAddNewImageBtn.setOnClickListener {
-            // TODO get image from gallery
-            takeImageWithCamera()
+            addImage()
         }
 
         binding.submitProductSendBtn.setOnClickListener {
@@ -234,14 +244,23 @@ class SubmitNewProductFragment : Fragment() {
             val name = binding.submitProductNameEdt.text.toString()
             val price = binding.submitProductPriceEdt.text.toString().toDouble()
             val desc = binding.submitProductDescEdt.text.toString()
-            // val image = BitmapFactory.decodeResource(resources, R.drawable.img)
 
             val images = arrayListOf<Bitmap>()
 
             viewModel.submittingImages.value?.forEach {
 
-                val image = BitmapFactory.decodeFile(it.path)
-                images.add(image)
+                // If path is NOT null, so camera taken with camera. And image bitmap is downscaled. Original image is in external storage.
+                // If path is null, so image chosen from gallery. So image is not downscaled. bitmap field can be used.
+                var image: Bitmap? = null
+                if (it.path != null) {
+                    image = BitmapFactory.decodeFile(it.path)
+                } else if (it.bitmap != null) {
+                    image = it.bitmap
+                }
+
+                if (image != null) {
+                    images.add(image)
+                }
             }
 
             val sendingProduct = ProductForSendingScreen(
@@ -253,6 +272,27 @@ class SubmitNewProductFragment : Fragment() {
 
             viewModel.sendProduct(sendingProduct)
         }
+    }
+
+    private fun addImage() {
+        // TODO shows bottom sheet dialog to choose method
+        // and calls method depending on the choice
+
+        takeImageWithCamera()
+        // chooseImageFromGallery()
+    }
+
+    private fun chooseImageFromGallery() {
+        val getImage = Intent(Intent.ACTION_GET_CONTENT)
+        getImage.type = "image/*"
+
+        val pickIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        pickIntent.type = "image/*"
+
+        val chooserIntent = Intent.createChooser(getImage, getString(R.string.select_image))
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(pickIntent))
+
+        startActivityForResult(chooserIntent, REQUEST_CODE_PICK_IMAGE)
     }
 
     private fun takeImageWithCamera() {
@@ -294,7 +334,7 @@ class SubmitNewProductFragment : Fragment() {
             storageDir
         ).apply {
             // TODO gallerydan olganda nima qilamiz
-            currentPhotoPath = absolutePath
+            viewModel.currentPhotoPath = absolutePath
         }
     }
 
