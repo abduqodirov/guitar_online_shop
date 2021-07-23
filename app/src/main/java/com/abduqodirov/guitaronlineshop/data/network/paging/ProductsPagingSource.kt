@@ -4,7 +4,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
 import com.abduqodirov.guitaronlineshop.data.network.IRemoteDataSource
-import com.abduqodirov.guitaronlineshop.data.network.PAGE_LIMIT
+import com.abduqodirov.guitaronlineshop.mockPageProducts
 import com.abduqodirov.guitaronlineshop.view.model.SortingFilteringFields
 
 const val PRODUCTS_STARTING_INDEX = 1
@@ -18,11 +18,13 @@ class ProductsPagingSource(
 
         return try {
             val currentPageIndex = params.key ?: PRODUCTS_STARTING_INDEX
-            val response = dataSource.fetchPaginatedProducts(
-                pageIndex = currentPageIndex,
-                limit = PAGE_LIMIT,
-                fields = fields
-            )
+            // TODO remove mocks
+            val response = mockPageProducts
+            // val response = dataSource.fetchPaginatedProducts(
+            //     pageIndex = currentPageIndex,
+            //     limit = PAGE_LIMIT,
+            //     fields = fields
+            // )
 
             val nextPageIndex = if (response.products.isEmpty()) {
                 null

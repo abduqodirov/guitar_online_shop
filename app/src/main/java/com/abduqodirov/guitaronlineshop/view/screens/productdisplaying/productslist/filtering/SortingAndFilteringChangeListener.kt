@@ -1,4 +1,4 @@
-package com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist
+package com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist.filtering
 
 import com.abduqodirov.guitaronlineshop.view.model.SortingFilteringFields
 

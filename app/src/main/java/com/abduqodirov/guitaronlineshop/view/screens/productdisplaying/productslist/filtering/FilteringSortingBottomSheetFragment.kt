@@ -1,4 +1,4 @@
-package com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist
+package com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist.filtering
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -27,7 +27,7 @@ class FilteringSortingBottomSheetFragment(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.FilterDialogStyle)
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.AppBottomSheetDialogTheme)
     }
 
     override fun onCreateView(

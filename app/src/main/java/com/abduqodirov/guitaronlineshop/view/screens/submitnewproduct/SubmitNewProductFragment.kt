@@ -28,6 +28,9 @@ import com.abduqodirov.guitaronlineshop.databinding.FragmentSubmitNewProductBind
 import com.abduqodirov.guitaronlineshop.view.ShopApplication
 import com.abduqodirov.guitaronlineshop.view.model.ProductForSendingScreen
 import com.abduqodirov.guitaronlineshop.view.screens.submitnewproduct.adapters.ImageChooserAdapter
+import com.abduqodirov.guitaronlineshop.view.screens.submitnewproduct.imagechooser.ImageChooserDialogFragment
+import com.abduqodirov.guitaronlineshop.view.screens.submitnewproduct.imagechooser.ImageSource
+import com.abduqodirov.guitaronlineshop.view.screens.submitnewproduct.imagechooser.ImageSourceCallback
 import com.abduqodirov.guitaronlineshop.view.util.PROVIDER_AUTHORITY_PRODUCTS
 import timber.log.Timber
 import java.io.File
@@ -275,11 +278,14 @@ class SubmitNewProductFragment : Fragment() {
     }
 
     private fun addImage() {
-        // TODO shows bottom sheet dialog to choose method
-        // and calls method depending on the choice
-
-        takeImageWithCamera()
-        // chooseImageFromGallery()
+        ImageChooserDialogFragment.newInstance(
+            ImageSourceCallback {
+                when (it) {
+                    ImageSource.GALLERY -> chooseImageFromGallery()
+                    ImageSource.CAMERA -> takeImageWithCamera()
+                }
+            }
+        ).show(requireActivity().supportFragmentManager, "source_chooser")
     }
 
     private fun chooseImageFromGallery() {
