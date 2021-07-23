@@ -21,4 +21,5 @@
     <string name="sort_price_min_to_max">Price: low to high</string>
     <string name="sort_price_max_to_min">Price: from hight to low</string>
     <string name="select_image">Select an image</string>
+    <string name="add_image">Add an image</string>
 </resources>
