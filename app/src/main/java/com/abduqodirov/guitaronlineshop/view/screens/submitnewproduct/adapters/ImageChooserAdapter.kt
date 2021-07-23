@@ -22,7 +22,7 @@ class ImageChooserAdapter(private val callback: ImageRemoveCallback) :
         // TODO displays bitmap in the POJO Uploading Image.
         // If image's source is camera so it shows rescaled image.
         //
-        holder.binding.itemImage.setImageBitmap(getItem(position).bitmap)
+        holder.binding.itemImage.setImageBitmap(getItem(position).thumbnailBitmap)
         holder.binding.itemRemoveBtn.setOnClickListener {
             Timber.d("Remove command $position")
             callback.onImageRemoved(getItem(position))

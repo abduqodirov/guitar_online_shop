@@ -34,6 +34,7 @@ import com.abduqodirov.guitaronlineshop.view.screens.submitnewproduct.imagechoos
 import com.abduqodirov.guitaronlineshop.view.util.PROVIDER_AUTHORITY_PRODUCTS
 import timber.log.Timber
 import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -55,6 +56,8 @@ class SubmitNewProductFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel by viewModels<SubmitProductViewModel> { viewModelFactory }
+
+    private var bitmapOptions: BitmapFactory.Options? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -87,6 +90,7 @@ class SubmitNewProductFragment : Fragment() {
     }
 
     private fun setupImageChooser() {
+
         val imagesAdapter = ImageChooserAdapter(
             ImageChooserAdapter.ImageRemoveCallback {
                 viewModel.removeImage(it.id)
@@ -104,7 +108,6 @@ class SubmitNewProductFragment : Fragment() {
         viewModel.submittingImages.observe(
             viewLifecycleOwner,
             Observer {
-                Timber.d("livedata observed")
                 imagesAdapter.submitList(it)
             }
         )
@@ -119,28 +122,49 @@ class SubmitNewProductFragment : Fragment() {
 
         if (resultCode == RESULT_OK) {
 
-            if (requestCode == REQUEST_CODE_CAMERA_IMAGE) {
-                downscaleAndAddToImagesArray(viewModel.currentPhotoPath)
-                viewModel.currentPhotoPath = ""
-            }
-
             if (requestCode == REQUEST_CODE_PICK_IMAGE) {
                 // TODO show error instead of just breaking
                 val imgUri: Uri = data?.data ?: return
 
                 val inputStream = requireActivity().contentResolver.openInputStream(imgUri)
-                val bitmap = BitmapFactory.decodeStream(inputStream)
-                viewModel.addImage(bitmap)
+                val largeBitmap = BitmapFactory.decodeStream(inputStream)
+
+                viewModel.currentFile?.also {
+                    try {
+                        FileOutputStream(it).use { out ->
+                            largeBitmap.compress(
+                                Bitmap.CompressFormat.JPEG,
+                                100,
+                                out
+                            )
+                        }
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+
+            if (requestCode == REQUEST_CODE_PICK_IMAGE || requestCode == REQUEST_CODE_CAMERA_IMAGE) {
+                val thumbnailBitmap = decodeAndDownscale(viewModel.currentPhotoPath)
+                // Will not add bitmap to the ViewModel, so the bitmap won't be sent,
+                // and won't be displayed in the
+                // Recyclerview
+                if (thumbnailBitmap != null) {
+                    viewModel.addImage(
+                        thumbnailBitmap = thumbnailBitmap
+                    )
+                }
             }
         }
     }
 
-    private fun downscaleAndAddToImagesArray(photoPath: String) {
+    private fun setupBitmapOptions(): BitmapFactory.Options {
         val targetH: Int = binding.submitImagesReycler.height
         val targetW: Int = binding.submitImagesReycler.height
 
         // TODO extract the part which works only with bitmap to a method
-        val bmOptions = BitmapFactory.Options().apply {
+
+        val options = BitmapFactory.Options().apply {
 
             inJustDecodeBounds = true
 
@@ -154,9 +178,19 @@ class SubmitNewProductFragment : Fragment() {
             inPurgeable = true
         }
 
-        BitmapFactory.decodeFile(photoPath, bmOptions)?.also {
-            viewModel.addImage(it, photoPath)
+        bitmapOptions = options
+        return options
+    }
+
+    private fun decodeAndDownscale(photoPath: String): Bitmap? {
+
+        val options: BitmapFactory.Options = bitmapOptions ?: setupBitmapOptions()
+
+        var bitmap: Bitmap? = null
+        BitmapFactory.decodeFile(photoPath, options)?.also {
+            bitmap = it
         }
+        return bitmap
     }
 
     private fun observeSendingProductStatusAndData() {
@@ -257,8 +291,8 @@ class SubmitNewProductFragment : Fragment() {
                 var image: Bitmap? = null
                 if (it.path != null) {
                     image = BitmapFactory.decodeFile(it.path)
-                } else if (it.bitmap != null) {
-                    image = it.bitmap
+                } else if (it.thumbnailBitmap != null) {
+                    image = it.thumbnailBitmap
                 }
 
                 if (image != null) {
@@ -278,11 +312,23 @@ class SubmitNewProductFragment : Fragment() {
     }
 
     private fun addImage() {
+
+        val photoFile: File? = try {
+            createImageFile()
+        } catch (e: IOException) {
+            // TODO UI da ko'rsatish kerakmasmikin
+            Timber.d("Exception while creating a file: ")
+            e.printStackTrace()
+            null
+        }
+
+        viewModel.currentFile = photoFile
+
         ImageChooserDialogFragment.newInstance(
             ImageSourceCallback {
                 when (it) {
                     ImageSource.GALLERY -> chooseImageFromGallery()
-                    ImageSource.CAMERA -> takeImageWithCamera()
+                    ImageSource.CAMERA -> takeImageWithCamera(photoFile)
                 }
             }
         ).show(requireActivity().supportFragmentManager, "source_chooser")
@@ -301,17 +347,8 @@ class SubmitNewProductFragment : Fragment() {
         startActivityForResult(chooserIntent, REQUEST_CODE_PICK_IMAGE)
     }
 
-    private fun takeImageWithCamera() {
+    private fun takeImageWithCamera(photoFile: File?) {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-
-        val photoFile: File? = try {
-            createImageFile()
-        } catch (e: IOException) {
-            // TODO UI da ko'rsatish kerakmasmikin
-            Timber.d("Exception while creating a file: ")
-            e.printStackTrace()
-            null
-        }
 
         photoFile?.also {
             val photoUri: Uri = FileProvider.getUriForFile(
@@ -334,14 +371,14 @@ class SubmitNewProductFragment : Fragment() {
     private fun createImageFile(): File {
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val storageDir = requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        return File.createTempFile(
+        val file = File.createTempFile(
             "Product_$timeStamp",
             ".jpg",
             storageDir
         ).apply {
-            // TODO gallerydan olganda nima qilamiz
             viewModel.currentPhotoPath = absolutePath
         }
+        return file
     }
 
     private fun navigateToProductDetailsScreen(product: FetchingProduct) {

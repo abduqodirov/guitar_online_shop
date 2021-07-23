@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 
 data class UploadingImage(
     val id: Int,
-    val bitmap: Bitmap? = null,
+    val thumbnailBitmap: Bitmap? = null,
+    val originalBitmap: Bitmap? = null,
     val path: String? = null
 )

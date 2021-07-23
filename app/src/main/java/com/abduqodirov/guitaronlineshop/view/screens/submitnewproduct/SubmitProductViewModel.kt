@@ -8,6 +8,7 @@ import com.abduqodirov.guitaronlineshop.data.repository.submitting.SubmitProduct
 import com.abduqodirov.guitaronlineshop.data.repository.submitting.SubmitProductRepositoryImpl
 import com.abduqodirov.guitaronlineshop.view.model.ProductForSendingScreen
 import com.abduqodirov.guitaronlineshop.view.model.UploadingImage
+import java.io.File
 import javax.inject.Inject
 
 private const val MINIMUM_DESC_LENGTH = 10
@@ -23,6 +24,7 @@ class SubmitProductViewModel @Inject constructor(
     var addImageCount = 0
 
     lateinit var currentPhotoPath: String
+    var currentFile: File? = null
 
     private val _submittingImages = MutableLiveData<ArrayList<UploadingImage>>(arrayListOf())
     val submittingImages: LiveData<ArrayList<UploadingImage>> = _submittingImages
@@ -33,7 +35,7 @@ class SubmitProductViewModel @Inject constructor(
         submitRepo.sendProduct(product)
     }
 
-    fun addImage(bitmap: Bitmap, path: String? = null) {
+    fun addImage(thumbnailBitmap: Bitmap) {
         val oldImages = submittingImages.value
         val newImages = arrayListOf<UploadingImage>()
         newImages.addAll(oldImages!!)
@@ -41,13 +43,16 @@ class SubmitProductViewModel @Inject constructor(
         newImages.add(
             UploadingImage(
                 id = addImageCount,
-                bitmap = bitmap,
-                path = path,
+                thumbnailBitmap = thumbnailBitmap,
+                path = currentPhotoPath,
             )
         )
 
         _submittingImages.value = newImages
         addImageCount++
+
+        // Clearing path before adding next pictures.
+        currentPhotoPath = ""
     }
 
     fun removeImage(id: Int) {
