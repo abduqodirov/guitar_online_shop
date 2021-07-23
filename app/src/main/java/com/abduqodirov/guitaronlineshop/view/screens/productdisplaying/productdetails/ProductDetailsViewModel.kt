@@ -9,6 +9,7 @@ class ProductDetailsViewModel @Inject constructor(
     private val productsRepository: ProductsFetchingRepository
 ) : ViewModel() {
 
+    // TODO Should be migrated to Kotlin Flow in order getting rid of cast
     val product = (productsRepository as ProductsFetchingRepositoryImpl).productById
 
     fun refreshProduct(id: String) {

@@ -1,11 +1,11 @@
 package com.abduqodirov.guitaronlineshop.view.mapper
 
-import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
+import com.abduqodirov.guitaronlineshop.data.model.FetchingProductDTO
 import com.abduqodirov.guitaronlineshop.view.model.ProductForDisplay
 import com.abduqodirov.guitaronlineshop.view.util.formatPrice
 import com.abduqodirov.guitaronlineshop.view.util.formatRatingAverage
 
-fun mapFetchedProduct(fetchingProduct: FetchingProduct): ProductForDisplay {
+fun mapFetchedProduct(fetchingProduct: FetchingProductDTO): ProductForDisplay {
 
     var formattedRatingAverage = ""
     var ratingAverage = 0.0

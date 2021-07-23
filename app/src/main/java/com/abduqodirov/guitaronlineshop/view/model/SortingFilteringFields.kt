@@ -7,5 +7,11 @@ data class SortingFilteringFields(
     val nameFilter: String,
     val order: String
 ) {
-    fun arePricesValid() = lowPrice < highPrice
+    fun arePricesValid(): Boolean {
+        return if (highPrice == 0 && lowPrice == 0) {
+            true
+        } else {
+            lowPrice < highPrice
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package com.abduqodirov.guitaronlineshop.data.network.imageuploader
 
 import android.graphics.Bitmap
+import com.abduqodirov.guitaronlineshop.data.network.SENDING_IMAGE_QUALITY
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -14,11 +15,10 @@ class FirebaseImageUploader : ImageUploader {
         suspendCancellableCoroutine { continuation ->
             val storage = FirebaseStorage.getInstance()
 
-            // TODO hardcoded image filename. Impact: overwrites images.
             val imageRef = storage.getReference("${name}_${System.currentTimeMillis()}.jpg")
 
             val baos = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.PNG, 75, baos)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, SENDING_IMAGE_QUALITY, baos)
             val uploadingData = baos.toByteArray()
 
             val uploadTask = imageRef.putBytes(uploadingData)

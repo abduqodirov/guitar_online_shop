@@ -1,8 +1,8 @@
 package com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -29,38 +29,37 @@ class ProductsRecyclerAdapter(private val productClickListener: ProductClickList
 
         val product = getItem(position)
 
-        // TODO null bo'lganda datalar qo'yvorish
         if (product != null) {
-            if (product.photos.isNotEmpty()) {
+            populateCardWithData(product, holder)
 
-                holder.binding.itemProductImage.loadImageFromNetwork(
-                    url = product.photos[0],
-                    errorImg = R.drawable.img,
-                )
-            } else {
-                holder.binding.itemProductImage.setImageResource(R.drawable.img)
-            }
-        }
-
-        // TODO null cases
-        holder.binding.itemProductName.text = product?.name
-        holder.binding.itemProductPrice.text = product?.price
-
-        holder.binding.itemProductCommentsCountTxt.text = product?.comments?.size.toString()
-        holder.binding.itemProductRatingTxt.text = product?.rating
-
-        if (product != null && product.comments.isEmpty()) {
-            holder.binding.itemProductCommentsGroup.visibility = View.INVISIBLE
-        }
-
-        if (product != null && product.rating.isEmpty()) {
-            holder.binding.itemProductRatingGroup.visibility = View.INVISIBLE
-        }
-
-        holder.binding.root.setOnClickListener {
-            if (product != null) {
+            holder.binding.root.setOnClickListener {
                 productClickListener.onProductClick(product)
             }
+        }
+    }
+
+    private fun populateCardWithData(product: ProductForDisplay, holder: ProductViewHolder) {
+
+        holder.binding.run {
+
+            if (product.photos.isNotEmpty()) {
+
+                itemProductImage.loadImageFromNetwork(
+                    url = product.photos[0],
+                    errorImg = R.drawable.no_img,
+                )
+            } else {
+                itemProductImage.setImageResource(R.drawable.no_img)
+            }
+
+            itemProductName.text = product.name
+            itemProductPrice.text = product.price
+
+            itemProductCommentsCountTxt.text = product.comments.size.toString()
+            itemProductRatingTxt.text = product.rating
+
+            itemProductCommentsGroup.isVisible = product.comments.isEmpty()
+            itemProductRatingGroup.isVisible = product.rating.isEmpty()
         }
     }
 

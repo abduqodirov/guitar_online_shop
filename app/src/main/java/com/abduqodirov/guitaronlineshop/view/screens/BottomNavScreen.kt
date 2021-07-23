@@ -1,6 +1,5 @@
 package com.abduqodirov.guitaronlineshop.view.screens
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +10,6 @@ import com.abduqodirov.guitaronlineshop.R
 import com.abduqodirov.guitaronlineshop.databinding.FragmentBottomNavScreenBinding
 import com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist.ProductsListFragment
 import com.abduqodirov.guitaronlineshop.view.screens.profile.ProfileFragment
-import timber.log.Timber
 
 class BottomNavScreen : Fragment() {
 
@@ -26,19 +24,7 @@ class BottomNavScreen : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Timber.d("onCreate")
         // setUpBottomNavigation()
-    }
-
-    override fun onAttach(context: Context) {
-
-        super.onAttach(context)
-        Timber.d("onAttach")
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        Timber.d("onDetach")
     }
 
     override fun onCreateView(
@@ -47,48 +33,19 @@ class BottomNavScreen : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentBottomNavScreenBinding.inflate(inflater, container, false)
-        Timber.d("onCreateView")
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Timber.d("onViewCreated")
-
         setUpBottomNavigation()
         setUpBottomMenuListeners()
     }
 
-    override fun onStart() {
-        super.onStart()
-        Timber.d("onStart")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Timber.d("onResume")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Timber.d("onStop")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Timber.d("onDestroy")
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
-        Timber.d("onDestroyView")
         _binding = null
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Timber.d("onPause")
     }
 
     private fun setUpBottomNavigation() {
@@ -111,26 +68,17 @@ class BottomNavScreen : Fragment() {
 
         fManager.beginTransaction().apply {
             if (!productsScreen!!.isAdded) {
-                Timber.d("Products screen hali qo'shilmagandi endi qo'shyabmiz")
                 add(R.id.bottom_fragment_container_view, productsScreen!!)
-            } else {
-                Timber.d("Qo'shib bo'lignan products")
             }
             hide(productsScreen!!)
 
             if (!profileScreen!!.isAdded) {
-                Timber.d("profile screen hali qo'shilmagandi endi qo'shyabmiz")
                 add(R.id.bottom_fragment_container_view, profileScreen!!)
-            } else {
-                Timber.d("Qo'shib bo'lignan Profile")
             }
             hide(profileScreen!!)
 
             if (activeFragment != null) {
                 show(activeFragment!!)
-                Timber.d("Null emas active fragment va u: $activeFragment")
-            } else {
-                Timber.d("Active fragment null")
             }
         }.commit()
     }

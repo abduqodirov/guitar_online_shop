@@ -28,10 +28,8 @@ import com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productsl
 import com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist.filtering.FilteringSortingBottomSheetFragment
 import com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist.filtering.SortingAndFilteringChangeListener
 import com.abduqodirov.guitaronlineshop.view.util.defaultFilteringConfigs
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 class ProductsListFragment : Fragment() {
@@ -48,37 +46,11 @@ class ProductsListFragment : Fragment() {
 
     private var currentFilteringFields: SortingFilteringFields = defaultFilteringConfigs
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Timber.d("onCreate")
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Timber.d("onStart")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Timber.d("onPause")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Timber.d("onStop")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Timber.d("onResume")
-    }
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
         (requireActivity().application as ShopApplication).appComponent.productsDisplayComponent()
             .create().inject(this)
-        Timber.d("onAttach")
     }
 
     override fun onCreateView(
@@ -89,7 +61,6 @@ class ProductsListFragment : Fragment() {
 
         _binding = FragmentProductsListBinding.inflate(layoutInflater, container, false)
 
-        Timber.d("onCreateView")
         setHasOptionsMenu(true)
         return binding.root
     }
@@ -97,34 +68,20 @@ class ProductsListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initAdapter()
+        setupAdapter()
 
         observeProductsData(currentFilteringFields)
 
         setUpViewListeners()
-        Timber.d("onViewCreated")
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        Timber.d("onDestroyView")
         _binding = null
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        Timber.d("onDestroy")
-    }
-
-    override fun onDestroyOptionsMenu() {
-        super.onDestroyOptionsMenu()
-        Timber.d("onDestroyOptionsMenu")
-    }
-
-    // TODO har safar chaqirilib ketib, lupani ko'paytirib tashayapti
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
 
-        Timber.d("onCreateOptionsMenu")
         inflater.inflate(R.menu.products_list_search_menu, menu)
 
         val searchItem = menu.findItem(R.id.action_search)
@@ -137,12 +94,12 @@ class ProductsListFragment : Fragment() {
 
         setUpSearchView(searchView)
 
-        setupListenerOfSearch(searchItem)
+        setupSearchListener(searchItem)
 
         return super.onCreateOptionsMenu(menu, inflater)
     }
 
-    private fun setupListenerOfSearch(searchItem: MenuItem) {
+    private fun setupSearchListener(searchItem: MenuItem) {
         searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
                 return true
@@ -160,7 +117,6 @@ class ProductsListFragment : Fragment() {
 
         lifecycleScope.launch {
             viewModel.fetchProducts(settings)
-                .catch { e -> } // TODO catch this one also
                 .collect {
                     productAdapter.submitData(it)
                 }
@@ -168,7 +124,7 @@ class ProductsListFragment : Fragment() {
         binding.productsRecycler.scrollToPosition(0)
     }
 
-    private fun initAdapter() {
+    private fun setupAdapter() {
         productAdapter = ProductsRecyclerAdapter(
             ProductsRecyclerAdapter.ProductClickListener {
                 navigateToProductDetails(it)
@@ -195,25 +151,27 @@ class ProductsListFragment : Fragment() {
     private fun setUpViewVisibilities() {
         productAdapter.addLoadStateListener { loadState ->
 
-            binding.productsProgressBar.isVisible = loadState.source.refresh is LoadState.Loading
+            binding.run {
 
-            binding.productsRecycler.isVisible = loadState.source.refresh is LoadState.NotLoading
-            binding.productsFilteringBtn.isVisible =
-                loadState.source.refresh is LoadState.NotLoading
+                productsProgressBar.isVisible = loadState.source.refresh is LoadState.Loading
 
-            binding.productsRetryButton.isVisible = loadState.source.refresh is LoadState.Error
-            binding.productsErrorTxt.isVisible = loadState.source.refresh is LoadState.Error
+                productsRecycler.isVisible = loadState.source.refresh is LoadState.NotLoading
+                productsFilteringBtn.isVisible = loadState.source.refresh is LoadState.NotLoading
 
-            if (loadState.source.refresh is LoadState.Error) {
-                binding.productsErrorTxt.text =
-                    (loadState.source.refresh as LoadState.Error).error.localizedMessage
-            }
+                productsRetryButton.isVisible = loadState.source.refresh is LoadState.Error
+                productsErrorTxt.isVisible = loadState.source.refresh is LoadState.Error
 
-            val isListEmpty =
-                loadState.refresh is LoadState.NotLoading && productAdapter.itemCount == 0
-            binding.produstsEmptyListTxt.isVisible = isListEmpty
-            if (isListEmpty) {
-                binding.produstsEmptyListTxt.text = getString(R.string.no_products)
+                if (loadState.source.refresh is LoadState.Error) {
+                    productsErrorTxt.text =
+                        (loadState.source.refresh as LoadState.Error).error.localizedMessage
+                }
+
+                val isListEmpty =
+                    loadState.refresh is LoadState.NotLoading && productAdapter.itemCount == 0
+                produstsEmptyListTxt.isVisible = isListEmpty
+                if (isListEmpty) {
+                    produstsEmptyListTxt.text = getString(R.string.no_products)
+                }
             }
         }
     }

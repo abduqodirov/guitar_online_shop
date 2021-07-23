@@ -23,7 +23,7 @@ interface SubmitComponent {
         fun create(): SubmitComponent
     }
 
-    fun inject(fragment: SubmitNewProductFragment)
-
     val submitProductRepository: SubmitProductRepository
+
+    fun inject(fragment: SubmitNewProductFragment)
 }

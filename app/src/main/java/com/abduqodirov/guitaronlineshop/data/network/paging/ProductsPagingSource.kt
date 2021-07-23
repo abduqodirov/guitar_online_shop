@@ -2,24 +2,22 @@ package com.abduqodirov.guitaronlineshop.data.network.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
-import com.abduqodirov.guitaronlineshop.data.network.IRemoteDataSource
+import com.abduqodirov.guitaronlineshop.data.model.FetchingProductDTO
 import com.abduqodirov.guitaronlineshop.data.network.PAGE_LIMIT
+import com.abduqodirov.guitaronlineshop.data.network.RemoteDataSource
 import com.abduqodirov.guitaronlineshop.view.model.SortingFilteringFields
 
 const val PRODUCTS_STARTING_INDEX = 1
 
 class ProductsPagingSource(
-    private val dataSource: IRemoteDataSource,
+    private val dataSource: RemoteDataSource,
     private val fields: SortingFilteringFields
-) : PagingSource<Int, FetchingProduct>() {
+) : PagingSource<Int, FetchingProductDTO>() {
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, FetchingProduct> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, FetchingProductDTO> {
 
         return try {
             val currentPageIndex = params.key ?: PRODUCTS_STARTING_INDEX
-            // TODO remove mocks
-            // val response = mockPageProducts
             val response = dataSource.fetchPaginatedProducts(
                 pageIndex = currentPageIndex,
                 limit = PAGE_LIMIT,
@@ -42,7 +40,7 @@ class ProductsPagingSource(
         }
     }
 
-    override fun getRefreshKey(state: PagingState<Int, FetchingProduct>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, FetchingProductDTO>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
                 ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)

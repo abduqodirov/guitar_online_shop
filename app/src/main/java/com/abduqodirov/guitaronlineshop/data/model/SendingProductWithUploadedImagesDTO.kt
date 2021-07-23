@@ -2,10 +2,7 @@ package com.abduqodirov.guitaronlineshop.data.model
 
 import com.squareup.moshi.Json
 
-data class FetchingProduct(
-
-    @field:Json(name = "id")
-    val id: String = "",
+data class SendingProductWithUploadedImagesDTO(
 
     @field:Json(name = "name")
     val name: String,
@@ -17,11 +14,11 @@ data class FetchingProduct(
     val description: String,
 
     @field:Json(name = "photos")
-    val photos: List<String?>,
+    val photos: List<String>,
 
     @field:Json(name = "rating")
-    val rating: List<Double?>,
+    val rating: List<Double>,
 
     @field:Json(name = "comments")
-    val comments: List<String?>
+    val comments: List<String>
 )

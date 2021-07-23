@@ -15,21 +15,18 @@ buildscript {
         classpath "com.android.tools.build:gradle:4.2.1"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
+        classpath 'com.google.gms:google-services:4.3.8'
+
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
 
         classpath "org.jlleitschuh.gradle:ktlint-gradle:10.1.0"
-
         classpath "org.jmailen.gradle:kotlinter-gradle:3.4.5"
-
-        classpath 'com.google.gms:google-services:4.3.8'
-
     }
 }
 
 allprojects {
     repositories {
         google()
-//        jcenter() // Warning: this repository is going to shut down soon
         mavenCentral()
     }
 
@@ -39,5 +36,3 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
-
-

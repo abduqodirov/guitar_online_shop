@@ -4,9 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
+import com.abduqodirov.guitaronlineshop.data.model.FetchingProductDTO
 import com.abduqodirov.guitaronlineshop.data.model.Response
-import com.abduqodirov.guitaronlineshop.data.network.IRemoteDataSource
+import com.abduqodirov.guitaronlineshop.data.network.RemoteDataSource
 import com.abduqodirov.guitaronlineshop.data.network.paging.ProductsPagingSource
 import com.abduqodirov.guitaronlineshop.view.model.SortingFilteringFields
 import kotlinx.coroutines.CoroutineScope
@@ -18,15 +18,15 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class ProductsFetchingRepositoryImpl @Inject constructor(
-    private val remoteDataSource: IRemoteDataSource
+    private val remoteDataSource: RemoteDataSource
 ) : ProductsFetchingRepository {
 
-    var productById = MutableLiveData<Response<FetchingProduct>>()
+    var productById = MutableLiveData<Response<FetchingProductDTO>>()
 
     private val repoJob = Job()
     private val repoScope = CoroutineScope(Dispatchers.Main + repoJob)
 
-    override fun fetchPaginatedProducts(fields: SortingFilteringFields): Flow<PagingData<FetchingProduct>> {
+    override fun fetchPaginatedProducts(fields: SortingFilteringFields): Flow<PagingData<FetchingProductDTO>> {
         return Pager(
             config = PagingConfig(pageSize = PAGE_SIZE),
             pagingSourceFactory = {

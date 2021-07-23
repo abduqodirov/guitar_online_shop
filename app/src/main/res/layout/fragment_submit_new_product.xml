@@ -39,6 +39,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/submit_products_hint_price"
             android:inputType="numberDecimal"
+            android:maxLines="1"
             app:boxBackgroundColor="@color/white" />
 
     </com.google.android.material.textfield.TextInputLayout>

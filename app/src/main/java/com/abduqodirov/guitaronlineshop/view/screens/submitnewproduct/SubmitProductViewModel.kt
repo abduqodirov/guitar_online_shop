@@ -12,6 +12,7 @@ import java.io.File
 import javax.inject.Inject
 
 private const val MINIMUM_DESC_LENGTH = 10
+private const val MAXIMUM_DESC_LENGTH = 600
 
 class SubmitProductViewModel @Inject constructor(
     private val submitRepo: SubmitProductRepository
@@ -19,6 +20,7 @@ class SubmitProductViewModel @Inject constructor(
 
     val formInputsValidationLive = MutableLiveData(arrayOf(false, false, false))
 
+    // TODO use Kotlin Flow instead
     val sentProduct = (submitRepo as SubmitProductRepositoryImpl).sentProduct
 
     var addImageCount = 0
@@ -84,12 +86,12 @@ class SubmitProductViewModel @Inject constructor(
         if (text.isEmpty()) {
             return false
         }
-        val price = text.toDouble()
+        val price = text.toDoubleOrNull() ?: return false
 
         return price > 0
     }
 
     private fun isValidDesc(desc: String): Boolean {
-        return desc.isNotEmpty() && desc.length > MINIMUM_DESC_LENGTH
+        return desc.isNotEmpty() && desc.length > MINIMUM_DESC_LENGTH && desc.length < MAXIMUM_DESC_LENGTH
     }
 }

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -31,6 +32,9 @@ class ProductDetailsFragment : Fragment() {
 
     private val viewModel by viewModels<ProductDetailsViewModel> { viewModelFactory }
 
+    private lateinit var imagesCollectionAdapter: ImagesCollectionAdapter
+    private lateinit var commentAdapter: CommentsRecyclerAdapter
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         (requireActivity().application as ShopApplication).appComponent.productsDisplayComponent()
@@ -48,6 +52,8 @@ class ProductDetailsFragment : Fragment() {
         return binding.root
     }
 
+    // TODO If comments array is empty or null, animation should be removed.
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -60,7 +66,9 @@ class ProductDetailsFragment : Fragment() {
         binding.detailsRetryBtn.setOnClickListener {
             viewModel.refreshProduct(id)
         }
-        // TODO commentlar null bo'lsa animationni o'chirib qo'yaverish kerak
+
+        setupAdapters()
+        setUpTabLayout()
     }
 
     override fun onDestroy() {
@@ -82,6 +90,7 @@ class ProductDetailsFragment : Fragment() {
                         }
 
                         is Response.Success -> {
+                            switchUItoSuccessState()
                             populateViewsWithSuccessfullyFetchedData(
                                 mapFetchedProduct(response.data)
                             )
@@ -98,58 +107,67 @@ class ProductDetailsFragment : Fragment() {
     }
 
     private fun populateViewsWithSuccessfullyFetchedData(product: ProductForDisplay) {
-        binding.detailsProgressBar.visibility = View.INVISIBLE
-        binding.detailsErrorGroup.visibility = View.INVISIBLE
-        binding.detailsDataGroup.visibility = View.VISIBLE
 
-        binding.detailsNameTxt.text = product.name
-        binding.detailsPriceTxt.text = product.price
-        binding.detailsDescTxt.text = product.description
+        binding.run {
+            detailsNameTxt.text = product.name
+            detailsPriceTxt.text = product.price
+            detailsDescTxt.text = product.description
 
-        binding.detailsRatingTxt.text = product.rating
-
-        if (product.rating.isEmpty()) {
-            binding.detailsRatingGroup.visibility = View.INVISIBLE
+            detailsRatingGroup.isVisible = product.rating.isEmpty()
+            detailsRatingTxt.text = product.rating
         }
 
-        // TODO load bo'lmaydigan imglarni olib tashlash kerak.
-        // Balki error bo'lgan imagelarni countini yig'ib birdan oshishi bilan Visibility = gone qivoraverish kerak.
-        val imagesCollectionAdapter =
-            ImagesCollectionAdapter(
-                this,
-                product.photos
-            )
-        binding.detailsImagePager.adapter = imagesCollectionAdapter
-
-        val commentAdapter = CommentsRecyclerAdapter()
-
-        binding.detailsCommentsRecycler.setHasFixedSize(true)
-        binding.detailsCommentsRecycler.adapter = commentAdapter
         commentAdapter.submitList(product.comments)
-
-        setUpTabLayout()
+        imagesCollectionAdapter.submitList(product.photos)
     }
 
     private fun setUpTabLayout() {
         TabLayoutMediator(
             binding.detailsImageTabLayout,
             binding.detailsImagePager
-        ) { tab, position ->
+        ) { _, _ ->
         }.attach()
     }
 
-    private fun switchUItoErrorState() {
-        binding.detailsErrorGroup.visibility = View.VISIBLE
+    private fun setupAdapters() {
+        // TODO Invalid image urls should be removed. Because Viewpager is showing several no_img illustrations.
+        // Maybe we could count failed images, and restrict ViewPager to include only 1 failed image.
+        imagesCollectionAdapter = ImagesCollectionAdapter(this)
+        commentAdapter = CommentsRecyclerAdapter()
 
-        binding.detailsProgressBar.visibility = View.INVISIBLE
-        binding.detailsDataGroup.visibility = View.INVISIBLE
+        binding.run {
+            detailsImagePager.adapter = imagesCollectionAdapter
+
+            detailsCommentsRecycler.setHasFixedSize(true)
+            detailsCommentsRecycler.adapter = commentAdapter
+        }
+    }
+
+    private fun switchUItoSuccessState() {
+        binding.run {
+            detailsProgressBar.visibility = View.INVISIBLE
+            detailsErrorGroup.visibility = View.INVISIBLE
+
+            detailsDataGroup.visibility = View.VISIBLE
+        }
+    }
+
+    private fun switchUItoErrorState() {
+        binding.run {
+            detailsErrorGroup.visibility = View.VISIBLE
+
+            detailsProgressBar.visibility = View.INVISIBLE
+            detailsDataGroup.visibility = View.INVISIBLE
+        }
     }
 
     private fun switchUItoLoadingState() {
-        binding.detailsProgressBar.visibility = View.VISIBLE
+        binding.run {
+            detailsProgressBar.visibility = View.VISIBLE
 
-        binding.detailsDataGroup.visibility = View.INVISIBLE
-        binding.detailsErrorGroup.visibility = View.INVISIBLE
+            detailsDataGroup.visibility = View.INVISIBLE
+            detailsErrorGroup.visibility = View.INVISIBLE
+        }
     }
 
     companion object {

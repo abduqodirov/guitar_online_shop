@@ -17,9 +17,9 @@ interface ProductDisplayingComponent {
         fun create(): ProductDisplayingComponent
     }
 
+    val productFetchingRepository: ProductsFetchingRepository
+
     fun inject(fragment: ProductsListFragment)
 
     fun inject(fragment: ProductDetailsFragment)
-
-    val productFetchingRepository: ProductsFetchingRepository
 }

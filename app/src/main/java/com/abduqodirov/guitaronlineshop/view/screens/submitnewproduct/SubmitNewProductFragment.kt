@@ -22,8 +22,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.abduqodirov.guitaronlineshop.R
-import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
+import com.abduqodirov.guitaronlineshop.data.model.FetchingProductDTO
 import com.abduqodirov.guitaronlineshop.data.model.Response
+import com.abduqodirov.guitaronlineshop.data.network.SENDING_IMAGE_QUALITY
 import com.abduqodirov.guitaronlineshop.databinding.FragmentSubmitNewProductBinding
 import com.abduqodirov.guitaronlineshop.view.ShopApplication
 import com.abduqodirov.guitaronlineshop.view.model.ProductForSendingScreen
@@ -123,7 +124,7 @@ class SubmitNewProductFragment : Fragment() {
         if (resultCode == RESULT_OK) {
 
             if (requestCode == REQUEST_CODE_PICK_IMAGE) {
-                // TODO show error instead of just breaking
+                // TODO show error with SnackBar instead of just breaking
                 val imgUri: Uri = data?.data ?: return
 
                 val inputStream = requireActivity().contentResolver.openInputStream(imgUri)
@@ -134,7 +135,7 @@ class SubmitNewProductFragment : Fragment() {
                         FileOutputStream(it).use { out ->
                             largeBitmap.compress(
                                 Bitmap.CompressFormat.JPEG,
-                                100,
+                                SENDING_IMAGE_QUALITY,
                                 out
                             )
                         }
@@ -146,13 +147,10 @@ class SubmitNewProductFragment : Fragment() {
 
             if (requestCode == REQUEST_CODE_PICK_IMAGE || requestCode == REQUEST_CODE_CAMERA_IMAGE) {
                 val thumbnailBitmap = decodeAndDownscale(viewModel.currentPhotoPath)
-                // Will not add bitmap to the ViewModel, so the bitmap won't be sent,
-                // and won't be displayed in the
-                // Recyclerview
+                // If bitmap is null, so it will not add bitmap to the ViewModel, so the bitmap won't be sent,
+                // and won't be displayed in the Recyclerview
                 if (thumbnailBitmap != null) {
-                    viewModel.addImage(
-                        thumbnailBitmap = thumbnailBitmap
-                    )
+                    viewModel.addImage(thumbnailBitmap)
                 }
             }
         }
@@ -161,8 +159,6 @@ class SubmitNewProductFragment : Fragment() {
     private fun setupBitmapOptions(): BitmapFactory.Options {
         val targetH: Int = binding.submitImagesReycler.height
         val targetW: Int = binding.submitImagesReycler.height
-
-        // TODO extract the part which works only with bitmap to a method
 
         val options = BitmapFactory.Options().apply {
 
@@ -207,10 +203,12 @@ class SubmitNewProductFragment : Fragment() {
                         }
 
                         is Response.Success -> {
-                            binding.submitProductProgressBar.hide()
-                            binding.submitProductMessageTxt.text =
-                                getString(R.string.successfully_uploaded)
-                            binding.submitProductsProductDetailsBtn.visibility = View.VISIBLE
+                            binding.run {
+                                submitProductProgressBar.hide()
+                                submitProductMessageTxt.text =
+                                    getString(R.string.successfully_uploaded)
+                                submitProductsProductDetailsBtn.visibility = View.VISIBLE
+                            }
 
                             setUpSuccessfullyUploadedButtonListener(response.data)
                         }
@@ -225,21 +223,25 @@ class SubmitNewProductFragment : Fragment() {
     }
 
     private fun switchUIToErrorState() {
-        binding.submitProductProgressBar.hide()
-        binding.submitProductSendBtn.visibility = View.VISIBLE
-        binding.submitProductMessageTxt.text =
-            getString(R.string.error_on_sending_product)
-        binding.submitProductMessageTxt.visibility = View.VISIBLE
+        binding.run {
+            submitProductProgressBar.hide()
+            submitProductSendBtn.visibility = View.VISIBLE
+            submitProductMessageTxt.text =
+                getString(R.string.error_on_sending_product)
+            submitProductMessageTxt.visibility = View.VISIBLE
+        }
     }
 
     private fun switchUIToLoadingState() {
-        binding.submitProductProgressBar.visibility = View.VISIBLE
+        binding.run {
+            submitProductProgressBar.visibility = View.VISIBLE
 
-        binding.submitProductSendBtn.visibility = View.INVISIBLE
-        binding.submitProductMessageTxt.visibility = View.INVISIBLE
+            submitProductSendBtn.visibility = View.INVISIBLE
+            submitProductMessageTxt.visibility = View.INVISIBLE
+        }
     }
 
-    private fun setUpSuccessfullyUploadedButtonListener(product: FetchingProduct) {
+    private fun setUpSuccessfullyUploadedButtonListener(product: FetchingProductDTO) {
         binding.submitProductsProductDetailsBtn.setOnClickListener {
 
             navigateToProductDetailsScreen(product)
@@ -255,18 +257,20 @@ class SubmitNewProductFragment : Fragment() {
             }
         )
 
-        binding.submitProductNameEdt.addTextChangedListener {
+        binding.run {
+            submitProductNameEdt.addTextChangedListener {
 
-            viewModel.validateEditText(EDITTEXT_NAME_POSITION, it.toString())
-        }
+                viewModel.validateEditText(EDITTEXT_NAME_POSITION, it.toString())
+            }
 
-        binding.submitProductPriceEdt.addTextChangedListener {
+            submitProductPriceEdt.addTextChangedListener {
 
-            viewModel.validateEditText(EDITTEXT_PRICE_POSITION, it.toString())
-        }
+                viewModel.validateEditText(EDITTEXT_PRICE_POSITION, it.toString())
+            }
 
-        binding.submitProductDescEdt.addTextChangedListener {
-            viewModel.validateEditText(EDITTEXT_DESC_POSITION, it.toString())
+            submitProductDescEdt.addTextChangedListener {
+                viewModel.validateEditText(EDITTEXT_DESC_POSITION, it.toString())
+            }
         }
     }
 
@@ -286,14 +290,7 @@ class SubmitNewProductFragment : Fragment() {
 
             viewModel.submittingImages.value?.forEach {
 
-                // If path is NOT null, so camera taken with camera. And image bitmap is downscaled. Original image is in external storage.
-                // If path is null, so image chosen from gallery. So image is not downscaled. bitmap field can be used.
-                var image: Bitmap? = null
-                if (it.path != null) {
-                    image = BitmapFactory.decodeFile(it.path)
-                } else if (it.thumbnailBitmap != null) {
-                    image = it.thumbnailBitmap
-                }
+                val image = BitmapFactory.decodeFile(it.path)
 
                 if (image != null) {
                     images.add(image)
@@ -316,7 +313,7 @@ class SubmitNewProductFragment : Fragment() {
         val photoFile: File? = try {
             createImageFile()
         } catch (e: IOException) {
-            // TODO UI da ko'rsatish kerakmasmikin
+            // TODO maybe we should in UI
             Timber.d("Exception while creating a file: ")
             e.printStackTrace()
             null
@@ -358,12 +355,11 @@ class SubmitNewProductFragment : Fragment() {
             )
             intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
             try {
-                // TODO hasSystemFeature bn tekshirish kerak oldin
+                // TODO Check with hasSystemService
                 startActivityForResult(intent, REQUEST_CODE_CAMERA_IMAGE)
             } catch (e: ActivityNotFoundException) {
-                Timber.d("Bunaqa activity yo'q ekan")
                 e.printStackTrace()
-                // TODO UI da ko'rsatish
+                // TODO Display in UI
             }
         }
     }
@@ -378,10 +374,11 @@ class SubmitNewProductFragment : Fragment() {
         ).apply {
             viewModel.currentPhotoPath = absolutePath
         }
+        // TODO Delete the file after submitting.
         return file
     }
 
-    private fun navigateToProductDetailsScreen(product: FetchingProduct) {
+    private fun navigateToProductDetailsScreen(product: FetchingProductDTO) {
         findNavController().navigate(
             SubmitNewProductFragmentDirections.actionSubmitNewProductFragmentToProductDetailsFragment(
                 product.id

@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.abduqodirov.guitaronlineshop.databinding.ItemSubmitImageBinding
 import com.abduqodirov.guitaronlineshop.view.model.UploadingImage
-import timber.log.Timber
 
 class ImageChooserAdapter(private val callback: ImageRemoveCallback) :
     ListAdapter<UploadingImage, ImageChooserAdapter.ImageViewHolder>(ImageDiffCallback()) {
@@ -19,12 +18,8 @@ class ImageChooserAdapter(private val callback: ImageRemoveCallback) :
     }
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
-        // TODO displays bitmap in the POJO Uploading Image.
-        // If image's source is camera so it shows rescaled image.
-        //
         holder.binding.itemImage.setImageBitmap(getItem(position).thumbnailBitmap)
         holder.binding.itemRemoveBtn.setOnClickListener {
-            Timber.d("Remove command $position")
             callback.onImageRemoved(getItem(position))
         }
     }

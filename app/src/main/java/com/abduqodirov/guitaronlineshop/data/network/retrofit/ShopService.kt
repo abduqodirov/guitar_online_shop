@@ -1,8 +1,8 @@
 package com.abduqodirov.guitaronlineshop.data.network.retrofit
 
-import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
-import com.abduqodirov.guitaronlineshop.data.model.PageProducts
-import com.abduqodirov.guitaronlineshop.data.model.SendingProductWithUploadedImages
+import com.abduqodirov.guitaronlineshop.data.model.FetchingProductDTO
+import com.abduqodirov.guitaronlineshop.data.model.PageProductsDTO
+import com.abduqodirov.guitaronlineshop.data.model.SendingProductWithUploadedImagesDTO
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -12,7 +12,7 @@ import retrofit2.http.Query
 interface ShopService {
 
     @GET("/products")
-    suspend fun fetchProducts(): List<FetchingProduct>
+    suspend fun fetchProducts(): List<FetchingProductDTO>
 
     @GET("/products/search")
     suspend fun fetchPaginatedProducts(
@@ -23,11 +23,11 @@ interface ShopService {
         @Query("lowPrice") lowPrice: Int,
         @Query("highPrice") highPrice: Int,
         @Query("orderOfSort") orderOfSort: String
-    ): PageProducts
+    ): PageProductsDTO
 
     @GET("/products/{id}")
-    suspend fun fetchProductById(@Path("id") id: String): FetchingProduct
+    suspend fun fetchProductById(@Path("id") id: String): FetchingProductDTO
 
     @POST("/products")
-    suspend fun submitProduct(@Body product: SendingProductWithUploadedImages): FetchingProduct
+    suspend fun submitProduct(@Body product: SendingProductWithUploadedImagesDTO): FetchingProductDTO
 }

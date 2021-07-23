@@ -1,15 +1,15 @@
 package com.abduqodirov.guitaronlineshop.data.network.implementations
 
-import com.abduqodirov.guitaronlineshop.data.model.FetchingProduct
-import com.abduqodirov.guitaronlineshop.data.model.PageProducts
-import com.abduqodirov.guitaronlineshop.data.model.SendingProductWithUploadedImages
-import com.abduqodirov.guitaronlineshop.data.network.IRemoteDataSource
+import com.abduqodirov.guitaronlineshop.data.model.FetchingProductDTO
+import com.abduqodirov.guitaronlineshop.data.model.PageProductsDTO
+import com.abduqodirov.guitaronlineshop.data.model.SendingProductWithUploadedImagesDTO
+import com.abduqodirov.guitaronlineshop.data.network.RemoteDataSource
 import com.abduqodirov.guitaronlineshop.data.network.retrofit.ShopService
 import com.abduqodirov.guitaronlineshop.view.model.SortingFilteringFields
 
-class RemoteDataSourceImpl(private val shopService: ShopService) : IRemoteDataSource {
+class RemoteDataSourceImpl(private val shopService: ShopService) : RemoteDataSource {
 
-    override suspend fun fetchProducts(): List<FetchingProduct> {
+    override suspend fun fetchProducts(): List<FetchingProductDTO> {
         return shopService.fetchProducts()
     }
 
@@ -17,7 +17,7 @@ class RemoteDataSourceImpl(private val shopService: ShopService) : IRemoteDataSo
         pageIndex: Int,
         limit: Int,
         fields: SortingFilteringFields
-    ): PageProducts {
+    ): PageProductsDTO {
         return shopService.fetchPaginatedProducts(
             pageIndex = pageIndex,
             limit = limit,
@@ -29,11 +29,11 @@ class RemoteDataSourceImpl(private val shopService: ShopService) : IRemoteDataSo
         )
     }
 
-    override suspend fun fetchProductById(id: String): FetchingProduct {
+    override suspend fun fetchProductById(id: String): FetchingProductDTO {
         return shopService.fetchProductById(id)
     }
 
-    override suspend fun submitProduct(product: SendingProductWithUploadedImages): FetchingProduct {
+    override suspend fun submitProduct(product: SendingProductWithUploadedImagesDTO): FetchingProductDTO {
         return shopService.submitProduct(product)
     }
 }
