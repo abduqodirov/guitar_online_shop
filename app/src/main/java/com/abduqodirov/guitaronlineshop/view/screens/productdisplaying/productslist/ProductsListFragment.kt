@@ -72,7 +72,7 @@ class ProductsListFragment : Fragment() {
 
         observeProductsData(currentFilteringFields)
 
-        setUpViewListeners()
+        setupClickListeners()
     }
 
     override fun onDestroyView() {
@@ -187,7 +187,7 @@ class ProductsListFragment : Fragment() {
         )
     }
 
-    private fun setUpViewListeners() {
+    private fun setupClickListeners() {
 
         binding.productsRetryButton.setOnClickListener {
             observeProductsData(currentFilteringFields)

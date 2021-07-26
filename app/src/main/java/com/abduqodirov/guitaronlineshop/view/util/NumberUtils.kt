@@ -11,7 +11,7 @@ fun Double.formatPrice(): String {
 fun Double.formatRatingAverage(): String {
     val formatter = DecimalFormat("0.#")
 
-    // TODO NaN ratingni ko'rsatmasdan o'rniga ratingni hide qilib qo'yavergan yaxshi
+    // TODO Hide rating instead of showing "NaN"
     return formatter.format(this)
 }
 

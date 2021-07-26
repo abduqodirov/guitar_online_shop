@@ -33,7 +33,7 @@ import com.abduqodirov.guitaronlineshop.view.screens.submitnewproduct.imagechoos
 import com.abduqodirov.guitaronlineshop.view.screens.submitnewproduct.imagechooser.ImageSource
 import com.abduqodirov.guitaronlineshop.view.screens.submitnewproduct.imagechooser.ImageSourceCallback
 import com.abduqodirov.guitaronlineshop.view.util.PROVIDER_AUTHORITY_PRODUCTS
-import timber.log.Timber
+import com.google.android.material.snackbar.Snackbar
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -72,9 +72,7 @@ class SubmitNewProductFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentSubmitNewProductBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
@@ -88,6 +86,53 @@ class SubmitNewProductFragment : Fragment() {
         setupImageChooser()
 
         observeSendingProductStatusAndData()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+
+        if (resultCode == RESULT_OK) {
+
+            if (requestCode == REQUEST_CODE_PICK_IMAGE) {
+                if (data == null || data.data == null) {
+                    showMessageWithSnackBar(getString(R.string.failed_to_get_image))
+                    return
+                }
+                val imgUri: Uri = data.data!!
+
+                val inputStream = requireActivity().contentResolver.openInputStream(imgUri)
+                val largeBitmap = BitmapFactory.decodeStream(inputStream)
+
+                viewModel.currentFile?.also {
+                    try {
+                        FileOutputStream(it).use { out ->
+                            largeBitmap.compress(
+                                Bitmap.CompressFormat.JPEG,
+                                SENDING_IMAGE_QUALITY,
+                                out
+                            )
+                        }
+                    } catch (e: IOException) {
+                        showMessageWithSnackBar(getString(R.string.failed_to_get_image))
+                        e.printStackTrace()
+                    }
+                }
+            }
+
+            if (requestCode == REQUEST_CODE_PICK_IMAGE || requestCode == REQUEST_CODE_CAMERA_IMAGE) {
+                val thumbnailBitmap = decodeAndDownscale(viewModel.currentPhotoPath)
+
+                // If bitmap is null, so it will not add bitmap to the ViewModel, so the bitmap won't be sent,
+                // and won't be displayed in the Recyclerview
+                if (thumbnailBitmap != null) {
+                    viewModel.addImage(thumbnailBitmap)
+                }
+            }
+        }
     }
 
     private fun setupImageChooser() {
@@ -112,48 +157,6 @@ class SubmitNewProductFragment : Fragment() {
                 imagesAdapter.submitList(it)
             }
         )
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-
-        if (resultCode == RESULT_OK) {
-
-            if (requestCode == REQUEST_CODE_PICK_IMAGE) {
-                // TODO show error with SnackBar instead of just breaking
-                val imgUri: Uri = data?.data ?: return
-
-                val inputStream = requireActivity().contentResolver.openInputStream(imgUri)
-                val largeBitmap = BitmapFactory.decodeStream(inputStream)
-
-                viewModel.currentFile?.also {
-                    try {
-                        FileOutputStream(it).use { out ->
-                            largeBitmap.compress(
-                                Bitmap.CompressFormat.JPEG,
-                                SENDING_IMAGE_QUALITY,
-                                out
-                            )
-                        }
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                    }
-                }
-            }
-
-            if (requestCode == REQUEST_CODE_PICK_IMAGE || requestCode == REQUEST_CODE_CAMERA_IMAGE) {
-                val thumbnailBitmap = decodeAndDownscale(viewModel.currentPhotoPath)
-                // If bitmap is null, so it will not add bitmap to the ViewModel, so the bitmap won't be sent,
-                // and won't be displayed in the Recyclerview
-                if (thumbnailBitmap != null) {
-                    viewModel.addImage(thumbnailBitmap)
-                }
-            }
-        }
     }
 
     private fun setupBitmapOptions(): BitmapFactory.Options {
@@ -249,21 +252,19 @@ class SubmitNewProductFragment : Fragment() {
 
     private fun setUpFormValidators() {
 
-        viewModel.formInputsValidationLive.observe(
-            viewLifecycleOwner,
-            Observer {
-                binding.submitProductSendBtn.isEnabled = !it.contains(false)
-            }
-        )
-
         binding.run {
-            submitProductNameEdt.addTextChangedListener {
+            viewModel.formInputsValidationLive.observe(
+                viewLifecycleOwner,
+                Observer {
+                    submitProductSendBtn.isEnabled = !it.contains(false)
+                }
+            )
 
+            submitProductNameEdt.addTextChangedListener {
                 viewModel.validateEditText(EDITTEXT_NAME_POSITION, it.toString())
             }
 
             submitProductPriceEdt.addTextChangedListener {
-
                 viewModel.validateEditText(EDITTEXT_PRICE_POSITION, it.toString())
             }
 
@@ -275,35 +276,37 @@ class SubmitNewProductFragment : Fragment() {
 
     private fun setUpViewClickListeners() {
 
-        binding.submitAddNewImageBtn.setOnClickListener {
-            addImage()
-        }
-
-        binding.submitProductSendBtn.setOnClickListener {
-
-            val name = binding.submitProductNameEdt.text.toString()
-            val price = binding.submitProductPriceEdt.text.toString().toDouble()
-            val desc = binding.submitProductDescEdt.text.toString()
-
-            val images = arrayListOf<Bitmap>()
-
-            viewModel.submittingImages.value?.forEach {
-
-                val image = BitmapFactory.decodeFile(it.path)
-
-                if (image != null) {
-                    images.add(image)
-                }
+        binding.run {
+            submitAddNewImageBtn.setOnClickListener {
+                addImage()
             }
 
-            val sendingProduct = ProductForSendingScreen(
-                name = name,
-                price = price,
-                description = desc,
-                photos = images
-            )
+            submitProductSendBtn.setOnClickListener {
 
-            viewModel.sendProduct(sendingProduct)
+                val name = submitProductNameEdt.text.toString()
+                val price = submitProductPriceEdt.text.toString().toDouble()
+                val desc = submitProductDescEdt.text.toString()
+
+                val images = arrayListOf<Bitmap>()
+
+                viewModel.submittingImages.value?.forEach {
+
+                    val image = BitmapFactory.decodeFile(it.path)
+
+                    if (image != null) {
+                        images.add(image)
+                    }
+                }
+
+                val sendingProduct = ProductForSendingScreen(
+                    name = name,
+                    price = price,
+                    description = desc,
+                    photos = images
+                )
+
+                viewModel.sendProduct(sendingProduct)
+            }
         }
     }
 
@@ -312,9 +315,7 @@ class SubmitNewProductFragment : Fragment() {
         val photoFile: File? = try {
             createImageFile()
         } catch (e: IOException) {
-            // TODO maybe we should show in UI
-            Timber.d("Exception while creating a file: ")
-            e.printStackTrace()
+            showMessageWithSnackBar(e.localizedMessage ?: getString(R.string.failed_to_get_image))
             null
         }
 
@@ -354,11 +355,9 @@ class SubmitNewProductFragment : Fragment() {
             )
             intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
             try {
-                // TODO Check with hasSystemService
                 startActivityForResult(intent, REQUEST_CODE_CAMERA_IMAGE)
             } catch (e: ActivityNotFoundException) {
-                e.printStackTrace()
-                // TODO Display in UI
+                showMessageWithSnackBar(getString(R.string.no_camera_app))
             }
         }
     }
@@ -383,6 +382,14 @@ class SubmitNewProductFragment : Fragment() {
                 product.id
             )
         )
+    }
+
+    private fun showMessageWithSnackBar(text: String) {
+        Snackbar.make(
+            binding.submitRoot,
+            text,
+            Snackbar.LENGTH_SHORT
+        ).show()
     }
 
     companion object {

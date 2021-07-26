@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.screens.productdisplaying.productdetails.ProductDetailsFragment">
-<!--TODO Add scrolling flags to RecyclerView and wrap with CoordinatorLayout-->
+    <!--TODO Add scrolling flags to RecyclerView and wrap with CoordinatorLayout-->
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/details_image_pager"
         android:layout_width="match_parent"

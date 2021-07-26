@@ -8,17 +8,17 @@
         android:id="@+id/item_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:background="@color/white"/>
+        android:background="@color/white"
+        android:scaleType="centerCrop" />
 
     <ImageView
         android:id="@+id/item_remove_btn"
         android:layout_width="16dp"
         android:layout_height="16dp"
-        android:layout_marginEnd="-8dp"
         android:layout_marginTop="-8dp"
+        android:layout_marginEnd="-8dp"
+        android:src="@drawable/ic_baseline_clear_24"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/ic_baseline_clear_24"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

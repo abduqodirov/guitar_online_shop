@@ -22,4 +22,6 @@
     <string name="sort_price_max_to_min">Price: from hight to low</string>
     <string name="select_image">Select an image</string>
     <string name="add_image">Add an image</string>
+    <string name="failed_to_get_image">Failed to get the image</string>
+    <string name="no_camera_app">Your device has no compatible camera app</string>
 </resources>

@@ -22,11 +22,6 @@ class BottomNavScreen : Fragment() {
     private var productsScreen: Fragment? = null
     private var profileScreen: Fragment? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // setUpBottomNavigation()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

@@ -31,38 +31,38 @@
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/products_filtering_btn"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:text="@string/filter"
         app:icon="@drawable/ic_baseline_filter_list_24"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/produsts_empty_list_txt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="24sp"
         android:layout_marginHorizontal="32dp"
-        tools:text="Lorem ipsum dolor sit amet blah blah blah blah blah"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Lorem ipsum dolor sit amet blah blah blah blah blah" />
 
     <TextView
         android:id="@+id/products_error_txt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="24sp"
         android:layout_marginHorizontal="32dp"
-        tools:text="Lorem ipsum dolor sit amet blah blah blah blah blah"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Lorem ipsum dolor sit amet blah blah blah blah blah" />
 
     <Button
         android:id="@+id/products_retry_button"
@@ -70,8 +70,8 @@
         android:layout_height="wrap_content"
         android:text="@string/retry"
         android:visibility="gone"
-        app:layout_constraintStart_toStartOf="@id/products_error_txt"
         app:layout_constraintEnd_toEndOf="@id/products_error_txt"
+        app:layout_constraintStart_toStartOf="@id/products_error_txt"
         app:layout_constraintTop_toBottomOf="@id/products_error_txt"
         tools:visibility="visible" />
 

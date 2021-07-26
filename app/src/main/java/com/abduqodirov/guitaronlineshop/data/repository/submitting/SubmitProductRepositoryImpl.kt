@@ -20,7 +20,7 @@ class SubmitProductRepositoryImpl @Inject constructor(
     override fun sendProduct(sendingProduct: ProductForSendingScreen): Flow<Response.Success<FetchingProductDTO>> =
         flow {
 
-            val urlsOfUploadedImages = arrayListOf<String>("")
+            val urlsOfUploadedImages = arrayListOf("")
 
             sendingProduct.photos.forEach {
                 val uploadedImage = imageUploader.uploadImage(it, sendingProduct.name)
