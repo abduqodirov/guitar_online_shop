@@ -4,10 +4,14 @@ import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.abduqodirov.guitaronlineshop.data.model.FetchingProductDTO
+import com.abduqodirov.guitaronlineshop.data.model.Response
 import com.abduqodirov.guitaronlineshop.data.repository.submitting.SubmitProductRepository
-import com.abduqodirov.guitaronlineshop.data.repository.submitting.SubmitProductRepositoryImpl
 import com.abduqodirov.guitaronlineshop.view.model.ProductForSendingScreen
 import com.abduqodirov.guitaronlineshop.view.model.UploadingImage
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
 
@@ -20,8 +24,7 @@ class SubmitProductViewModel @Inject constructor(
 
     val formInputsValidationLive = MutableLiveData(arrayOf(false, false, false))
 
-    // TODO use Kotlin Flow instead
-    val sentProduct = (submitRepo as SubmitProductRepositoryImpl).sentProduct
+    val sentProduct = MutableLiveData<Response<FetchingProductDTO>>()
 
     var addImageCount = 0
 
@@ -34,7 +37,17 @@ class SubmitProductViewModel @Inject constructor(
     private val validators = arrayOf(::isValidName, ::isValidPrice, ::isValidDesc)
 
     fun sendProduct(product: ProductForSendingScreen) {
-        submitRepo.sendProduct(product)
+        viewModelScope.launch {
+            sentProduct.value = Response.Loading
+            try {
+                submitRepo.sendProduct(product)
+                    .collect {
+                        sentProduct.postValue(it)
+                    }
+            } catch (e: Exception) {
+                sentProduct.value = Response.Failure(e.localizedMessage ?: "Failed to load")
+            }
+        }
     }
 
     fun addImage(thumbnailBitmap: Bitmap) {
@@ -61,7 +74,7 @@ class SubmitProductViewModel @Inject constructor(
         val oldImages = submittingImages.value
         val newImages = arrayListOf<UploadingImage>()
 
-        oldImages?.forEachIndexed { index, image ->
+        oldImages?.forEach { image ->
             if (image.id != id) {
                 newImages.add(image)
             }

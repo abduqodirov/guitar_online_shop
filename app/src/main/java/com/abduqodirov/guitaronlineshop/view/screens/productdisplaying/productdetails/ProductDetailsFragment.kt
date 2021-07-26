@@ -52,8 +52,6 @@ class ProductDetailsFragment : Fragment() {
         return binding.root
     }
 
-    // TODO If comments array is empty or null, animation should be removed.
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -71,8 +69,8 @@ class ProductDetailsFragment : Fragment() {
         setUpTabLayout()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
 
@@ -97,8 +95,8 @@ class ProductDetailsFragment : Fragment() {
                         }
 
                         is Response.Failure -> {
-                            switchUItoErrorState()
                             binding.detailsMessageTxt.text = response.errorMessage
+                            switchUItoErrorState()
                         }
                     }
                 }
@@ -113,7 +111,7 @@ class ProductDetailsFragment : Fragment() {
             detailsPriceTxt.text = product.price
             detailsDescTxt.text = product.description
 
-            detailsRatingGroup.isVisible = product.rating.isEmpty()
+            detailsRatingGroup.isVisible = product.rating.isNotEmpty()
             detailsRatingTxt.text = product.rating
         }
 
@@ -145,28 +143,28 @@ class ProductDetailsFragment : Fragment() {
 
     private fun switchUItoSuccessState() {
         binding.run {
-            detailsProgressBar.visibility = View.INVISIBLE
-            detailsErrorGroup.visibility = View.INVISIBLE
+            detailsProgressBar.isVisible = false
+            detailsErrorGroup.isVisible = false
 
-            detailsDataGroup.visibility = View.VISIBLE
+            detailsDataGroup.isVisible = true
         }
     }
 
     private fun switchUItoErrorState() {
         binding.run {
-            detailsErrorGroup.visibility = View.VISIBLE
+            detailsErrorGroup.isVisible = true
 
-            detailsProgressBar.visibility = View.INVISIBLE
-            detailsDataGroup.visibility = View.INVISIBLE
+            detailsProgressBar.isVisible = false
+            detailsDataGroup.isVisible = false
         }
     }
 
     private fun switchUItoLoadingState() {
         binding.run {
-            detailsProgressBar.visibility = View.VISIBLE
+            detailsProgressBar.isVisible = true
 
-            detailsDataGroup.visibility = View.INVISIBLE
-            detailsErrorGroup.visibility = View.INVISIBLE
+            detailsDataGroup.isVisible = false
+            detailsErrorGroup.isVisible = false
         }
     }
 

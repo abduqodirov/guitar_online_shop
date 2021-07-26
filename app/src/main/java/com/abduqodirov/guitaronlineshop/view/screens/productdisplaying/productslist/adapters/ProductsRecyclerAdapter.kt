@@ -58,8 +58,8 @@ class ProductsRecyclerAdapter(private val productClickListener: ProductClickList
             itemProductCommentsCountTxt.text = product.comments.size.toString()
             itemProductRatingTxt.text = product.rating
 
-            itemProductCommentsGroup.isVisible = product.comments.isEmpty()
-            itemProductRatingGroup.isVisible = product.rating.isEmpty()
+            itemProductCommentsGroup.isVisible = product.comments.isNotEmpty()
+            itemProductRatingGroup.isVisible = product.rating.isNotEmpty()
         }
     }
 

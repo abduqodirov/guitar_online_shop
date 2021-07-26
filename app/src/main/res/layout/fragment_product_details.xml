@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layoutDescription="@xml/fragment_product_details_scene"
     tools:context=".view.screens.productdisplaying.productdetails.ProductDetailsFragment">
-
+<!--TODO Add scrolling flags to RecyclerView and wrap with CoordinatorLayout-->
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/details_image_pager"
         android:layout_width="match_parent"
@@ -17,60 +16,57 @@
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/details_image_tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/details_image_pager"
+        app:tabBackground="@drawable/tab_dot_unselected"
         app:tabGravity="center"
         app:tabIndicator="@drawable/tab_dot_selected"
         app:tabIndicatorColor="@color/black"
-        app:tabIndicatorGravity="center"
-        app:tabBackground="@drawable/tab_dot_unselected"
-        android:layout_width="match_parent"
-        app:layout_constraintBottom_toBottomOf="@id/details_image_pager"
-        android:layout_height="wrap_content" />
+        app:tabIndicatorGravity="center" />
 
     <TextView
         android:id="@+id/details_name_txt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
-        android:maxLines="1"
+        android:layout_marginBottom="16dp"
         android:ellipsize="end"
+        android:maxLines="1"
         android:textColor="@color/black"
         android:textSize="28sp"
-        tools:text="Lorem ipsum blah blah "
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintBottom_toTopOf="@id/details_price_txt"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/details_rating_icon" />
+        app:layout_constraintEnd_toStartOf="@id/details_rating_icon"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/details_price_txt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:textSize="22sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toTopOf="@id/details_desc_txt"
-        app:layout_constraintStart_toStartOf="@id/details_name_txt"
-        tools:text="$5000000" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/details_name_txt" />
 
     <TextView
         android:id="@+id/details_desc_txt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@id/horizontal_border"
-        app:layout_constraintStart_toStartOf="@id/details_name_txt"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:maxLines="4"
+        android:layout_marginBottom="16dp"
         android:ellipsize="end"
-        tools:text="Lorem ipsum dolor dolor sit amet blah blah blah ipsum dolor sit amet blah blah blahsit amet blah blah blah ipsum dolor sit amet blah blah blah dolor sit amet blah blah blah ipsum dolor sit amet blah blah blah" />
+        android:maxLines="4"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@id/details_comments_recycler"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/details_name_txt" />
 
     <ImageView
         android:id="@+id/details_rating_icon"
@@ -91,8 +87,7 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@id/details_name_txt"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/details_name_txt"
-        tools:text="4.5" />
+        app:layout_constraintTop_toTopOf="@id/details_name_txt" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/details_rating_group"
@@ -100,34 +95,24 @@
         android:layout_height="wrap_content"
         app:constraint_referenced_ids="details_rating_icon, details_rating_txt" />
 
-    <View
-        android:id="@+id/horizontal_border"
-        android:layout_width="wrap_content"
-        android:layout_height="1dp"
-        android:orientation="horizontal" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/details_comments_recycler"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="400dp"
         android:layout_marginTop="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/horizontal_border"
-        tools:listitem="@layout/item_comment"
-        tools:spanCount="5"
-        tools:layoutManager="GridLayoutManager"
-        tools:itemCount="12" />
+        tools:itemCount="12"
+        tools:listitem="@layout/item_comment" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/details_data_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="details_name_txt, details_price_txt, details_desc_txt, details_comments_recycler, details_rating_txt" />
+        app:constraint_referenced_ids="details_name_txt, details_price_txt, details_desc_txt, details_comments_recycler, details_rating_group" />
 
     <androidx.core.widget.ContentLoadingProgressBar
         android:id="@+id/details_progress_bar"
-        style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="invisible"
@@ -138,15 +123,15 @@
 
     <TextView
         android:id="@+id/details_message_txt"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
         android:textColor="@color/black"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Error occurred" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/details_retry_btn"
@@ -162,6 +147,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="invisible"
-        app:constraint_referenced_ids="details_message_txt,details_retry_btn" />
+        app:constraint_referenced_ids="details_message_txt, details_retry_btn" />
 
-</androidx.constraintlayout.motion.widget.MotionLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -193,7 +193,6 @@ class SubmitNewProductFragment : Fragment() {
         viewModel.sentProduct.observe(
             viewLifecycleOwner,
             {
-
                 it.let { response ->
 
                     when (response) {
@@ -313,7 +312,7 @@ class SubmitNewProductFragment : Fragment() {
         val photoFile: File? = try {
             createImageFile()
         } catch (e: IOException) {
-            // TODO maybe we should in UI
+            // TODO maybe we should show in UI
             Timber.d("Exception while creating a file: ")
             e.printStackTrace()
             null

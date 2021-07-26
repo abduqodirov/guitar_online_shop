@@ -4,5 +4,5 @@ import android.graphics.Bitmap
 
 interface ImageUploader {
 
-    suspend fun uploadImage(bitmap: Bitmap, name: String): String
+    suspend fun uploadImage(bitmap: Bitmap, name: String): String?
 }
