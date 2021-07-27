@@ -128,7 +128,6 @@ class ProductDetailsFragment : Fragment() {
     }
 
     private fun setupAdapters() {
-        //
         // TODO Invalid image urls should be removed. Because Viewpager is showing several no_img illustrations.
         // Maybe we could count failed images, and restrict ViewPager to include only 1 failed image.
         imagesCollectionAdapter = ImagesCollectionAdapter(this)
