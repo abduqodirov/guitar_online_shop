@@ -157,10 +157,12 @@ class SubmitNewProductFragment : Fragment() {
                             }
 
                             setUpSuccessfullyUploadedButtonListener(response.data)
+                            viewModel.clearStorage()
                         }
 
                         is Response.Failure -> {
                             switchUIToErrorState()
+                            viewModel.clearStorage()
                         }
                     }
                 }

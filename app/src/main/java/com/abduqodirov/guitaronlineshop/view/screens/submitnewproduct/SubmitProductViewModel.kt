@@ -12,6 +12,7 @@ import com.abduqodirov.guitaronlineshop.view.model.ProductForSendingScreen
 import com.abduqodirov.guitaronlineshop.view.model.UploadingImage
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
@@ -81,6 +82,14 @@ class SubmitProductViewModel @Inject constructor(
         }
 
         _submittingImages.value = newImages
+    }
+
+    fun clearStorage() {
+        submittingImages.value?.forEach {
+            val deletingFile = File(it.path)
+            deletingFile.delete()
+            Timber.d("${it.path} delete bo'ldi")
+        }
     }
 
     fun validateEditText(
