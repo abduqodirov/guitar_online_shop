@@ -98,6 +98,26 @@ class ProductsListFragment : Fragment() {
         return super.onCreateOptionsMenu(menu, inflater)
     }
 
+    private fun observeProductsData(settings: SortingFilteringFields) {
+
+        lifecycleScope.launch {
+            viewModel.fetchProducts(settings)
+                .collect {
+                    productAdapter.submitData(it)
+                }
+        }
+        binding.productsRecycler.scrollToPosition(0)
+    }
+
+    private fun applyFilterAndRefreshList(settings: SortingFilteringFields) {
+        // If filtering settings are the same, there is no need to refresh
+        if (currentFilteringFields == settings) {
+            return
+        }
+        currentFilteringFields = settings
+        observeProductsData(currentFilteringFields)
+    }
+
     private fun setupSearchListener(searchItem: MenuItem) {
         searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
@@ -110,17 +130,6 @@ class ProductsListFragment : Fragment() {
                 return true
             }
         })
-    }
-
-    private fun observeProductsData(settings: SortingFilteringFields) {
-
-        lifecycleScope.launch {
-            viewModel.fetchProducts(settings)
-                .collect {
-                    productAdapter.submitData(it)
-                }
-        }
-        binding.productsRecycler.scrollToPosition(0)
     }
 
     private fun setupAdapter() {
@@ -175,13 +184,6 @@ class ProductsListFragment : Fragment() {
         }
     }
 
-    private fun navigateToProductDetails(it: ProductForDisplay) {
-
-        findNavController().navigate(
-            ProductsListFragmentDirections.actionProductsListFragmentToProductDetailsFragment(it.id)
-        )
-    }
-
     private fun setupClickListeners() {
 
         binding.productsRetryButton.setOnClickListener {
@@ -222,15 +224,10 @@ class ProductsListFragment : Fragment() {
         })
     }
 
-    private fun applyFilterAndRefreshList(settings: SortingFilteringFields) {
-
-        // If filtering settings are the same, there is no need to refresh
-        if (currentFilteringFields == settings) {
-            return
-        }
-
-        currentFilteringFields = settings
-        observeProductsData(currentFilteringFields)
+    private fun navigateToProductDetails(it: ProductForDisplay) {
+        findNavController().navigate(
+            ProductsListFragmentDirections.actionProductsListFragmentToProductDetailsFragment(it.id)
+        )
     }
 
     companion object {

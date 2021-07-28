@@ -106,7 +106,6 @@
             app:layout_constraintStart_toStartOf="@id/details_comments_recycler"
             app:layout_constraintTop_toBottomOf="@id/details_comments_recycler" />
 
-
         <TextView
             android:id="@+id/details_desc_txt"
             android:layout_width="0dp"

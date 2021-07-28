@@ -72,33 +72,6 @@ class ProductDetailsFragment : Fragment() {
         setupTabLayout()
     }
 
-    private fun setupClickListeners() {
-        binding.run {
-            detailsRetryBtn.setOnClickListener {
-                viewModel.refreshProduct(productId)
-            }
-
-            detailsCommentsBtn.setOnClickListener {
-                navigateToCommentsScreen()
-            }
-
-            detailsCommentsRecycler.setOnClickListener {
-                navigateToCommentsScreen()
-            }
-
-            detailsDescExpandCollapseBtn.setOnClickListener {
-                if (detailsDescTxt.maxLines == Int.MAX_VALUE) {
-                    detailsDescTxt.maxLines = DESCRIPTION_MAX_LINES_COLLAPSED
-                } else {
-                    detailsDescTxt.maxLines = Int.MAX_VALUE
-                    detailsScrollView.post {
-                        detailsScrollView.fullScroll(View.FOCUS_DOWN)
-                    }
-                }
-            }
-        }
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -187,6 +160,33 @@ class ProductDetailsFragment : Fragment() {
         }
     }
 
+    private fun setupClickListeners() {
+        binding.run {
+            detailsRetryBtn.setOnClickListener {
+                viewModel.refreshProduct(productId)
+            }
+
+            detailsCommentsBtn.setOnClickListener {
+                navigateToCommentsScreen()
+            }
+
+            detailsCommentsRecycler.setOnClickListener {
+                navigateToCommentsScreen()
+            }
+
+            detailsDescExpandCollapseBtn.setOnClickListener {
+                if (detailsDescTxt.maxLines == Int.MAX_VALUE) {
+                    detailsDescTxt.maxLines = DESCRIPTION_MAX_LINES_COLLAPSED
+                } else {
+                    detailsDescTxt.maxLines = Int.MAX_VALUE
+                    detailsScrollView.post {
+                        detailsScrollView.fullScroll(View.FOCUS_DOWN)
+                    }
+                }
+            }
+        }
+    }
+
     private fun switchUItoSuccessState() {
         binding.run {
             detailsProgressBar.isVisible = false
@@ -216,9 +216,7 @@ class ProductDetailsFragment : Fragment() {
 
     private fun navigateToCommentsScreen() {
         findNavController().navigate(
-            ProductDetailsFragmentDirections.actionProductDetailsFragmentToCommentsFragment(
-                productId
-            )
+            ProductDetailsFragmentDirections.actionProductDetailsFragmentToCommentsFragment()
         )
     }
 

@@ -10,13 +10,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.navArgs
 import com.abduqodirov.guitaronlineshop.data.model.Response
 import com.abduqodirov.guitaronlineshop.databinding.FragmentCommentsBinding
 import com.abduqodirov.guitaronlineshop.view.ShopApplication
 import com.abduqodirov.guitaronlineshop.view.mapper.mapFetchedProduct
 import com.abduqodirov.guitaronlineshop.view.model.ProductForDisplay
-import com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productdetails.ProductDetailsFragmentArgs
 import com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productdetails.ProductDetailsViewModel
 import javax.inject.Inject
 
@@ -32,8 +30,6 @@ class CommentsFragment : Fragment() {
 
     private lateinit var commentAdapter: CommentsRecyclerAdapter
 
-    private val args: ProductDetailsFragmentArgs by navArgs()
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         (requireActivity().application as ShopApplication).appComponent.productsDisplayComponent()
@@ -47,6 +43,11 @@ class CommentsFragment : Fragment() {
     ): View {
         _binding = FragmentCommentsBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

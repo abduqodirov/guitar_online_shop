@@ -49,9 +49,5 @@
     <fragment
         android:id="@+id/commentsFragment"
         android:name="com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productdetails.comments.CommentsFragment"
-        android:label="CommentsFragment" >
-        <argument
-            android:name="productId"
-            app:argType="string" />
-    </fragment>
+        android:label="CommentsFragment" />
 </navigation>
