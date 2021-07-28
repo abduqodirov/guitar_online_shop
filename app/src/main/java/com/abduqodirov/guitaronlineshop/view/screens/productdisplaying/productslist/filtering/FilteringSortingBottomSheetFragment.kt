@@ -79,10 +79,6 @@ class FilteringSortingBottomSheetFragment(
         }
     }
 
-    private fun showErrorWithSnackBar(msg: String) {
-        Snackbar.make(binding.dialogFilterRoot, msg, Snackbar.LENGTH_LONG).show()
-    }
-
     private fun setSortAndOrderSpinnerListener(sortSelectedListener: (choice: SortOrderOption) -> Unit) {
         val sortAdapter = SortOrderOptionsAdapter(
             requireContext(),
@@ -106,6 +102,10 @@ class FilteringSortingBottomSheetFragment(
                 override fun onNothingSelected(parent: AdapterView<*>?) {
                 }
             }
+    }
+
+    private fun showErrorWithSnackBar(msg: String) {
+        Snackbar.make(binding.dialogFilterRoot, msg, Snackbar.LENGTH_LONG).show()
     }
 
     companion object {

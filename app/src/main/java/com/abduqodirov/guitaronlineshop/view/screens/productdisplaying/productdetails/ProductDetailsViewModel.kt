@@ -9,7 +9,6 @@ import com.abduqodirov.guitaronlineshop.data.model.Response
 import com.abduqodirov.guitaronlineshop.data.repository.fetching.ProductsFetchingRepository
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 class ProductDetailsViewModel @Inject constructor(
@@ -28,7 +27,6 @@ class ProductDetailsViewModel @Inject constructor(
                     }
                 productsRepository.fetchProductById(id).asLiveData()
             } catch (e: Exception) {
-                Timber.d("ushladim")
                 product.value = Response.Failure(e.localizedMessage ?: "Failed to load")
                 e.printStackTrace()
             }

@@ -93,6 +93,7 @@ class SubmitNewProductFragment : Fragment() {
         _binding = null
     }
 
+    // Saves file to storage instead of storing bitmaps in RAM to use RAM efficiently
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
         if (resultCode == RESULT_OK) {
@@ -133,6 +134,104 @@ class SubmitNewProductFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun observeSendingProductStatusAndData() {
+        viewModel.sentProduct.observe(
+            viewLifecycleOwner,
+            {
+                it.let { response ->
+
+                    when (response) {
+
+                        is Response.Loading -> {
+                            switchUIToLoadingState()
+                        }
+
+                        is Response.Success -> {
+                            binding.run {
+                                submitProductProgressBar.hide()
+                                submitProductMessageTxt.text =
+                                    getString(R.string.successfully_uploaded)
+                                submitProductsProductDetailsBtn.visibility = View.VISIBLE
+                            }
+
+                            setUpSuccessfullyUploadedButtonListener(response.data)
+                        }
+
+                        is Response.Failure -> {
+                            switchUIToErrorState()
+                        }
+                    }
+                }
+            }
+        )
+    }
+
+    private fun addImage() {
+
+        val photoFile: File? = try {
+            createImageFile()
+        } catch (e: IOException) {
+            showMessageWithSnackBar(e.localizedMessage ?: getString(R.string.failed_to_get_image))
+            null
+        }
+
+        viewModel.currentFile = photoFile
+
+        ImageChooserDialogFragment.newInstance(
+            ImageSourceCallback {
+                when (it) {
+                    ImageSource.GALLERY -> chooseImageFromGallery()
+                    ImageSource.CAMERA -> takeImageWithCamera(photoFile)
+                }
+            }
+        ).show(requireActivity().supportFragmentManager, "source_chooser")
+    }
+
+    private fun chooseImageFromGallery() {
+        val getImage = Intent(Intent.ACTION_GET_CONTENT)
+        getImage.type = "image/*"
+
+        val pickIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        pickIntent.type = "image/*"
+
+        val chooserIntent = Intent.createChooser(getImage, getString(R.string.select_image))
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(pickIntent))
+
+        startActivityForResult(chooserIntent, REQUEST_CODE_PICK_IMAGE)
+    }
+
+    private fun takeImageWithCamera(photoFile: File?) {
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
+        photoFile?.also {
+            val photoUri: Uri = FileProvider.getUriForFile(
+                requireContext(),
+                PROVIDER_AUTHORITY_PRODUCTS,
+                it
+            )
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+            try {
+                startActivityForResult(intent, REQUEST_CODE_CAMERA_IMAGE)
+            } catch (e: ActivityNotFoundException) {
+                showMessageWithSnackBar(getString(R.string.no_camera_app))
+            }
+        }
+    }
+
+    private fun createImageFile(): File {
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val storageDir = requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val file = File.createTempFile(
+            "Product_$timeStamp",
+            ".jpg",
+            storageDir
+        ).apply {
+            viewModel.currentPhotoPath = absolutePath
+        }
+        // TODO Delete the file after submitting.
+        return file
     }
 
     private fun setupImageChooser() {
@@ -190,57 +289,6 @@ class SubmitNewProductFragment : Fragment() {
             bitmap = it
         }
         return bitmap
-    }
-
-    private fun observeSendingProductStatusAndData() {
-        viewModel.sentProduct.observe(
-            viewLifecycleOwner,
-            {
-                it.let { response ->
-
-                    when (response) {
-
-                        is Response.Loading -> {
-                            switchUIToLoadingState()
-                        }
-
-                        is Response.Success -> {
-                            binding.run {
-                                submitProductProgressBar.hide()
-                                submitProductMessageTxt.text =
-                                    getString(R.string.successfully_uploaded)
-                                submitProductsProductDetailsBtn.visibility = View.VISIBLE
-                            }
-
-                            setUpSuccessfullyUploadedButtonListener(response.data)
-                        }
-
-                        is Response.Failure -> {
-                            switchUIToErrorState()
-                        }
-                    }
-                }
-            }
-        )
-    }
-
-    private fun switchUIToErrorState() {
-        binding.run {
-            submitProductProgressBar.hide()
-            submitProductSendBtn.visibility = View.VISIBLE
-            submitProductMessageTxt.text =
-                getString(R.string.error_on_sending_product)
-            submitProductMessageTxt.visibility = View.VISIBLE
-        }
-    }
-
-    private fun switchUIToLoadingState() {
-        binding.run {
-            submitProductProgressBar.visibility = View.VISIBLE
-
-            submitProductSendBtn.visibility = View.INVISIBLE
-            submitProductMessageTxt.visibility = View.INVISIBLE
-        }
     }
 
     private fun setUpSuccessfullyUploadedButtonListener(product: FetchingProductDTO) {
@@ -310,78 +358,23 @@ class SubmitNewProductFragment : Fragment() {
         }
     }
 
-    private fun addImage() {
-
-        val photoFile: File? = try {
-            createImageFile()
-        } catch (e: IOException) {
-            showMessageWithSnackBar(e.localizedMessage ?: getString(R.string.failed_to_get_image))
-            null
-        }
-
-        viewModel.currentFile = photoFile
-
-        ImageChooserDialogFragment.newInstance(
-            ImageSourceCallback {
-                when (it) {
-                    ImageSource.GALLERY -> chooseImageFromGallery()
-                    ImageSource.CAMERA -> takeImageWithCamera(photoFile)
-                }
-            }
-        ).show(requireActivity().supportFragmentManager, "source_chooser")
-    }
-
-    private fun chooseImageFromGallery() {
-        val getImage = Intent(Intent.ACTION_GET_CONTENT)
-        getImage.type = "image/*"
-
-        val pickIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        pickIntent.type = "image/*"
-
-        val chooserIntent = Intent.createChooser(getImage, getString(R.string.select_image))
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(pickIntent))
-
-        startActivityForResult(chooserIntent, REQUEST_CODE_PICK_IMAGE)
-    }
-
-    private fun takeImageWithCamera(photoFile: File?) {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-
-        photoFile?.also {
-            val photoUri: Uri = FileProvider.getUriForFile(
-                requireContext(),
-                PROVIDER_AUTHORITY_PRODUCTS,
-                it
-            )
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
-            try {
-                startActivityForResult(intent, REQUEST_CODE_CAMERA_IMAGE)
-            } catch (e: ActivityNotFoundException) {
-                showMessageWithSnackBar(getString(R.string.no_camera_app))
-            }
+    private fun switchUIToErrorState() {
+        binding.run {
+            submitProductProgressBar.hide()
+            submitProductSendBtn.visibility = View.VISIBLE
+            submitProductMessageTxt.text =
+                getString(R.string.error_on_sending_product)
+            submitProductMessageTxt.visibility = View.VISIBLE
         }
     }
 
-    private fun createImageFile(): File {
-        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        val storageDir = requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        val file = File.createTempFile(
-            "Product_$timeStamp",
-            ".jpg",
-            storageDir
-        ).apply {
-            viewModel.currentPhotoPath = absolutePath
-        }
-        // TODO Delete the file after submitting.
-        return file
-    }
+    private fun switchUIToLoadingState() {
+        binding.run {
+            submitProductProgressBar.visibility = View.VISIBLE
 
-    private fun navigateToProductDetailsScreen(product: FetchingProductDTO) {
-        findNavController().navigate(
-            SubmitNewProductFragmentDirections.actionSubmitNewProductFragmentToProductDetailsFragment(
-                product.id
-            )
-        )
+            submitProductSendBtn.visibility = View.INVISIBLE
+            submitProductMessageTxt.visibility = View.INVISIBLE
+        }
     }
 
     private fun showMessageWithSnackBar(text: String) {
@@ -390,6 +383,14 @@ class SubmitNewProductFragment : Fragment() {
             text,
             Snackbar.LENGTH_SHORT
         ).show()
+    }
+
+    private fun navigateToProductDetailsScreen(product: FetchingProductDTO) {
+        findNavController().navigate(
+            SubmitNewProductFragmentDirections.actionSubmitNewProductFragmentToProductDetailsFragment(
+                product.id
+            )
+        )
     }
 
     companion object {

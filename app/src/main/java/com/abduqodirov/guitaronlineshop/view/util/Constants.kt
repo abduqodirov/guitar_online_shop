@@ -38,3 +38,5 @@ val defaultFilteringConfigs =
     )
 
 const val PROVIDER_AUTHORITY_PRODUCTS = "com.abduqodirov.guitaronlineshop.fileprovider"
+
+const val DESCRIPTION_MAX_LINES_COLLAPSED = 4

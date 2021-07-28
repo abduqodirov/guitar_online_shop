@@ -24,4 +24,7 @@
     <string name="add_image">Add an image</string>
     <string name="failed_to_get_image">Failed to get the image</string>
     <string name="no_camera_app">Your device has no compatible camera app</string>
+    <string name="long_dummy_text">ljslkdfjlksdajflisueoirjslkdfjsdlfjsdlkjflksdjlf jlkdsjflksdjfoiweurloj ljslkdfjlksdajflisueoirjslkdfjsdlfjsdlkjflksdjlf jlkdsjflksdjfoiweurloj ljslkdfjlksdajflisueoirjslkdfjsdlfjsdlkjflksdjlf jlkdsjflksdjfoiweurloj ljslkdfjlksdajflisueoirjslkdfjsdlfjsdlkjflksdjlf jlkdsjflksdjfoiweurlojljslkdfjlksdajflisueoirjslkdfjsdlfjsdlkjflksdjlf jlkdsjflksdjfoiweurloj ljslkdfjlksdajflisueoirjslkdfjsdlfjsdlkjflksdjlf jlkdsjflksdjfoiweurlojljslkdfjlksdajflisueoirjslkdfjsdlfjsdlkjflksdjlf jlkdsjflksdjfoiweurloj ljslkdfjlksdajflisueoirjslkdfjsdlfjsdlkjflksdjlf jlkdsjflksdjfoiweurlojljslkdfjlksdajflisueoirjslkdfjsdlfjsdlkjflksdjlf jlkdsjflksdjfoiweurloj ljslkdfjlksdajflisueoirjslkdfjsdlfjsdlkjflksdjlf jlkdsjflksdjfoiweurlojljslkdfjlksdajflisueoirjslkdfjsdlfjsdlkjflksdjlf jlkdsjflksdjfoiweurloj ljslkdfjlksdajflisueoirjslkdfjsdlfjsdlkjflksdjlf jlkdsjflksdjfoiweurloj</string>
+    <string name="show_more_comments">Show more comments</string>
+    <string name="show_more_description">View more</string>
 </resources>

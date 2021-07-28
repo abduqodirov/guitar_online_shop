@@ -15,14 +15,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import com.abduqodirov.guitaronlineshop.R
 import com.abduqodirov.guitaronlineshop.databinding.FragmentProductsListBinding
 import com.abduqodirov.guitaronlineshop.view.ShopApplication
 import com.abduqodirov.guitaronlineshop.view.model.ProductForDisplay
 import com.abduqodirov.guitaronlineshop.view.model.SortingFilteringFields
-import com.abduqodirov.guitaronlineshop.view.screens.BottomNavScreenDirections
 import com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist.adapters.ProductsLoadStateAdapter
 import com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist.adapters.ProductsRecyclerAdapter
 import com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productslist.filtering.FilteringSortingBottomSheetFragment
@@ -99,6 +98,26 @@ class ProductsListFragment : Fragment() {
         return super.onCreateOptionsMenu(menu, inflater)
     }
 
+    private fun observeProductsData(settings: SortingFilteringFields) {
+
+        lifecycleScope.launch {
+            viewModel.fetchProducts(settings)
+                .collect {
+                    productAdapter.submitData(it)
+                }
+        }
+        binding.productsRecycler.scrollToPosition(0)
+    }
+
+    private fun applyFilterAndRefreshList(settings: SortingFilteringFields) {
+        // If filtering settings are the same, there is no need to refresh
+        if (currentFilteringFields == settings) {
+            return
+        }
+        currentFilteringFields = settings
+        observeProductsData(currentFilteringFields)
+    }
+
     private fun setupSearchListener(searchItem: MenuItem) {
         searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
@@ -111,17 +130,6 @@ class ProductsListFragment : Fragment() {
                 return true
             }
         })
-    }
-
-    private fun observeProductsData(settings: SortingFilteringFields) {
-
-        lifecycleScope.launch {
-            viewModel.fetchProducts(settings)
-                .collect {
-                    productAdapter.submitData(it)
-                }
-        }
-        binding.productsRecycler.scrollToPosition(0)
     }
 
     private fun setupAdapter() {
@@ -176,17 +184,6 @@ class ProductsListFragment : Fragment() {
         }
     }
 
-    private fun navigateToProductDetails(it: ProductForDisplay) {
-        val mainNavController = Navigation.findNavController(
-            requireActivity(),
-            R.id.main_fragment_container_view
-        )
-
-        mainNavController.navigate(
-            BottomNavScreenDirections.actionBottomMainToProductDetailsFragment(it.id)
-        )
-    }
-
     private fun setupClickListeners() {
 
         binding.productsRetryButton.setOnClickListener {
@@ -227,15 +224,10 @@ class ProductsListFragment : Fragment() {
         })
     }
 
-    private fun applyFilterAndRefreshList(settings: SortingFilteringFields) {
-
-        // If filtering settings are the same, there is no need to refresh
-        if (currentFilteringFields == settings) {
-            return
-        }
-
-        currentFilteringFields = settings
-        observeProductsData(currentFilteringFields)
+    private fun navigateToProductDetails(it: ProductForDisplay) {
+        findNavController().navigate(
+            ProductsListFragmentDirections.actionProductsListFragmentToProductDetailsFragment(it.id)
+        )
     }
 
     companion object {

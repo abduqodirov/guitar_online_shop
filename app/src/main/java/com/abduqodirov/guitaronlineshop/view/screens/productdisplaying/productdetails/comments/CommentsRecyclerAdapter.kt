@@ -1,4 +1,4 @@
-package com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productdetails
+package com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productdetails.comments
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,6 +10,8 @@ import com.abduqodirov.guitaronlineshop.databinding.ItemCommentBinding
 class CommentsRecyclerAdapter :
     ListAdapter<String, CommentsRecyclerAdapter.CommentsViewHolder>(CommentDiffCallback()) {
 
+    var collapseComments = false
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentsViewHolder {
 
         val binding = ItemCommentBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -19,6 +21,9 @@ class CommentsRecyclerAdapter :
 
     override fun onBindViewHolder(holder: CommentsViewHolder, position: Int) {
         holder.binding.itemCommentText.text = getItem(position)
+        if (collapseComments) {
+            holder.binding.itemCommentText.maxLines = 1
+        }
     }
 
     inner class CommentsViewHolder(val binding: ItemCommentBinding) :
