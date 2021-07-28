@@ -32,6 +32,9 @@
         <argument
             android:name="productId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_productDetailsFragment_to_commentsFragment"
+            app:destination="@id/commentsFragment" />
     </fragment>
 
     <fragment
@@ -42,5 +45,13 @@
         <action
             android:id="@+id/action_submitNewProductFragment_to_productDetailsFragment"
             app:destination="@id/productDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/commentsFragment"
+        android:name="com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productdetails.comments.CommentsFragment"
+        android:label="CommentsFragment" >
+        <argument
+            android:name="productId"
+            app:argType="string" />
     </fragment>
 </navigation>
