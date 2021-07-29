@@ -12,7 +12,6 @@ import com.abduqodirov.guitaronlineshop.view.model.ProductForSendingScreen
 import com.abduqodirov.guitaronlineshop.view.model.UploadingImage
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
@@ -23,9 +22,11 @@ class SubmitProductViewModel @Inject constructor(
     private val submitRepo: SubmitProductRepository
 ) : ViewModel() {
 
-    val formInputsValidationLive = MutableLiveData(arrayOf(false, false, false))
+    private val _formInputsValidationLive = MutableLiveData(arrayOf(false, false, false))
+    val formInputsValidationLive: LiveData<Array<Boolean>> get() = _formInputsValidationLive
 
-    val sentProduct = MutableLiveData<Response<FetchingProductDTO>>()
+    private val _sentProduct = MutableLiveData<Response<FetchingProductDTO>>()
+    val sentProduct: LiveData<Response<FetchingProductDTO>> get() = _sentProduct
 
     var addImageCount = 0
 
@@ -38,11 +39,10 @@ class SubmitProductViewModel @Inject constructor(
     private val validators = arrayOf(::isValidName, ::isValidPrice, ::isValidDesc)
 
     fun sendProduct(product: ProductForSendingScreen) {
-        sentProduct.value = Response.Loading
         viewModelScope.launch {
             submitRepo.sendProduct(product)
                 .collect {
-                    sentProduct.postValue(it)
+                    _sentProduct.postValue(it)
                 }
         }
     }
@@ -84,7 +84,6 @@ class SubmitProductViewModel @Inject constructor(
         submittingImages.value?.forEach {
             val deletingFile = File(it.path)
             deletingFile.delete()
-            Timber.d("${it.path} delete bo'ldi")
         }
     }
 
@@ -95,7 +94,7 @@ class SubmitProductViewModel @Inject constructor(
         val oldValidation = formInputsValidationLive.value
         val result = validators[position](text)
         oldValidation?.set(position, result)
-        formInputsValidationLive.value = oldValidation!!
+        _formInputsValidationLive.value = oldValidation!!
     }
 
     private fun isValidName(name: String) = name.isNotEmpty()

@@ -7,11 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.abduqodirov.guitaronlineshop.data.model.Response
+import com.abduqodirov.guitaronlineshop.data.model.TokenUserDTO
 import com.abduqodirov.guitaronlineshop.databinding.FragmentEmailSignInBinding
 import com.abduqodirov.guitaronlineshop.view.ShopApplication
 import com.abduqodirov.guitaronlineshop.view.screens.auth.AuthViewModel
+import timber.log.Timber
 import javax.inject.Inject
 
 class EmailSignInFragment : Fragment() {
@@ -43,6 +47,8 @@ class EmailSignInFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupClickListeners()
+
+        observeSignedInUser()
     }
 
     override fun onDestroyView() {
@@ -50,12 +56,27 @@ class EmailSignInFragment : Fragment() {
         _binding = null
     }
 
+    private fun observeSignedInUser() {
+        viewModel.user.observe(
+            viewLifecycleOwner,
+            Observer {
+                when (it) {
+                    is Response.Loading -> switchUIToLoadingState()
+                    is Response.Success -> onUserSignedInSuccessfully(it)
+                    is Response.Failure -> showErrors(it)
+                }
+            }
+        )
+    }
+
     private fun setupClickListeners() {
         binding.run {
             submitBtn.setOnClickListener {
+                // TODO validate fields and show message.
                 val email = emailInput.text.toString()
                 val password = passwordInput.text.toString()
-                // TODO validate fields and show message.
+
+                viewModel.signIn(email, password)
             }
         }
 
@@ -66,6 +87,18 @@ class EmailSignInFragment : Fragment() {
         binding.signUpBtn.setOnClickListener {
             navigateToSignUpScreen()
         }
+    }
+
+    private fun onUserSignedInSuccessfully(success: Response.Success<TokenUserDTO>) {
+        Timber.d("kirdi muvafaqqiyatli ${success.data}")
+    }
+
+    private fun switchUIToLoadingState() {
+        Timber.d("loading bo'lyapti")
+    }
+
+    private fun showErrors(failure: Response.Failure) {
+        Timber.d("error keldi ${failure.errorMessage}")
     }
 
     private fun navigateToSignUpScreen() {

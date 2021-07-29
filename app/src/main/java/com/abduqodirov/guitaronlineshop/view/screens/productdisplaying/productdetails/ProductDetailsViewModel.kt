@@ -1,5 +1,6 @@
 package com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productdetails
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,14 +15,14 @@ class ProductDetailsViewModel @Inject constructor(
     private val productsRepository: ProductsFetchingRepository
 ) : ViewModel() {
 
-    val product = MutableLiveData<Response<FetchingProductDTO>>()
+    private val _product = MutableLiveData<Response<FetchingProductDTO>>()
+    val product: LiveData<Response<FetchingProductDTO>> get() = _product
 
     fun refreshProduct(id: String) {
-        product.value = Response.Loading
         viewModelScope.launch {
             productsRepository.fetchProductById(id)
                 .collect {
-                    product.postValue(it)
+                    _product.postValue(it)
                 }
         }
     }

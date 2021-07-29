@@ -26,14 +26,22 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.profileCreateProductBtn.setOnClickListener {
-            navigateToSubmitProductScreen()
-        }
+        setupClickListeners()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun setupClickListeners() {
+        binding.profileCreateProductBtn.setOnClickListener {
+            navigateToSubmitProductScreen()
+        }
+
+        binding.tempSignInBtn.setOnClickListener {
+            findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToAuthGraph())
+        }
     }
 
     private fun navigateToSubmitProductScreen() {

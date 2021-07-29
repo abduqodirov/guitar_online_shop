@@ -29,6 +29,7 @@ class ProductsFetchingRepositoryImpl @Inject constructor(
     }
 
     override fun fetchProductById(id: String) = flow {
+        emit(Response.Loading)
         try {
             emit(Response.Success(remoteDataSource.fetchProductById(id)))
         } catch (e: Exception) {
