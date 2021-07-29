@@ -33,6 +33,8 @@ class MainActivity : AppCompatActivity() {
         )
         binding.bottomNav.setupWithNavController(navController)
         setupActionBarWithNavController(navController, appBarConfiguration)
+
+        // TODO hide bottom navigation on certain screens
     }
 
     override fun onSupportNavigateUp(): Boolean {

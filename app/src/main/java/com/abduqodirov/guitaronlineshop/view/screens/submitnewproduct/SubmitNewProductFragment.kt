@@ -232,7 +232,6 @@ class SubmitNewProductFragment : Fragment() {
         ).apply {
             viewModel.currentPhotoPath = absolutePath
         }
-        // TODO Delete the file after submitting.
         return file
     }
 

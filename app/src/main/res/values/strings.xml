@@ -27,4 +27,9 @@
     <string name="long_dummy_text">ljslkdfjlksdajflisueoirjslkdfjsdlfjsdlkjflksdjlf jlkdsjflksdjfoiweurloj ljslkdfjlksdajflisueoirjslkdfjsdlfjsdlkjflksdjlf jlkdsjflksdjfoiweurloj ljslkdfjlksdajflisueoirjslkdfjsdlfjsdlkjflksdjlf jlkdsjflksdjfoiweurloj ljslkdfjlksdajflisueoirjslkdfjsdlfjsdlkjflksdjlf jlkdsjflksdjfoiweurlojljslkdfjlksdajflisueoirjslkdfjsdlfjsdlkjflksdjlf jlkdsjflksdjfoiweurloj ljslkdfjlksdajflisueoirjslkdfjsdlfjsdlkjflksdjlf jlkdsjflksdjfoiweurlojljslkdfjlksdajflisueoirjslkdfjsdlfjsdlkjflksdjlf jlkdsjflksdjfoiweurloj ljslkdfjlksdajflisueoirjslkdfjsdlfjsdlkjflksdjlf jlkdsjflksdjfoiweurlojljslkdfjlksdajflisueoirjslkdfjsdlfjsdlkjflksdjlf jlkdsjflksdjfoiweurloj ljslkdfjlksdajflisueoirjslkdfjsdlfjsdlkjflksdjlf jlkdsjflksdjfoiweurlojljslkdfjlksdajflisueoirjslkdfjsdlfjsdlkjflksdjlf jlkdsjflksdjfoiweurloj ljslkdfjlksdajflisueoirjslkdfjsdlfjsdlkjflksdjlf jlkdsjflksdjfoiweurloj</string>
     <string name="show_more_comments">Show more comments</string>
     <string name="show_more_description">View more</string>
+    <string name="input_email">Enter your email</string>
+    <string name="input_password">Enter your password</string>
+    <string name="login_submit">Submit</string>
+    <string name="navigate_sign_up">Don\'t have an account? Sign up</string>
+    <string name="forget_password">Forget password?</string>
 </resources>

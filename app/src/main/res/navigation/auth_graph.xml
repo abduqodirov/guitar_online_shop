@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/auth_graph"
+    app:startDestination="@id/emailSignInFragment">
+
+    <fragment
+        android:id="@+id/emailSignInFragment"
+        android:name="com.abduqodirov.guitaronlineshop.view.screens.auth.email.EmailSignInFragment"
+        android:label="EmailSignInFragment" >
+        <action
+            android:id="@+id/action_emailSignInFragment_to_forgetPasswordFragment"
+            app:destination="@id/forgetPasswordFragment" />
+        <action
+            android:id="@+id/action_emailSignInFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/forgetPasswordFragment"
+        android:name="com.abduqodirov.guitaronlineshop.view.screens.auth.forget.ForgetPasswordFragment"
+        android:label="ForgetPasswordFragment" />
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="com.abduqodirov.guitaronlineshop.view.screens.auth.signup.SignUpFragment"
+        android:label="SignUpFragment" />
+</navigation>

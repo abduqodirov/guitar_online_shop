@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_profileFragment_to_submitNewProductFragment"
             app:destination="@id/submitNewProductFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_auth_graph"
+            app:destination="@id/auth_graph" />
     </fragment>
 
     <fragment
@@ -50,4 +53,5 @@
         android:id="@+id/commentsFragment"
         android:name="com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productdetails.comments.CommentsFragment"
         android:label="CommentsFragment" />
+    <include app:graph="@navigation/auth_graph" />
 </navigation>
