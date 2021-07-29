@@ -20,6 +20,7 @@ import com.abduqodirov.guitaronlineshop.view.mapper.mapFetchedProduct
 import com.abduqodirov.guitaronlineshop.view.model.ProductForDisplay
 import com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productdetails.comments.CommentsRecyclerAdapter
 import com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productdetails.imageslider.ImagesCollectionAdapter
+import com.abduqodirov.guitaronlineshop.view.util.COMMENTS_LIMIT_IN_PRODUCT_DETAILS
 import com.abduqodirov.guitaronlineshop.view.util.DESCRIPTION_MAX_LINES_COLLAPSED
 import com.google.android.material.tabs.TabLayoutMediator
 import javax.inject.Inject
@@ -119,7 +120,7 @@ class ProductDetailsFragment : Fragment() {
 
             imagesCollectionAdapter.submitList(product.photos)
 
-            var commentsLimit = 3
+            var commentsLimit = COMMENTS_LIMIT_IN_PRODUCT_DETAILS
             if (product.comments.size < commentsLimit) {
                 commentsLimit = product.comments.size
                 detailsCommentsBtn.isVisible = false

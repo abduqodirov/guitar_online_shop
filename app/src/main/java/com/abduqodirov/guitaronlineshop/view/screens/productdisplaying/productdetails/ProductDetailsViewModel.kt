@@ -2,7 +2,6 @@ package com.abduqodirov.guitaronlineshop.view.screens.productdisplaying.productd
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.abduqodirov.guitaronlineshop.data.model.FetchingProductDTO
 import com.abduqodirov.guitaronlineshop.data.model.Response
@@ -18,18 +17,12 @@ class ProductDetailsViewModel @Inject constructor(
     val product = MutableLiveData<Response<FetchingProductDTO>>()
 
     fun refreshProduct(id: String) {
+        product.value = Response.Loading
         viewModelScope.launch {
-            product.value = Response.Loading
-            try {
-                productsRepository.fetchProductById(id)
-                    .collect {
-                        product.postValue(it)
-                    }
-                productsRepository.fetchProductById(id).asLiveData()
-            } catch (e: Exception) {
-                product.value = Response.Failure(e.localizedMessage ?: "Failed to load")
-                e.printStackTrace()
-            }
+            productsRepository.fetchProductById(id)
+                .collect {
+                    product.postValue(it)
+                }
         }
     }
 }

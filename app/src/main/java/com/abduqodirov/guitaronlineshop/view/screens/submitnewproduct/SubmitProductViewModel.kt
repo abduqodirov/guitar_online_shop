@@ -38,16 +38,12 @@ class SubmitProductViewModel @Inject constructor(
     private val validators = arrayOf(::isValidName, ::isValidPrice, ::isValidDesc)
 
     fun sendProduct(product: ProductForSendingScreen) {
+        sentProduct.value = Response.Loading
         viewModelScope.launch {
-            sentProduct.value = Response.Loading
-            try {
-                submitRepo.sendProduct(product)
-                    .collect {
-                        sentProduct.postValue(it)
-                    }
-            } catch (e: Exception) {
-                sentProduct.value = Response.Failure(e.localizedMessage ?: "Failed to load")
-            }
+            submitRepo.sendProduct(product)
+                .collect {
+                    sentProduct.postValue(it)
+                }
         }
     }
 

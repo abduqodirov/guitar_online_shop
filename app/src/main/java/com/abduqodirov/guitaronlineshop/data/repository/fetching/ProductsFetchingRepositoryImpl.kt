@@ -29,7 +29,11 @@ class ProductsFetchingRepositoryImpl @Inject constructor(
     }
 
     override fun fetchProductById(id: String) = flow {
-        emit(Response.Success(remoteDataSource.fetchProductById(id)))
+        try {
+            emit(Response.Success(remoteDataSource.fetchProductById(id)))
+        } catch (e: Exception) {
+            emit(Response.Failure(e.localizedMessage ?: "Failed to load"))
+        }
     }
 
     companion object {

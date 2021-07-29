@@ -3,7 +3,7 @@ package com.abduqodirov.guitaronlineshop.data.network.retrofit
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
-const val BASE_URL = "http://192.168.1.103:3000"
+const val BASE_URL = "http://192.168.1.103:3000/"
 
 val retrofit: Retrofit = Retrofit.Builder()
     .baseUrl(BASE_URL)

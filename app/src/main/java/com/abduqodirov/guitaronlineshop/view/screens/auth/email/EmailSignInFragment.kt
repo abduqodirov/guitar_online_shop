@@ -1,17 +1,34 @@
 package com.abduqodirov.guitaronlineshop.view.screens.auth.email
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.abduqodirov.guitaronlineshop.databinding.FragmentEmailSignInBinding
+import com.abduqodirov.guitaronlineshop.view.ShopApplication
+import com.abduqodirov.guitaronlineshop.view.screens.auth.AuthViewModel
+import javax.inject.Inject
 
 class EmailSignInFragment : Fragment() {
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private val viewModel by viewModels<AuthViewModel> { viewModelFactory }
+
     private var _binding: FragmentEmailSignInBinding? = null
     private val binding get() = _binding!!
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        (requireActivity().application as ShopApplication).appComponent.authComponent().create()
+            .inject(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

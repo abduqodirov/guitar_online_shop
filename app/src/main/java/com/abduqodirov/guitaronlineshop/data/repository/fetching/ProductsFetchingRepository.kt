@@ -10,5 +10,5 @@ interface ProductsFetchingRepository {
 
     fun fetchPaginatedProducts(fields: SortingFilteringFields): Flow<PagingData<FetchingProductDTO>>
 
-    fun fetchProductById(id: String): Flow<Response.Success<FetchingProductDTO>>
+    fun fetchProductById(id: String): Flow<Response<FetchingProductDTO>>
 }

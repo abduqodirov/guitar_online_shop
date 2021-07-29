@@ -3,6 +3,7 @@ package com.abduqodirov.guitaronlineshop.data.network
 import com.abduqodirov.guitaronlineshop.data.model.FetchingProductDTO
 import com.abduqodirov.guitaronlineshop.data.model.PageProductsDTO
 import com.abduqodirov.guitaronlineshop.data.model.SendingProductWithUploadedImagesDTO
+import com.abduqodirov.guitaronlineshop.data.model.TokenUserDTO
 import com.abduqodirov.guitaronlineshop.view.model.SortingFilteringFields
 
 interface RemoteDataSource {
@@ -18,4 +19,6 @@ interface RemoteDataSource {
     suspend fun fetchProductById(id: String): FetchingProductDTO
 
     suspend fun submitProduct(product: SendingProductWithUploadedImagesDTO): FetchingProductDTO
+
+    suspend fun loginWithEmail(email: String, password: String): TokenUserDTO
 }

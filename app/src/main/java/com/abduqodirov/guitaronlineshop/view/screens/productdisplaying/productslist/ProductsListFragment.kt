@@ -176,9 +176,9 @@ class ProductsListFragment : Fragment() {
 
                 val isListEmpty =
                     loadState.refresh is LoadState.NotLoading && productAdapter.itemCount == 0
-                produstsEmptyListTxt.isVisible = isListEmpty
+                productsEmptyListTxt.isVisible = isListEmpty
                 if (isListEmpty) {
-                    produstsEmptyListTxt.text = getString(R.string.no_products)
+                    productsEmptyListTxt.text = getString(R.string.no_products)
                 }
             }
         }

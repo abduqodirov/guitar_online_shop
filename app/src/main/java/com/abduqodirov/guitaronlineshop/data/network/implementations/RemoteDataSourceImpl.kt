@@ -3,6 +3,9 @@ package com.abduqodirov.guitaronlineshop.data.network.implementations
 import com.abduqodirov.guitaronlineshop.data.model.FetchingProductDTO
 import com.abduqodirov.guitaronlineshop.data.model.PageProductsDTO
 import com.abduqodirov.guitaronlineshop.data.model.SendingProductWithUploadedImagesDTO
+import com.abduqodirov.guitaronlineshop.data.model.TokenUserDTO
+import com.abduqodirov.guitaronlineshop.data.network.LOGIN_KEY_EMAIL
+import com.abduqodirov.guitaronlineshop.data.network.LOGIN_KEY_PASSWORD
 import com.abduqodirov.guitaronlineshop.data.network.RemoteDataSource
 import com.abduqodirov.guitaronlineshop.data.network.retrofit.ShopService
 import com.abduqodirov.guitaronlineshop.view.model.SortingFilteringFields
@@ -35,5 +38,13 @@ class RemoteDataSourceImpl(private val shopService: ShopService) : RemoteDataSou
 
     override suspend fun submitProduct(product: SendingProductWithUploadedImagesDTO): FetchingProductDTO {
         return shopService.submitProduct(product)
+    }
+
+    override suspend fun loginWithEmail(email: String, password: String): TokenUserDTO {
+        val map = mapOf(
+            LOGIN_KEY_EMAIL to email,
+            LOGIN_KEY_PASSWORD to password
+        )
+        return shopService.loginWithEmail(map)
     }
 }

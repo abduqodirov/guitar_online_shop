@@ -17,7 +17,7 @@ class SubmitProductRepositoryImpl @Inject constructor(
     private val imageUploader: ImageUploader
 ) : SubmitProductRepository {
 
-    override fun sendProduct(sendingProduct: ProductForSendingScreen): Flow<Response.Success<FetchingProductDTO>> =
+    override fun sendProduct(sendingProduct: ProductForSendingScreen): Flow<Response<FetchingProductDTO>> =
         flow {
 
             val urlsOfUploadedImages = arrayListOf("")
@@ -30,8 +30,11 @@ class SubmitProductRepositoryImpl @Inject constructor(
             val productWithUploadedImages =
                 mapSubmittingProduct(sendingProduct, urlsOfUploadedImages)
 
-            val resultProduct = remoteDataSource.submitProduct(productWithUploadedImages)
-
-            emit(Response.Success(resultProduct))
+            try {
+                val resultProduct = remoteDataSource.submitProduct(productWithUploadedImages)
+                emit(Response.Success(resultProduct))
+            } catch (e: Exception) {
+                emit(Response.Failure(e.localizedMessage ?: "Failed to load"))
+            }
         }
 }

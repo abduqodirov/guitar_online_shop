@@ -18,7 +18,7 @@ class ForgetPasswordFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentForgetPasswordBinding.inflate(inflater, container, false)
-        return _binding.root
+        return binding.root
     }
 
     override fun onDestroyView() {

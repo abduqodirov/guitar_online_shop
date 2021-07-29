@@ -7,5 +7,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface SubmitProductRepository {
 
-    fun sendProduct(sendingProduct: ProductForSendingScreen): Flow<Response.Success<FetchingProductDTO>>
+    fun sendProduct(sendingProduct: ProductForSendingScreen): Flow<Response<FetchingProductDTO>>
 }
