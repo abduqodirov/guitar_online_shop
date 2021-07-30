@@ -22,5 +22,11 @@
     <fragment
         android:id="@+id/signUpFragment"
         android:name="com.abduqodirov.guitaronlineshop.view.screens.auth.signup.SignUpFragment"
-        android:label="SignUpFragment" />
+        android:label="SignUpFragment" >
+        <action
+            android:id="@+id/action_signUpFragment_to_emailSignInFragment"
+            app:destination="@id/emailSignInFragment"
+            app:popUpTo="@id/signUpFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>

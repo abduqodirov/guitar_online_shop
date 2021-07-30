@@ -42,3 +42,6 @@ const val PROVIDER_AUTHORITY_PRODUCTS = "com.abduqodirov.guitaronlineshop.filepr
 const val DESCRIPTION_MAX_LINES_COLLAPSED = 4
 
 const val COMMENTS_LIMIT_IN_PRODUCT_DETAILS = 3
+
+const val MINIMUM_PASSWORD_LENGTH = 3
+const val MAXIMUM_PASSWORD_LENGTH = 256
