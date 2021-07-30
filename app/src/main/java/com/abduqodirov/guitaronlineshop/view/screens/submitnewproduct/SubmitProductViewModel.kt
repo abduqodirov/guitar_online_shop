@@ -5,11 +5,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.abduqodirov.guitaronlineshop.R
 import com.abduqodirov.guitaronlineshop.data.model.FetchingProductDTO
 import com.abduqodirov.guitaronlineshop.data.model.Response
 import com.abduqodirov.guitaronlineshop.data.repository.submitting.SubmitProductRepository
 import com.abduqodirov.guitaronlineshop.view.model.ProductForSendingScreen
 import com.abduqodirov.guitaronlineshop.view.model.UploadingImage
+import com.abduqodirov.guitaronlineshop.view.model.Validation
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.io.File
@@ -22,21 +24,25 @@ class SubmitProductViewModel @Inject constructor(
     private val submitRepo: SubmitProductRepository
 ) : ViewModel() {
 
-    private val _formInputsValidationLive = MutableLiveData(arrayOf(false, false, false))
-    val formInputsValidationLive: LiveData<Array<Boolean>> get() = _formInputsValidationLive
+    private val _formInputsValidation = MutableLiveData(
+        arrayOf(
+            Validation(EDITTEXT_NAME_POSITION, validator = ::nameValidator),
+            Validation(EDITTEXT_PRICE_POSITION, validator = ::priceValidator),
+            Validation(EDITTEXT_DESC_POSITION, validator = ::descriptionValidator),
+        )
+    )
+    val formInputsValidation: LiveData<Array<Validation>> get() = _formInputsValidation
 
     private val _sentProduct = MutableLiveData<Response<FetchingProductDTO>>()
     val sentProduct: LiveData<Response<FetchingProductDTO>> get() = _sentProduct
 
-    var addImageCount = 0
+    private var addImageCount = 0
 
     lateinit var currentPhotoPath: String
     var currentFile: File? = null
 
     private val _submittingImages = MutableLiveData<ArrayList<UploadingImage>>(arrayListOf())
     val submittingImages: LiveData<ArrayList<UploadingImage>> = _submittingImages
-
-    private val validators = arrayOf(::isValidName, ::isValidPrice, ::isValidDesc)
 
     fun sendProduct(product: ProductForSendingScreen) {
         viewModelScope.launch {
@@ -91,24 +97,54 @@ class SubmitProductViewModel @Inject constructor(
         position: Int,
         text: String
     ) {
-        val oldValidation = formInputsValidationLive.value
-        val result = validators[position](text)
-        oldValidation?.set(position, result)
-        _formInputsValidationLive.value = oldValidation!!
-    }
+        val oldValidation = formInputsValidation.value
+        val validatorFunction = oldValidation?.get(position)?.validator
+        val result = validatorFunction?.invoke(text)
 
-    private fun isValidName(name: String) = name.isNotEmpty()
+        val validationField = oldValidation?.get(position)
 
-    private fun isValidPrice(text: String): Boolean {
-        if (text.isEmpty()) {
-            return false
+        if (validationField != null) {
+
+            validationField.errorResId = result
+            oldValidation[position] = validationField
+
+            _formInputsValidation.value = oldValidation
         }
-        val price = text.toDoubleOrNull() ?: return false
-
-        return price > 0
     }
 
-    private fun isValidDesc(desc: String): Boolean {
-        return desc.isNotEmpty() && desc.length > MINIMUM_DESC_LENGTH && desc.length < MAXIMUM_DESC_LENGTH
+    private fun nameValidator(name: String): Int? {
+        if (name.isEmpty()) {
+            return R.string.validation_empty_field
+        }
+
+        return null
+    }
+
+    private fun priceValidator(text: String): Int? {
+
+        if (text.isEmpty()) {
+            return R.string.validation_empty_field
+        }
+
+        val price = text.toDoubleOrNull() ?: return R.string.validation_invalid_value
+
+        // TODO add limit to tremendous price
+        if (price <= 0) {
+            return R.string.validation_price_above_zero
+        }
+        return null
+    }
+
+    private fun descriptionValidator(desc: String): Int? {
+        if (desc.isEmpty()) {
+            return R.string.validation_empty_field
+        }
+        if (desc.length < MINIMUM_DESC_LENGTH) {
+            return R.string.validation_desc_min
+        }
+        if (desc.length > MAXIMUM_DESC_LENGTH) {
+            return R.string.validation_desc_max
+        }
+        return null
     }
 }

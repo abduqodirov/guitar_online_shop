@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         // TODO hide bottom navigation on certain screens
+        // TODO keyboard swiping up bottom navigation what a bug!!!)))
     }
 
     override fun onSupportNavigateUp(): Boolean {

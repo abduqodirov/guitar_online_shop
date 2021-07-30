@@ -32,4 +32,11 @@
     <string name="login_submit">Submit</string>
     <string name="navigate_sign_up">Don\'t have an account? Sign up</string>
     <string name="forget_password">Forget password?</string>
+
+    <!--  Validation error texts  -->
+    <string name="validation_empty_field">This field can\'t be empty</string>
+    <string name="validation_invalid_value">Invalid value</string>
+    <string name="validation_price_above_zero">Price should be bigger than zero</string>
+    <string name="validation_desc_min">Description should be at least 10 charecters</string>
+    <string name="validation_desc_max">Description should not contain more than 600 charecters</string>
 </resources>

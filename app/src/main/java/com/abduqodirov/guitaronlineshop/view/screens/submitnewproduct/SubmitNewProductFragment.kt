@@ -28,11 +28,13 @@ import com.abduqodirov.guitaronlineshop.data.network.SENDING_IMAGE_QUALITY
 import com.abduqodirov.guitaronlineshop.databinding.FragmentSubmitNewProductBinding
 import com.abduqodirov.guitaronlineshop.view.ShopApplication
 import com.abduqodirov.guitaronlineshop.view.model.ProductForSendingScreen
+import com.abduqodirov.guitaronlineshop.view.model.Validation
 import com.abduqodirov.guitaronlineshop.view.screens.submitnewproduct.adapters.ImageChooserAdapter
 import com.abduqodirov.guitaronlineshop.view.screens.submitnewproduct.imagechooser.ImageChooserDialogFragment
 import com.abduqodirov.guitaronlineshop.view.screens.submitnewproduct.imagechooser.ImageSource
 import com.abduqodirov.guitaronlineshop.view.screens.submitnewproduct.imagechooser.ImageSourceCallback
 import com.abduqodirov.guitaronlineshop.view.util.PROVIDER_AUTHORITY_PRODUCTS
+import com.abduqodirov.guitaronlineshop.view.util.setErrorTextResId
 import com.google.android.material.snackbar.Snackbar
 import java.io.File
 import java.io.FileOutputStream
@@ -41,9 +43,9 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import javax.inject.Inject
 
-private const val EDITTEXT_NAME_POSITION = 0
-private const val EDITTEXT_PRICE_POSITION = 1
-private const val EDITTEXT_DESC_POSITION = 2
+const val EDITTEXT_NAME_POSITION = 0
+const val EDITTEXT_PRICE_POSITION = 1
+const val EDITTEXT_DESC_POSITION = 2
 
 private const val REQUEST_CODE_CAMERA_IMAGE = 101
 private const val REQUEST_CODE_PICK_IMAGE = 202
@@ -79,11 +81,11 @@ class SubmitNewProductFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setUpFormValidators()
-
         setUpViewClickListeners()
 
         setupImageChooser()
+
+        setUpFormValidators()
 
         observeSendingProductStatusAndData()
     }
@@ -302,10 +304,14 @@ class SubmitNewProductFragment : Fragment() {
     private fun setUpFormValidators() {
 
         binding.run {
-            viewModel.formInputsValidationLive.observe(
+
+            viewModel.formInputsValidation.observe(
                 viewLifecycleOwner,
                 Observer {
-                    submitProductSendBtn.isEnabled = !it.contains(false)
+                    manageButtonVisibilityWithValidation(it)
+                    inputLayoutSubmitName.setErrorTextResId(it[EDITTEXT_NAME_POSITION])
+                    inputLayoutSubmitPrice.setErrorTextResId(it[EDITTEXT_PRICE_POSITION])
+                    inputLayoutSubmitDesc.setErrorTextResId(it[EDITTEXT_DESC_POSITION])
                 }
             )
 
@@ -323,6 +329,20 @@ class SubmitNewProductFragment : Fragment() {
         }
     }
 
+    private fun manageButtonVisibilityWithValidation(
+        it: Array<Validation>
+    ): Boolean {
+        var isAllFieldsValid = true
+        for (validation in it) {
+            if (validation.errorResId != null) {
+                isAllFieldsValid = false
+                break
+            }
+        }
+        binding.submitProductSendBtn.isEnabled = isAllFieldsValid
+        return isAllFieldsValid
+    }
+
     private fun setUpViewClickListeners() {
 
         binding.run {
@@ -332,15 +352,26 @@ class SubmitNewProductFragment : Fragment() {
 
             submitProductSendBtn.setOnClickListener {
 
+                viewModel.validateEditText(EDITTEXT_NAME_POSITION, submitProductNameEdt.text.toString())
+                viewModel.validateEditText(EDITTEXT_PRICE_POSITION, submitProductPriceEdt.text.toString())
+                viewModel.validateEditText(EDITTEXT_DESC_POSITION, submitProductDescEdt.text.toString())
+
+                viewModel.formInputsValidation.value?.let { validationArray ->
+                    val isAllFieldsValid = manageButtonVisibilityWithValidation(validationArray)
+                    if (!isAllFieldsValid) {
+                        return@setOnClickListener
+                    }
+                }
+
                 val name = submitProductNameEdt.text.toString()
                 val price = submitProductPriceEdt.text.toString().toDouble()
                 val desc = submitProductDescEdt.text.toString()
 
                 val images = arrayListOf<Bitmap>()
 
-                viewModel.submittingImages.value?.forEach {
+                viewModel.submittingImages.value?.forEach { uploadingImage ->
 
-                    val image = BitmapFactory.decodeFile(it.path)
+                    val image = BitmapFactory.decodeFile(uploadingImage.path)
 
                     if (image != null) {
                         images.add(image)

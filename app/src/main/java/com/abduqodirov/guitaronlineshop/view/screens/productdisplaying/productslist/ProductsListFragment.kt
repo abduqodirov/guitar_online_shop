@@ -106,6 +106,7 @@ class ProductsListFragment : Fragment() {
                     productAdapter.submitData(it)
                 }
         }
+        setUpViewVisibilities()
         binding.productsRecycler.scrollToPosition(0)
     }
 
@@ -152,11 +153,13 @@ class ProductsListFragment : Fragment() {
             )
         )
         binding.productsRecycler.setHasFixedSize(true)
-
-        setUpViewVisibilities()
     }
 
     private fun setUpViewVisibilities() {
+        // TODO Binding is already null until Paging returned a response.
+        // TODO Fragment shouldn't listen anymore once its view destroyed. Or Coroutine and flow shouldn't give data
+        // TODO Fragment instance should be kept when switched to another tab
+
         productAdapter.addLoadStateListener { loadState ->
 
             binding.run {
