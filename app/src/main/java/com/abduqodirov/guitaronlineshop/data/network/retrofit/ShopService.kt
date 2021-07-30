@@ -34,4 +34,7 @@ interface ShopService {
 
     @POST("login")
     suspend fun loginWithEmail(@Body emailAndPassword: Map<String, String>): TokenUserDTO
+
+    @POST("auth_reg")
+    suspend fun signUpWithEmail(@Body emailAndPassword: Map<String, String>): TokenUserDTO
 }

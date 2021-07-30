@@ -90,7 +90,6 @@ class EmailSignInFragment : Fragment() {
                     }
                 }
 
-                Timber.d("buyqolarga ham o'tib ketdi")
                 val email = emailInput.text.toString()
                 val password = passwordInput.text.toString()
 

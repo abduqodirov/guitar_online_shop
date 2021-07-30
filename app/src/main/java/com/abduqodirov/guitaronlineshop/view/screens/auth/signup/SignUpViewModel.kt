@@ -3,15 +3,23 @@ package com.abduqodirov.guitaronlineshop.view.screens.auth.signup
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.abduqodirov.guitaronlineshop.R
+import com.abduqodirov.guitaronlineshop.data.model.Response
+import com.abduqodirov.guitaronlineshop.data.model.TokenUserDTO
 import com.abduqodirov.guitaronlineshop.data.repository.auth.AuthRepository
 import com.abduqodirov.guitaronlineshop.view.model.Validation
 import com.abduqodirov.guitaronlineshop.view.util.MAXIMUM_PASSWORD_LENGTH
 import com.abduqodirov.guitaronlineshop.view.util.MINIMUM_PASSWORD_LENGTH
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class SignUpViewModel @Inject constructor(private val authRepository: AuthRepository) :
     ViewModel() {
+
+    private val _user = MutableLiveData<Response<TokenUserDTO>>()
+    val user: LiveData<Response<TokenUserDTO>> get() = _user
 
     private val _formValidations = MutableLiveData(
         arrayOf(
@@ -21,6 +29,14 @@ class SignUpViewModel @Inject constructor(private val authRepository: AuthReposi
         )
     )
     val formValidations: LiveData<Array<Validation>> get() = _formValidations
+
+    fun signUp(email: String, password: String) {
+        viewModelScope.launch {
+            authRepository.signUp(email, password).collect {
+                _user.postValue(it)
+            }
+        }
+    }
 
     fun validatePassword(
         position: Int,

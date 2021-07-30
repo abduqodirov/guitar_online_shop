@@ -19,6 +19,12 @@ class AuthRepositoryImpl @Inject constructor(private val remoteDataSource: Remot
     override fun logout(email: String) {
     }
 
-    override fun signUp(email: String, password: String) {
+    override fun signUp(email: String, password: String) = flow {
+        emit(Response.Loading)
+        try {
+            emit(Response.Success(remoteDataSource.signUpWithEmail(email, password)))
+        } catch (e: Exception) {
+            emit(Response.Failure(e.localizedMessage ?: "Failed to load"))
+        }
     }
 }

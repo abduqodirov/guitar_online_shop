@@ -11,6 +11,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.abduqodirov.guitaronlineshop.data.model.Response
+import com.abduqodirov.guitaronlineshop.data.model.TokenUserDTO
 import com.abduqodirov.guitaronlineshop.databinding.FragmentSignUpBinding
 import com.abduqodirov.guitaronlineshop.view.ShopApplication
 import com.abduqodirov.guitaronlineshop.view.model.Validation
@@ -63,9 +65,18 @@ class SignUpFragment : Fragment() {
     }
 
     private fun observeSignedUpUser() {
+        viewModel.user.observe(
+            viewLifecycleOwner,
+            Observer {
+                when (it) {
+                    is Response.Loading -> switchUIToLoadingState()
+                    is Response.Success -> onUserSignedUpSuccessfully(it)
+                    is Response.Failure -> showErrors(it)
+                }
+            }
+        )
     }
 
-    // TODO match bo'lganda narigini match bo'lishini qilmayapti.
     private fun setupFormValidators() {
         binding.run {
             viewModel.formValidations.observe(
@@ -130,9 +141,10 @@ class SignUpFragment : Fragment() {
                     }
                 }
 
-                Timber.d("buyqolarga ham o'tib ketdi")
                 val email = emailInput.text.toString()
                 val password = passwordInput.text.toString()
+
+                viewModel.signUp(email, password)
             }
 
             signInNavigateBtn.setOnClickListener {
@@ -154,6 +166,18 @@ class SignUpFragment : Fragment() {
         }
         binding.submitBtn.isEnabled = isAllFieldsValid
         return isAllFieldsValid
+    }
+
+    private fun onUserSignedUpSuccessfully(success: Response.Success<TokenUserDTO>) {
+        Timber.d("kirdi muvafaqqiyatli ${success.data}")
+    }
+
+    private fun switchUIToLoadingState() {
+        Timber.d("loading bo'lyapti")
+    }
+
+    private fun showErrors(failure: Response.Failure) {
+        Timber.d("error keldi ${failure.errorMessage}")
     }
 
     private fun navigateToSignInFragment() {

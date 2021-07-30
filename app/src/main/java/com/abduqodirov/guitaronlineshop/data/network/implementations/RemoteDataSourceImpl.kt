@@ -47,4 +47,12 @@ class RemoteDataSourceImpl(private val shopService: ShopService) : RemoteDataSou
         )
         return shopService.loginWithEmail(map)
     }
+
+    override suspend fun signUpWithEmail(email: String, password: String): TokenUserDTO {
+        val map = mapOf(
+            LOGIN_KEY_EMAIL to email,
+            LOGIN_KEY_PASSWORD to password
+        )
+        return shopService.signUpWithEmail(map)
+    }
 }
