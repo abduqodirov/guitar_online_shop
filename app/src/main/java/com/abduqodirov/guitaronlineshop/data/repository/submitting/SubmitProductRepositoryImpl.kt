@@ -5,8 +5,8 @@ import com.abduqodirov.guitaronlineshop.data.model.FetchingProductDTO
 import com.abduqodirov.guitaronlineshop.data.model.Response
 import com.abduqodirov.guitaronlineshop.data.network.RemoteDataSource
 import com.abduqodirov.guitaronlineshop.data.network.imageuploader.ImageUploader
+import com.abduqodirov.guitaronlineshop.di.scopes.FragmentScope
 import com.abduqodirov.guitaronlineshop.view.model.ProductForSendingScreen
-import com.abduqodirov.guitaronlineshop.view.screens.submitnewproduct.di.component.FragmentScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject

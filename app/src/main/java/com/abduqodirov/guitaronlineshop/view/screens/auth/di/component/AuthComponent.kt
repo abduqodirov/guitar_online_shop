@@ -1,11 +1,11 @@
 package com.abduqodirov.guitaronlineshop.view.screens.auth.di.component
 
+import com.abduqodirov.guitaronlineshop.di.scopes.FragmentScope
 import com.abduqodirov.guitaronlineshop.view.screens.auth.di.module.AuthModule
 import com.abduqodirov.guitaronlineshop.view.screens.auth.di.module.AuthModuleBinds
 import com.abduqodirov.guitaronlineshop.view.screens.auth.email.EmailSignInFragment
 import com.abduqodirov.guitaronlineshop.view.screens.auth.forget.ForgetPasswordFragment
 import com.abduqodirov.guitaronlineshop.view.screens.auth.signup.SignUpFragment
-import com.abduqodirov.guitaronlineshop.view.screens.submitnewproduct.di.component.FragmentScope
 import dagger.Subcomponent
 
 @FragmentScope

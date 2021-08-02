@@ -156,6 +156,7 @@ class EmailSignInFragment : Fragment() {
     }
 
     private fun onUserSignedInSuccessfully(signedInUser: TokenUserDTO) {
+        viewModel.saveToken(signedInUser.accessToken)
         findNavController().popBackStack()
         // TODO: 8/2/2021 pop back stack up to profile.
     }

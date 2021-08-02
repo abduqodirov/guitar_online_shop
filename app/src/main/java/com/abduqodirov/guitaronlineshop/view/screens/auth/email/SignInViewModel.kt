@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.abduqodirov.guitaronlineshop.R
+import com.abduqodirov.guitaronlineshop.data.TokenManager
 import com.abduqodirov.guitaronlineshop.data.model.Response
 import com.abduqodirov.guitaronlineshop.data.model.TokenUserDTO
 import com.abduqodirov.guitaronlineshop.data.repository.auth.AuthRepository
@@ -15,7 +16,10 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class SignInViewModel @Inject constructor(private val authRepository: AuthRepository) : ViewModel() {
+class SignInViewModel @Inject constructor(
+    private val authRepository: AuthRepository,
+    private val tokenManager: TokenManager
+) : ViewModel() {
 
     private val _user = MutableLiveData<Response<TokenUserDTO>>()
     val user: LiveData<Response<TokenUserDTO>> get() = _user
@@ -34,6 +38,10 @@ class SignInViewModel @Inject constructor(private val authRepository: AuthReposi
                 _user.postValue(it)
             }
         }
+    }
+
+    fun saveToken(token: String) {
+        tokenManager.insertToken(token)
     }
 
     // TODO The same with SubmitProductViewModel. So extract to some class. And use it from there
@@ -61,7 +69,8 @@ class SignInViewModel @Inject constructor(private val authRepository: AuthReposi
             return R.string.validation_empty_field
         }
 
-        val regex = Regex("(?:[a-z0-9!#\$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#\$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])")
+        val regex =
+            Regex("(?:[a-z0-9!#\$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#\$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])")
         if (!regex.matches(email.lowercase())) {
             return R.string.validation_not_email
         }
