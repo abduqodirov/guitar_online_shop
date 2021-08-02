@@ -33,7 +33,7 @@ class ProductsFetchingRepositoryImpl @Inject constructor(
         try {
             emit(Response.Success(remoteDataSource.fetchProductById(id)))
         } catch (e: Exception) {
-            emit(Response.Failure(e.localizedMessage ?: "Failed to load"))
+            emit(Response.Failure(e.localizedMessage))
         }
     }
 

@@ -78,6 +78,7 @@ class CommentsFragment : Fragment() {
                         }
 
                         is Response.Failure -> {
+                            // TODO: 8/2/2021 null bo'lganda error text getStringdan
                             binding.commentsMessageTxt.text = response.errorMessage
                             switchUItoErrorState()
                         }

@@ -5,19 +5,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.abduqodirov.guitaronlineshop.R
 import com.abduqodirov.guitaronlineshop.data.model.Response
 import com.abduqodirov.guitaronlineshop.data.model.TokenUserDTO
 import com.abduqodirov.guitaronlineshop.databinding.FragmentEmailSignInBinding
 import com.abduqodirov.guitaronlineshop.view.ShopApplication
 import com.abduqodirov.guitaronlineshop.view.model.Validation
 import com.abduqodirov.guitaronlineshop.view.util.setErrorTextResId
-import timber.log.Timber
 import javax.inject.Inject
 
 const val EDITTEXT_SIGN_IN_EMAIL_POSITION = 0
@@ -69,7 +70,7 @@ class EmailSignInFragment : Fragment() {
             Observer {
                 when (it) {
                     is Response.Loading -> switchUIToLoadingState()
-                    is Response.Success -> onUserSignedInSuccessfully(it)
+                    is Response.Success -> onUserSignedInSuccessfully(it.data)
                     is Response.Failure -> showErrors(it)
                 }
             }
@@ -80,8 +81,14 @@ class EmailSignInFragment : Fragment() {
         binding.run {
             submitBtn.setOnClickListener {
 
-                viewModel.validateEditText(EDITTEXT_SIGN_IN_EMAIL_POSITION, emailInput.text.toString())
-                viewModel.validateEditText(EDITTEXT_SIGN_IN_PASSWORD_POSITION, passwordInput.text.toString())
+                viewModel.validateEditText(
+                    EDITTEXT_SIGN_IN_EMAIL_POSITION,
+                    emailInput.text.toString()
+                )
+                viewModel.validateEditText(
+                    EDITTEXT_SIGN_IN_PASSWORD_POSITION,
+                    passwordInput.text.toString()
+                )
 
                 viewModel.formValidations.value?.let { validationArray ->
                     val isAllFieldsValid = manageButtonVisibilityWithValidation(validationArray)
@@ -118,11 +125,17 @@ class EmailSignInFragment : Fragment() {
             )
 
             emailInput.addTextChangedListener { emailText ->
-                viewModel.validateEditText(EDITTEXT_SIGN_IN_EMAIL_POSITION, emailText.toString())
+                viewModel.validateEditText(
+                    EDITTEXT_SIGN_IN_EMAIL_POSITION,
+                    emailText.toString()
+                )
             }
 
             passwordInput.addTextChangedListener { passwordText ->
-                viewModel.validateEditText(EDITTEXT_SIGN_IN_PASSWORD_POSITION, passwordText.toString())
+                viewModel.validateEditText(
+                    EDITTEXT_SIGN_IN_PASSWORD_POSITION,
+                    passwordText.toString()
+                )
             }
         }
     }
@@ -142,16 +155,29 @@ class EmailSignInFragment : Fragment() {
         return isAllFieldsValid
     }
 
-    private fun onUserSignedInSuccessfully(success: Response.Success<TokenUserDTO>) {
-        Timber.d("kirdi muvafaqqiyatli ${success.data}")
+    private fun onUserSignedInSuccessfully(signedInUser: TokenUserDTO) {
+        findNavController().popBackStack()
+        // TODO: 8/2/2021 pop back stack up to profile.
     }
 
     private fun switchUIToLoadingState() {
-        Timber.d("loading bo'lyapti")
+        binding.run {
+            submitBtn.isVisible = false
+            messageTxt.isVisible = false
+            progressBar.show()
+        }
     }
 
     private fun showErrors(failure: Response.Failure) {
-        Timber.d("error keldi ${failure.errorMessage}")
+        binding.run {
+            messageTxt.isVisible = true
+            submitBtn.isVisible = true
+            progressBar.hide()
+            submitBtn.text = getString(R.string.retry)
+
+            // TODO boshqa joylarda ham shunaqa failure errormessageni nnullablega yozib chiqish
+            messageTxt.text = failure.errorMessage ?: getString(R.string.failed_to_sign_in)
+        }
     }
 
     private fun navigateToSignUpScreen() {

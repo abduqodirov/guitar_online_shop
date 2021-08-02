@@ -34,7 +34,7 @@ class SubmitProductRepositoryImpl @Inject constructor(
                 val resultProduct = remoteDataSource.submitProduct(productWithUploadedImages)
                 emit(Response.Success(resultProduct))
             } catch (e: Exception) {
-                emit(Response.Failure(e.localizedMessage ?: "Failed to load"))
+                emit(Response.Failure(e.localizedMessage))
             }
         }
 }

@@ -13,6 +13,9 @@ class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
 
+    // TODO: 8/2/2021 persist user token. And refresh token
+    // TODO: 8/2/2021 Get user data by id and display in UI
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

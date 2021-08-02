@@ -45,9 +45,7 @@
     <string name="validation_short_password">Password should be longer than 3 charecters</string>
     <string name="validation_long_password">Password mustn\'t longer than 256 charecters</string>
     <string name="validation_password_with_space">Password can\'t contain space</string>
-    <string name="validation_not_matching_passwords">Passwords should match</string>\
-
-
-
-
+    <string name="validation_not_matching_passwords">Passwords should match</string>
+    <string name="failed_to_sign_in">Failed to sign in</string>
+    <string name="failed_to_sign_up">Failed to sign up</string>
 </resources>

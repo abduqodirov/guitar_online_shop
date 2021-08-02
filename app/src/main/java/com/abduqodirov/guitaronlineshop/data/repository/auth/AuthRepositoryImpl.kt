@@ -9,10 +9,11 @@ class AuthRepositoryImpl @Inject constructor(private val remoteDataSource: Remot
 
     override fun login(email: String, password: String) = flow {
         emit(Response.Loading)
+        // TODO: 8/2/2021 In case of wrong login or password extract message from response and emit to Failure, instead of http exception
         try {
             emit(Response.Success(remoteDataSource.loginWithEmail(email, password)))
         } catch (e: Exception) {
-            emit(Response.Failure(e.localizedMessage ?: "Failed to load"))
+            emit(Response.Failure(e.localizedMessage))
         }
     }
 
@@ -24,7 +25,7 @@ class AuthRepositoryImpl @Inject constructor(private val remoteDataSource: Remot
         try {
             emit(Response.Success(remoteDataSource.signUpWithEmail(email, password)))
         } catch (e: Exception) {
-            emit(Response.Failure(e.localizedMessage ?: "Failed to load"))
+            emit(Response.Failure(e.localizedMessage))
         }
     }
 }
