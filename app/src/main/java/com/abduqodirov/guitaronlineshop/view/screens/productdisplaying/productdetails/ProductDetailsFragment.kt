@@ -190,7 +190,7 @@ class ProductDetailsFragment : Fragment() {
 
     private fun switchUItoSuccessState() {
         binding.run {
-            detailsProgressBar.isVisible = false
+            detailsProgressBar.hide()
             detailsErrorGroup.isVisible = false
 
             detailsDataGroup.isVisible = true
@@ -201,14 +201,14 @@ class ProductDetailsFragment : Fragment() {
         binding.run {
             detailsErrorGroup.isVisible = true
 
-            detailsProgressBar.isVisible = false
+            detailsProgressBar.hide()
             detailsDataGroup.isVisible = false
         }
     }
 
     private fun switchUItoLoadingState() {
         binding.run {
-            detailsProgressBar.isVisible = true
+            detailsProgressBar.show()
 
             detailsDataGroup.isVisible = false
             detailsErrorGroup.isVisible = false

@@ -87,4 +87,8 @@ dependencies {
 
     //Timber for logging
     implementation 'com.jakewharton.timber:timber:4.7.1'
+
+    // Chucker for Retrofit Inspection
+    debugImplementation "com.github.chuckerteam.chucker:library:3.5.2"
+    releaseImplementation "com.github.chuckerteam.chucker:library-no-op:3.5.2"
 }

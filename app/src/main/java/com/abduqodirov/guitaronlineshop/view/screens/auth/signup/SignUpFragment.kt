@@ -171,6 +171,7 @@ class SignUpFragment : Fragment() {
 
     private fun onUserSignedUpSuccessfully(signedUpUser: TokenUserDTO) {
         findNavController().popBackStack(R.id.emailSignInFragment, true)
+        viewModel.saveToken(signedUpUser.accessToken)
         // TODO: 8/2/2021 navigate up to pop inclusive sign in fragment
     }
 

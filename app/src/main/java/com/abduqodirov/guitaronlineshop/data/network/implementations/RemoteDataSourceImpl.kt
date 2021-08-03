@@ -9,8 +9,11 @@ import com.abduqodirov.guitaronlineshop.data.network.LOGIN_KEY_PASSWORD
 import com.abduqodirov.guitaronlineshop.data.network.RemoteDataSource
 import com.abduqodirov.guitaronlineshop.data.network.retrofit.ShopService
 import com.abduqodirov.guitaronlineshop.view.model.SortingFilteringFields
+import timber.log.Timber
+import javax.inject.Inject
+import kotlin.Exception
 
-class RemoteDataSourceImpl(private val shopService: ShopService) : RemoteDataSource {
+class RemoteDataSourceImpl @Inject constructor(private val shopService: ShopService) : RemoteDataSource {
 
     override suspend fun fetchProducts(): List<FetchingProductDTO> {
         return shopService.fetchProducts()
@@ -37,7 +40,14 @@ class RemoteDataSourceImpl(private val shopService: ShopService) : RemoteDataSou
     }
 
     override suspend fun submitProduct(product: SendingProductWithUploadedImagesDTO): FetchingProductDTO {
-        return shopService.submitProduct(product)
+        try {
+            val submitProduct = shopService.submitProduct(product)
+            return submitProduct
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Timber.d("error bo'ldi jo'natishda")
+            return shopService.submitProduct(product)
+        }
     }
 
     override suspend fun loginWithEmail(email: String, password: String): TokenUserDTO {

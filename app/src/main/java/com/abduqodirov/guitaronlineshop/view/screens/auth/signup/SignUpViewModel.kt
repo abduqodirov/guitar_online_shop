@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.abduqodirov.guitaronlineshop.R
+import com.abduqodirov.guitaronlineshop.data.local_chaching.TokenManager
 import com.abduqodirov.guitaronlineshop.data.model.Response
 import com.abduqodirov.guitaronlineshop.data.model.TokenUserDTO
 import com.abduqodirov.guitaronlineshop.data.repository.auth.AuthRepository
@@ -15,7 +16,10 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class SignUpViewModel @Inject constructor(private val authRepository: AuthRepository) :
+class SignUpViewModel @Inject constructor(
+    private val authRepository: AuthRepository,
+    private val tokenManager: TokenManager
+) :
     ViewModel() {
 
     private val _user = MutableLiveData<Response<TokenUserDTO>>()
@@ -36,6 +40,10 @@ class SignUpViewModel @Inject constructor(private val authRepository: AuthReposi
                 _user.postValue(it)
             }
         }
+    }
+
+    fun saveToken(token: String) {
+        tokenManager.insertToken(token)
     }
 
     fun validatePassword(
