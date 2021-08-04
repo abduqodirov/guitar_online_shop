@@ -21,6 +21,9 @@ import javax.inject.Inject
 class RemoteDataSourceImpl @Inject constructor(private val shopService: ShopService) :
     RemoteDataSource {
 
+    private val moshi = Moshi.Builder().build()
+    private val adapter: JsonAdapter<ErrorMessageDTO> = moshi.adapter(ErrorMessageDTO::class.java)
+
     override suspend fun fetchProducts(): List<FetchingProductDTO> {
         return shopService.fetchProducts()
     }
@@ -63,9 +66,6 @@ class RemoteDataSourceImpl @Inject constructor(private val shopService: ShopServ
             return Response.Success(shopService.loginWithEmail(map))
         } catch (httpException: HttpException) {
 
-            val moshi = Moshi.Builder().build()
-            val adapter: JsonAdapter<ErrorMessageDTO> = moshi.adapter(ErrorMessageDTO::class.java)
-
             return withContext(Dispatchers.IO) {
                 val errorResponse =
                     adapter.fromJson(httpException.response()?.errorBody()?.string())
@@ -76,11 +76,20 @@ class RemoteDataSourceImpl @Inject constructor(private val shopService: ShopServ
         }
     }
 
-    override suspend fun signUpWithEmail(email: String, password: String): TokenUserDTO {
+    override suspend fun signUpWithEmail(email: String, password: String): Response<TokenUserDTO> {
         val map = mapOf(
             LOGIN_KEY_EMAIL to email,
             LOGIN_KEY_PASSWORD to password
         )
-        return shopService.signUpWithEmail(map)
+        try {
+            return Response.Success(shopService.signUpWithEmail(map))
+        } catch (httpException: HttpException) {
+            return withContext(Dispatchers.IO) {
+                val errorResponse = adapter.fromJson(httpException.response()?.errorBody()?.string())
+                return@withContext Response.Failure(errorResponse?.message)
+            }
+        } catch (e: Exception) {
+            return Response.Failure(e.localizedMessage)
+        }
     }
 }
