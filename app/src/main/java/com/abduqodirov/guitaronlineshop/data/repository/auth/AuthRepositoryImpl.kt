@@ -5,16 +5,12 @@ import com.abduqodirov.guitaronlineshop.data.network.RemoteDataSource
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class AuthRepositoryImpl @Inject constructor(private val remoteDataSource: RemoteDataSource) : AuthRepository {
+class AuthRepositoryImpl @Inject constructor(private val remoteDataSource: RemoteDataSource) :
+    AuthRepository {
 
     override fun login(email: String, password: String) = flow {
         emit(Response.Loading)
-        // TODO: 8/2/2021 In case of wrong login or password extract message from response and emit to Failure, instead of http exception
-        try {
-            emit(Response.Success(remoteDataSource.loginWithEmail(email, password)))
-        } catch (e: Exception) {
-            emit(Response.Failure(e.localizedMessage))
-        }
+        emit(remoteDataSource.loginWithEmail(email, password))
     }
 
     override fun logout(email: String) {
