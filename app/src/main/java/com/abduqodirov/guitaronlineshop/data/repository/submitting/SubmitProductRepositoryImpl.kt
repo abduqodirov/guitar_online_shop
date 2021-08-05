@@ -30,11 +30,6 @@ class SubmitProductRepositoryImpl @Inject constructor(
             val productWithUploadedImages =
                 mapSubmittingProduct(sendingProduct, urlsOfUploadedImages)
 
-            try {
-                val resultProduct = remoteDataSource.submitProduct(productWithUploadedImages)
-                emit(Response.Success(resultProduct))
-            } catch (e: Exception) {
-                emit(Response.Failure(e.localizedMessage))
-            }
+            emit(remoteDataSource.submitProduct(productWithUploadedImages))
         }
 }

@@ -174,7 +174,7 @@ class ProductsListFragment : Fragment() {
 
                 if (loadState.source.refresh is LoadState.Error) {
                     productsErrorTxt.text =
-                        (loadState.source.refresh as LoadState.Error).error.localizedMessage
+                        (loadState.source.refresh as LoadState.Error).error.localizedMessage ?: getString(R.string.product_fetching_failure)
                 }
 
                 val isListEmpty =

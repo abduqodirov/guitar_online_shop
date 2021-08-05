@@ -19,7 +19,7 @@ interface RemoteDataSource {
 
     suspend fun fetchProductById(id: String): FetchingProductDTO
 
-    suspend fun submitProduct(product: SendingProductWithUploadedImagesDTO): FetchingProductDTO
+    suspend fun submitProduct(product: SendingProductWithUploadedImagesDTO): Response<FetchingProductDTO>
 
     suspend fun loginWithEmail(email: String, password: String): Response<TokenUserDTO>
 

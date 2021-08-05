@@ -48,12 +48,17 @@ class RemoteDataSourceImpl @Inject constructor(private val shopService: ShopServ
         return shopService.fetchProductById(id)
     }
 
-    override suspend fun submitProduct(product: SendingProductWithUploadedImagesDTO): FetchingProductDTO {
+    override suspend fun submitProduct(product: SendingProductWithUploadedImagesDTO): Response<FetchingProductDTO> {
         try {
-            return shopService.submitProduct(product)
+            return Response.Success(shopService.submitProduct(product))
+        } catch (httpException: HttpException) {
+            return withContext(Dispatchers.IO) {
+                val errorResponse =
+                    adapter.fromJson(httpException.response()?.errorBody()?.string())
+                return@withContext Response.Failure(errorMessage = errorResponse?.message)
+            }
         } catch (e: Exception) {
-            e.printStackTrace()
-            return shopService.submitProduct(product)
+            return Response.Failure(e.localizedMessage)
         }
     }
 

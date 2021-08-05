@@ -163,7 +163,7 @@ class SubmitNewProductFragment : Fragment() {
                         }
 
                         is Response.Failure -> {
-                            switchUIToErrorState()
+                            switchUIToErrorState(response.errorMessage)
                             viewModel.clearStorage()
                         }
                     }
@@ -390,12 +390,13 @@ class SubmitNewProductFragment : Fragment() {
         }
     }
 
-    private fun switchUIToErrorState() {
+    // TODO error caselarda statis stringni ko'rsatavermasdan, API responseni olish
+    private fun switchUIToErrorState(response: String?) {
         binding.run {
             submitProductProgressBar.hide()
             submitProductSendBtn.visibility = View.VISIBLE
-            submitProductMessageTxt.text =
-                getString(R.string.error_on_sending_product)
+            submitProductMessageTxt.text = response
+                ?: getString(R.string.error_on_sending_product)
             submitProductMessageTxt.visibility = View.VISIBLE
         }
     }
