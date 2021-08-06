@@ -1,18 +1,18 @@
 package com.abduqodirov.guitaronlineshop.data.network.retrofit
 
-import com.abduqodirov.guitaronlineshop.data.local_chaching.TokenManager
+import com.abduqodirov.guitaronlineshop.data.local_chaching.UserManager
 import okhttp3.Interceptor
 import okhttp3.Response
 import timber.log.Timber
 import javax.inject.Inject
 
-class ServiceInterceptor @Inject constructor(private val tokenManager: TokenManager) : Interceptor {
+class ServiceInterceptor @Inject constructor(private val userManager: UserManager) : Interceptor {
 
     var sessionToken: String? = null
 
     override fun intercept(chain: Interceptor.Chain): Response {
 
-        val token = tokenManager.getToken()
+        val token = userManager.getToken()
         sessionToken = token
 
         val request = chain.request().newBuilder()

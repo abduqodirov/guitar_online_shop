@@ -1,7 +1,7 @@
 package com.abduqodirov.guitaronlineshop.di.module
 
 import android.content.Context
-import com.abduqodirov.guitaronlineshop.data.local_chaching.TokenManager
+import com.abduqodirov.guitaronlineshop.data.local_chaching.UserManager
 import com.abduqodirov.guitaronlineshop.data.network.retrofit.BASE_URL
 import com.abduqodirov.guitaronlineshop.data.network.retrofit.ServiceInterceptor
 import com.abduqodirov.guitaronlineshop.data.network.retrofit.ShopService
@@ -18,10 +18,10 @@ class NetworkModule {
 
     @AppScope
     @Provides
-    fun provideOkHttpClient(tokenManager: TokenManager, context: Context): OkHttpClient {
+    fun provideOkHttpClient(userManager: UserManager, context: Context): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(ChuckerInterceptor(context = context))
-            .addInterceptor(ServiceInterceptor(tokenManager))
+            .addInterceptor(ServiceInterceptor(userManager))
             .build()
     }
 

@@ -14,19 +14,56 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/fake_img"
+        android:scaleType="centerCrop"
         app:layout_constraintVertical_bias="0.2" />
 
     <TextView
-        android:id="@+id/profile_full_name_txt"
+        android:id="@+id/profile_first_name_txt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="32dp"
         android:layout_marginTop="16dp"
         android:textColor="@color/black"
         android:textSize="24sp"
+        tools:text="Usmon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/profile_avatar_img" />
+
+    <TextView
+        android:id="@+id/profile_last_name_txt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:textColor="@color/black"
+        tools:text="Hamidulloh"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@id/profile_first_name_txt"
+        app:layout_constraintStart_toStartOf="@id/profile_first_name_txt"
+        app:layout_constraintTop_toBottomOf="@id/profile_first_name_txt" />
+
+    <TextView
+        android:id="@+id/label_email"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/profile_last_name_txt"
+        app:layout_constraintStart_toStartOf="@id/profile_last_name_txt"
+        android:layout_marginTop="16dp"
+        android:text="@string/label_email"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/profile_email_txt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:textColor="@color/black"
+        android:textSize="22sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/label_email"
+        app:layout_constraintEnd_toEndOf="@id/profile_last_name_txt"
+        app:layout_constraintStart_toEndOf="@id/label_email"
+        tools:text="usmon@hamidulloh.com" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/profile_create_product_btn"
@@ -39,12 +76,31 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <Button
-        android:id="@+id/temp_sign_in_btn"
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/profile_data_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="sign in"
-        app:layout_constraintBottom_toTopOf="@+id/profile_create_product_btn"
-        app:layout_constraintEnd_toEndOf="parent" />
+        tools:visibility="invisible"
+        app:constraint_referenced_ids="profile_avatar_img, profile_first_name_txt, profile_last_name_txt, label_email, profile_email_txt, profile_create_product_btn"/>
+
+    <androidx.core.widget.ContentLoadingProgressBar
+        android:id="@+id/profile_progress_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        tools:visibility="visible"
+        android:visibility="invisible"
+        android:layout_height="wrap_content" />
+
+<!--    <Button-->
+<!--        android:id="@+id/temp_sign_in_btn"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="sign in"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/profile_create_product_btn"-->
+<!--        app:layout_constraintEnd_toEndOf="parent" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

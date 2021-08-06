@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.abduqodirov.guitaronlineshop.data.local_chaching.UserManager
 import com.abduqodirov.guitaronlineshop.data.model.FetchingProductDTO
 import com.abduqodirov.guitaronlineshop.data.model.Response
 import com.abduqodirov.guitaronlineshop.data.repository.fetching.ProductsFetchingRepository
@@ -12,7 +13,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ProductDetailsViewModel @Inject constructor(
-    private val productsRepository: ProductsFetchingRepository
+    private val productsRepository: ProductsFetchingRepository,
+    private val userManager: UserManager
 ) : ViewModel() {
 
     private val _product = MutableLiveData<Response<FetchingProductDTO>>()
@@ -20,10 +22,13 @@ class ProductDetailsViewModel @Inject constructor(
 
     fun refreshProduct(id: String) {
         viewModelScope.launch {
-            productsRepository.fetchProductById(id)
-                .collect {
-                    _product.postValue(it)
-                }
+            productsRepository.fetchProductById(id).collect {
+                _product.postValue(it)
+            }
         }
+    }
+
+    fun checkWhetherSignedIn(): Boolean {
+        return false
     }
 }

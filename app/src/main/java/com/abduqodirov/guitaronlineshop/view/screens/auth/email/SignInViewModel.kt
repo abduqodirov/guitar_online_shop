@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.abduqodirov.guitaronlineshop.R
-import com.abduqodirov.guitaronlineshop.data.local_chaching.TokenManager
+import com.abduqodirov.guitaronlineshop.data.local_chaching.UserManager
 import com.abduqodirov.guitaronlineshop.data.model.Response
 import com.abduqodirov.guitaronlineshop.data.model.TokenUserDTO
 import com.abduqodirov.guitaronlineshop.data.repository.auth.AuthRepository
@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 class SignInViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private val tokenManager: TokenManager
+    private val userManager: UserManager
 ) : ViewModel() {
 
     private val _user = MutableLiveData<Response<TokenUserDTO>>()
@@ -41,7 +41,7 @@ class SignInViewModel @Inject constructor(
     }
 
     fun saveToken(token: String) {
-        tokenManager.insertToken(token)
+        userManager.insertToken(token)
     }
 
     // TODO The same with SubmitProductViewModel. So extract to some class. And use it from there

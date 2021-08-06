@@ -1,7 +1,7 @@
 package com.abduqodirov.guitaronlineshop.di.module
 
 import android.content.Context
-import com.abduqodirov.guitaronlineshop.data.local_chaching.TokenManager
+import com.abduqodirov.guitaronlineshop.data.local_chaching.UserManager
 import com.abduqodirov.guitaronlineshop.data.network.RemoteDataSource
 import com.abduqodirov.guitaronlineshop.data.network.implementations.RemoteDataSourceImpl
 import com.abduqodirov.guitaronlineshop.data.network.retrofit.ShopService
@@ -18,5 +18,5 @@ class AppModule {
 
     @AppScope
     @Provides
-    fun provideTokenManager(context: Context): TokenManager = TokenManager(context)
+    fun provideUserManager(context: Context): UserManager = UserManager(context)
 }

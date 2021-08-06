@@ -48,4 +48,5 @@
     <string name="validation_not_matching_passwords">Passwords should match</string>
     <string name="failed_to_sign_in">Failed to sign in</string>
     <string name="failed_to_sign_up">Failed to sign up</string>
+    <string name="label_email">Email: </string>
 </resources>
