@@ -17,11 +17,11 @@ data class FetchingProductDTO(
     val description: String,
 
     @field:Json(name = "photos")
-    val photos: List<String?>,
+    val photos: List<String?>?,
 
     @field:Json(name = "rating")
-    val rating: List<Double?>,
+    val rating: List<Double?>?,
 
     @field:Json(name = "comments")
-    val comments: List<String?>
+    val comments: List<String?>?
 )

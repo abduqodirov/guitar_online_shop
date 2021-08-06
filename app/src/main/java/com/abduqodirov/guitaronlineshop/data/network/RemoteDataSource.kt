@@ -24,4 +24,6 @@ interface RemoteDataSource {
     suspend fun loginWithEmail(email: String, password: String): Response<TokenUserDTO>
 
     suspend fun signUpWithEmail(email: String, password: String): Response<TokenUserDTO>
+
+    suspend fun refreshToken(): Response<TokenUserDTO>
 }

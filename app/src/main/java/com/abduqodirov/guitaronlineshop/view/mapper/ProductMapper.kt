@@ -10,13 +10,13 @@ fun mapFetchedProduct(fetchingProduct: FetchingProductDTO): ProductForDisplay {
     var formattedRatingAverage = ""
     var ratingAverage = 0.0
 
-    fetchingProduct.rating.forEach {
+    fetchingProduct.rating?.forEach {
         if (it != null) {
             ratingAverage += it
         }
     }
 
-    ratingAverage /= fetchingProduct.rating.size
+    ratingAverage /= fetchingProduct.rating?.size ?: 0
     if (ratingAverage > 1.0) {
         formattedRatingAverage = ratingAverage.formatRatingAverage()
     }
@@ -24,14 +24,14 @@ fun mapFetchedProduct(fetchingProduct: FetchingProductDTO): ProductForDisplay {
     // TODO we will remove once we restricted null and empty string values on backend
     val validatedComments = arrayListOf<String>()
 
-    fetchingProduct.comments.forEach {
+    fetchingProduct.comments?.forEach {
         if (it != null && it.isNotEmpty()) {
             validatedComments.add(it)
         }
     }
 
     val validatedPhotos = arrayListOf<String>()
-    fetchingProduct.photos.forEach {
+    fetchingProduct.photos?.forEach {
         if (it != null && it.isNotEmpty()) {
             validatedPhotos.add(it)
         }

@@ -90,7 +90,22 @@ class RemoteDataSourceImpl @Inject constructor(private val shopService: ShopServ
             return Response.Success(shopService.signUpWithEmail(map))
         } catch (httpException: HttpException) {
             return withContext(Dispatchers.IO) {
-                val errorResponse = adapter.fromJson(httpException.response()?.errorBody()?.string())
+                val errorResponse =
+                    adapter.fromJson(httpException.response()?.errorBody()?.string())
+                return@withContext Response.Failure(errorResponse?.message)
+            }
+        } catch (e: Exception) {
+            return Response.Failure(e.localizedMessage)
+        }
+    }
+
+    override suspend fun refreshToken(): Response<TokenUserDTO> {
+        try {
+            return Response.Success(shopService.refreshToken())
+        } catch (httpException: HttpException) {
+            return withContext(Dispatchers.IO) {
+                val errorResponse =
+                    adapter.fromJson(httpException.response()?.errorBody()?.string())
                 return@withContext Response.Failure(errorResponse?.message)
             }
         } catch (e: Exception) {

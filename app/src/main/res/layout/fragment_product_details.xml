@@ -120,7 +120,8 @@
             app:layout_constraintTop_toBottomOf="@id/details_comments_btn"
             tools:text="@string/long_dummy_text" />
 
-        <!--        TODO Hide this button if description text lines smaller than 4-->
+        <!--
+        TODO Hide this button if description text lines smaller than 4-->
         <Button
             android:id="@+id/details_desc_expand_collapse_btn"
             style="@style/Widget.MaterialComponents.Button.TextButton"

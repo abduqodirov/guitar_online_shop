@@ -11,4 +11,6 @@ interface AuthRepository {
     fun logout(email: String)
 
     fun signUp(email: String, password: String): Flow<Response<TokenUserDTO>>
+
+    fun refreshToken(): Flow<Response<TokenUserDTO>>
 }

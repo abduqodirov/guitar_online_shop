@@ -29,7 +29,6 @@ interface ShopService {
     @GET("products/{id}")
     suspend fun fetchProductById(@Path("id") id: String): FetchingProductDTO
 
-    // TODO: 8/3/2021 Expired token case also should be handled
     @POST("products")
     suspend fun submitProduct(@Body product: SendingProductWithUploadedImagesDTO): FetchingProductDTO
 
@@ -38,4 +37,7 @@ interface ShopService {
 
     @POST("auth_reg")
     suspend fun signUpWithEmail(@Body emailAndPassword: Map<String, String>): TokenUserDTO
+
+    @GET("refresh_token")
+    suspend fun refreshToken(): TokenUserDTO
 }
