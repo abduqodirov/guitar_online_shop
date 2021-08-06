@@ -303,6 +303,8 @@ class SubmitNewProductFragment : Fragment() {
 
     private fun setUpFormValidators() {
 
+        // TODO add price validation max integer
+
         binding.run {
 
             viewModel.formInputsValidation.observe(

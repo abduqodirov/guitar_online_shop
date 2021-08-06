@@ -20,5 +20,8 @@ data class SendingProductWithUploadedImagesDTO(
     val rating: List<Double>,
 
     @field:Json(name = "comments")
-    val comments: List<String>
+    val comments: List<String>,
+
+    @field:Json(name = "amount")
+    val amount: Int
 )
